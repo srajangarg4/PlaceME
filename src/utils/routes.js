@@ -1,6 +1,15 @@
 import Role from './roles';
 
 const Screens = {
+  jobDescription: {
+    path: '/jobDetail',
+  },
+  personalDetailsForm: {
+    path: '/personalDetails',
+  },
+  dashboard: {
+    path: '/dashboard',
+  },
   login: {
     path: '/login',
     roles: [Role.ANY],
@@ -67,7 +76,6 @@ const Screens = {
   stopForm: {
     path: '/stop/edit',
   },
-
 };
 
 export default Screens;

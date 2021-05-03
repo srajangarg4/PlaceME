@@ -1,12 +1,32 @@
 import React from 'react';
 
-function Input({ error, errorMessage, ...extraProps }) {
+const Input = ({
+  error,
+  styles,
+  iconName,
+  errorMessage,
+  className,
+  ...extraProps
+}) => {
   return (
-    <div>
-      <Input {...extraProps} />
-      {error && <span>{errorMessage}</span>}
+    <div className={`form-group ${styles ?? ''}`}>
+      {/* {iconName && (
+        <div className="input-group-prepend">
+          <span className="input-group-text">
+            <i className="material-icons">{iconName}</i>
+          </span>
+        </div>
+      )} */}
+
+      <input
+        className={` ${error && 'is-invalid'} ${className ?? ''}`}
+        {...extraProps}
+      />
+      <div className="help-block">
+        {error && <span className="text-danger">{errorMessage}</span>}
+      </div>
     </div>
   );
-}
+};
 
 export default Input;
