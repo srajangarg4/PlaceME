@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { AUTH_STATE, getData } from '../AsyncStorage';
 import AppNavigation from './app';
 import AuthNavigation from './auth';
 import Middleware from './middleware';
 import { updateAuth } from '../actions';
 import JobNavigator from './job';
+import { ProfileNavigator } from './profile';
+import PendingRequest from './pendingRequest';
 
 const modules = { middleware: 'middleware', auth: 'auth', app: 'app' };
 
@@ -42,6 +44,8 @@ const ApplicationNavigator = () => {
       {module === modules.app && <AppNavigation />}
       {module === modules.auth && <AuthNavigation />}
       <JobNavigator />
+      <ProfileNavigator />
+      <Route path="/pendingRequest" exact component={PendingRequest} />
     </Router>
   );
 };

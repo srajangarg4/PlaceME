@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import '../gradients.css';
 
 const Navbar = () => {
   const [state, setstate] = useState({ isNavOpen: true });
@@ -10,11 +11,11 @@ const Navbar = () => {
     <div className="navbar bg-dark navbar-expand-md">
       <div className="container">
         <div className="navbar-toggler" onClick={state.isNavOpen} />
-        <Link className="navbar-brand mr-auto">
+        <Link className="navbar-brand mr-auto nav-link">
           <h3>PlaceME</h3>
         </Link>
         <div className="navbar navbar-collapse" hidden={state.isNavOpen}>
-          <div className="nav navbar" style={{ color: 'white' }}>
+          <div className="nav navbar">
             <div className="nav-item">
               <NavLink className="nav-link d-flex align-items-center" to="/">
                 <span className="material-icons">home</span>Home

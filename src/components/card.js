@@ -7,16 +7,14 @@ const Card = ({
   style,
   horizontalCenter,
 }) => {
-  const containerStyle = `card shadow bg-white rounded d-flex
+  const containerStyle = `card shadow-lg bg-white my-4 rounded d-flex
   ${className ?? ''}
-  ${verticalCentered ? 'justify-content-center' : ''}
-  ${horizontalCenter ? 'align-items-center' : ''}
+  ${horizontalCenter ? 'justify-content-center' : ''}
+  ${verticalCentered ? 'align-items-center' : ''}
   `;
   return (
-    <div>
-      <div className={containerStyle} style={style}>
-        <div>{children}</div>
-      </div>
+    <div className={containerStyle} style={style}>
+      {children}
     </div>
   );
 };

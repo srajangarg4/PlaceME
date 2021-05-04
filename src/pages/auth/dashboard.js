@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { Navbar } from '../../components';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Card, Navbar } from '../../components';
 const Dashboard = () => {
   return (
     <div>
       <Navbar />
-      <WelcomeJumbo />
       <div className="container">
         <div className="row">
           <div className="col">
@@ -43,7 +42,7 @@ const WelcomeJumbo = () => {
 
 const CardComponent = () => {
   return (
-    <div className="card">
+    <Card>
       <div className="card-header bg-white">
         <div className="row justify-content-between">
           <div className="col-auto">
@@ -98,7 +97,7 @@ const CardComponent = () => {
           </Link>
         </h5>
       </div>
-    </div>
+    </Card>
   );
 };
 

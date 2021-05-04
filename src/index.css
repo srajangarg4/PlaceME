@@ -12,9 +12,9 @@ code {
     monospace;
 }
 
-a {
+.nav-link {
   color: #fff;
 }
-a:hover {
+.nav-link :hover {
   color: #00f;
 }
