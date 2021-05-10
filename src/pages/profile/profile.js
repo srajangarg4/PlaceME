@@ -13,7 +13,7 @@ import { formSections } from './utils';
 
 const Profile = () => (
   <div className="main-content">
-    <Navbar title="PlaceMe" />
+    <Navbar />
     <ProfileHeader />
     <ProfilePageContent />
   </div>

@@ -1,5 +1,4 @@
 export * from './theme';
-export * from './propTypes';
 export * from './httpUtils';
 export * from './validator';
 export { default as Routes } from './routes';

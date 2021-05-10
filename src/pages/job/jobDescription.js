@@ -1,7 +1,5 @@
 import { Navbar, Card } from '../../components';
 
-//https://preview.colorlib.com/#jobsco
-
 const jobSummaryList = [
   { name: 'Published On', value: 'Date' },
   { name: 'Salary', value: 'Date' },
@@ -32,36 +30,38 @@ const JobDescription = () => {
 
 const JobTitleCard = () => {
   return (
-    <div className="card px-md-5 py-md-3 shadow bg-white my-5">
+    <div className="card shadow bg-white my-5">
       <div className="card-body">
-        <div className="d-flex justify-content-between">
-          <div className="d-flex align-items-center">
-            <div className="p-2 p-sm-3 mr-3 mr-sm-5">
-              <img
-                src="https://preview.colorlib.com/theme/jobsco/assets/img/icon/1.svg"
-                alt=""
-              />
-            </div>
-            <div>
-              <h3>Papa mai choti se badi ho gyi</h3>
-              <div className="row">
-                <div className="col-auto">
-                  <i className="text-muted d-flex align-items-center">
-                    <span className="material-icons">place</span>
-                    Califonia, USA
-                  </i>
-                </div>
-                <div className="col-auto">
-                  <i className="text-muted d-flex align-items-center">
-                    <span className="material-icons">schedule</span>
-                    Full-Time
-                  </i>
+        <div className="row d-flex justify-content-between">
+          <div className="col-12 col-md">
+            <div className="d-flex align-items-center">
+              <div className="p-2 p-sm-3 mr-3 mr-sm-5">
+                <img
+                  src="https://preview.colorlib.com/theme/jobsco/assets/img/icon/1.svg"
+                  alt=""
+                />
+              </div>
+              <div>
+                <h3 className="text-capitalize">Software Engineer</h3>
+                <div className="row">
+                  <div className="col-auto my-1">
+                    <i className="text-muted d-flex align-items-center">
+                      <span className="material-icons">place</span>
+                      Califonia, USA
+                    </i>
+                  </div>
+                  <div className="col-auto my-1">
+                    <i className="text-muted d-flex align-items-center">
+                      <span className="material-icons">schedule</span>
+                      Full-Time
+                    </i>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="d-flex align-items-center">
-            <button className="btn btn-outline-dark" type="submit">
+          <div className="col-12 col-md-auto d-flex align-items-center my-3">
+            <button className="btn btn-block btn-outline-dark" type="submit">
               Apply
             </button>
           </div>
