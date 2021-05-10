@@ -35,19 +35,6 @@ const Statistics = () => {
               <StatCard {...statFields[1]} />
             </div>
             <div className="row">
-              <Card>
-                <div className="progress mx-auto">
-                  <span class="progress-left">
-                    <span class="progress-bar"></span>
-                  </span>
-                  <span class="progress-right">
-                    <span class="progress-bar"></span>
-                  </span>
-                  <div className="progress-value">90%</div>
-                </div>
-              </Card>
-            </div>
-            <div className="row">
               <StatCard {...statFields[2]} />
               <StatCard {...statFields[3]} />
             </div>

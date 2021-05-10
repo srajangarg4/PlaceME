@@ -1,13 +1,18 @@
 import React from 'react';
 import { Card, Navbar } from '../../components';
+import { ProfileHeader } from '../profile/components';
 import Statistics from './statistics';
 const Dashboard = () => {
   return (
     <div>
       <Navbar />
+      <ProfileHeader />
       <div className="container-fluid">
         <div className="row">
-          <div className="col-12 col-md-8">
+          <div className="col-12 col-md-4 order-md-2">
+            <Statistics />
+          </div>
+          <div className="col-12 col-md-8 order-md-1">
             <Card>
               <div className="card-header bg-white">
                 <h5 className="text-center">Recent Jobs</h5>
@@ -22,9 +27,6 @@ const Dashboard = () => {
               </div>
             </Card>
           </div>
-          <div className="col-12 col-md">
-            <Statistics />
-          </div>
         </div>
       </div>
     </div>
@@ -33,7 +35,7 @@ const Dashboard = () => {
 
 const JobTitleCard = () => {
   return (
-    <div className="card shadow bg-white my-5">
+    <div className="card shadow bg-white my-4">
       <div className="card-body">
         <div className="row d-flex justify-content-between">
           <div className="col-12 col-md">

@@ -30,10 +30,10 @@ const PersonalDetailSection = ({ isFormEditable }) => {
         <div className="row">
           <div className="col-12 col-md-6">
             <div className="form-group">
-              <label for="first-name">Papa Ka naam</label>
-              {connectField('fathers', {
-                type: 'text',
-                id: 'first-name',
+              <label for="dob-field">Date of birth</label>
+              {connectField('dob', {
+                type: 'date',
+                id: 'dob-field',
                 className: 'form-control',
                 disabled: !isFormEditable,
               })(Input)}
@@ -41,10 +41,10 @@ const PersonalDetailSection = ({ isFormEditable }) => {
           </div>
           <div className="col-12 col-md-6">
             <div className="form-group">
-              <label for="last-name">Last Name</label>
+              <label for="blood-group-field">Blood Group</label>
               {connectField('lastName', {
                 type: 'text',
-                id: 'last-name',
+                id: 'blood-group-field',
                 className: 'form-control',
                 disabled: !isFormEditable,
               })(Input)}
@@ -54,22 +54,59 @@ const PersonalDetailSection = ({ isFormEditable }) => {
         <div className="row">
           <div className="col-12 col-md-6">
             <div className="form-group">
-              <label for="email">Email</label>
-              {connectField('email', {
-                type: 'email',
-                id: 'email',
+              <label for="father-email-field">Father Name</label>
+              {connectField('fatherName', {
+                id: 'father-email-field',
                 className: 'form-control',
-                value: 'xyz@gmail.com',
-                disabled: true,
+                disabled: !isFormEditable,
               })(Input)}
             </div>
           </div>
           <div className="col-12 col-md-6">
             <div className="form-group">
-              <label for="phone-number">Mobile</label>
-              {connectField('phoneNumber', {
-                type: 'text',
-                id: 'phone-number',
+              <label for="mother-name-field">Mother Name</label>
+              {connectField('motherName', {
+                id: 'mother-name-field',
+                className: 'form-control',
+                disabled: !isFormEditable,
+              })(Input)}
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <div className="form-group">
+              <label for="father-mobile-field">Father Mobile Number</label>
+              {connectField('fatherMobile', {
+                id: 'father-mobile-field',
+                className: 'form-control',
+                disabled: !isFormEditable,
+              })(Input)}
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <div className="form-group">
+              <label for="mother-mobile-field">Mother Mobile Number</label>
+              {connectField('motherMobile', {
+                id: 'mother-mobile-field',
+                className: 'form-control',
+                disabled: !isFormEditable,
+              })(Input)}
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <div className="form-group">
+              <label for="father-occupation-field">Father Occupation</label>
+              {connectField('fatherOccupation', {
+                id: 'father-occupation-field',
+                className: 'form-control',
+                disabled: !isFormEditable,
+              })(Input)}
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <div className="form-group">
+              <label for="mother-occupation-field">Mother Occupation</label>
+              {connectField('motherOccupation', {
+                id: 'mother-occupation-field',
                 className: 'form-control',
                 disabled: !isFormEditable,
               })(Input)}
