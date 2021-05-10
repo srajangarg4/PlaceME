@@ -1,20 +1,30 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Navbar } from '../../components';
+import Statistics from './statistics';
 const Dashboard = () => {
   return (
     <div>
       <Navbar />
-      <div className="container">
+      <div className="container-fluid">
         <div className="row">
-          <div className="col">
-            <CardComponent />
+          <div className="col-12 col-md-8">
+            <Card>
+              <div className="card-header bg-white">
+                <h5 className="text-center">Recent Jobs</h5>
+              </div>
+              <div className="card-body mx-3">
+                <JobTitleCard />
+                <JobTitleCard />
+                <JobTitleCard />
+              </div>
+              <div className="card-footer bg-white">
+                <h6 className="text-muted text-center">See More</h6>
+              </div>
+            </Card>
           </div>
-          <div className="col">
-            <CardComponent />
-          </div>
-          <div className="col">
-            <CardComponent />
+          <div className="col-12 col-md">
+            <Statistics />
           </div>
         </div>
       </div>
@@ -22,82 +32,46 @@ const Dashboard = () => {
   );
 };
 
-const WelcomeJumbo = () => {
+const JobTitleCard = () => {
   return (
-    <div className="jumbotron">
-      <div className="row row-header">
-        <div className="col-12 col-sm-6">
-          <h1>
-            Welcome Srajan
-            <span className="material-icons ">sentiment_satisfied_alt</span>
-          </h1>
-          <p>
-            Move your carrer in right direction with various job opportunities
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const CardComponent = () => {
-  return (
-    <Card>
-      <div className="card-header bg-white">
-        <div className="row justify-content-between">
-          <div className="col-auto">
-            <h4>
-              <span className="badge badge-pill badge-success">full time</span>
-            </h4>
-          </div>
-          <div className="col-auto">
-            <h4>
-              <span className="badge badge-pill badge-warning">3000000</span>
-            </h4>
-          </div>
-        </div>
-      </div>
-      <div className="card-body text-center">
-        <div className="d-block">
-          <h3 className="card-title">Software Engineer</h3>
-          <small className="text-info">Nagarro software pvt ltd</small>
-        </div>
-        <div className="col-auto">
-          <ul className="list-inline">
-            <li className="list-inline-item">
-              <span className="badge badge-pill badge-info">OOPs</span>
-            </li>
-            <li className="list-inline-item">
-              <span className="badge badge-pill badge-info">DSA</span>
-            </li>
-            <li className="list-inline-item">
-              <span className="badge badge-pill badge-info">C/C++</span>
-            </li>
-            <li className="list-inline-item">
-              <button className="btn badge badge-pill badge-primary">+4</button>
-            </li>
-          </ul>
-          <div className="d-flex row mb-0">
-            <div className="col">
-              <p className="text-muted">
-                We are looking for an experience UI and UX designer to work on
-                our projects...
-              </p>
+    <div className="card shadow bg-white my-5">
+      <div className="card-body">
+        <div className="row d-flex justify-content-between">
+          <div className="col-12 col-md">
+            <div className="d-flex align-items-center">
+              <div className="p-2 p-sm-3 mr-3 mr-sm-5">
+                <img
+                  src="https://preview.colorlib.com/theme/jobsco/assets/img/icon/1.svg"
+                  alt=""
+                />
+              </div>
+              <div>
+                <h3 className="text-capitalize">Software Engineer</h3>
+                <div className="row">
+                  <div className="col-auto my-1">
+                    <i className="text-muted d-flex align-items-center">
+                      <span className="material-icons">place</span>
+                      Califonia, USA
+                    </i>
+                  </div>
+                  <div className="col-auto my-1">
+                    <i className="text-muted d-flex align-items-center">
+                      <span className="material-icons">schedule</span>
+                      Full-Time
+                    </i>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+          <div className="col-12 col-md-auto d-flex align-items-center my-3">
+            <button className="btn btn-block btn-outline-dark" type="submit">
+              View
+            </button>
+          </div>
         </div>
       </div>
-      <div>
-        <hr className="align-content-center w-25" />
-      </div>
-      <div className="card-footer border-0 bg-white text-center mx-auto ">
-        <h5 className="footer">
-          <Link href="" className="text-decoration-none">
-            VIEW JOB
-          </Link>
-        </h5>
-      </div>
-    </Card>
+    </div>
   );
 };
 

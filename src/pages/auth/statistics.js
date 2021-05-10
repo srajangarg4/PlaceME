@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card } from '../../../components';
+import { Card } from '../../components';
 
 const StatCard = ({ gradientName, title, description }) => (
-  <div className="col d-flex align-self-stretch my-3">
+  <div className="col d-flex align-self-stretch">
     <Card className={`w-100 ${gradientName}`}>
       <div className="card-body">
         <h6>{title}</h6>
@@ -25,7 +25,7 @@ const Statistics = () => {
   ];
 
   return (
-    <div className="col col-md-5">
+    <div className="col">
       <Card>
         <div className="card-body">
           <h4 className="text-center card-title">Statistics</h4>
@@ -33,12 +33,27 @@ const Statistics = () => {
             <div className="row">
               <StatCard {...statFields[0]} />
               <StatCard {...statFields[1]} />
-              <StatCard {...statFields[1]} />
+            </div>
+            <div className="row">
+              <Card>
+                <div className="progress mx-auto">
+                  <span class="progress-left">
+                    <span class="progress-bar"></span>
+                  </span>
+                  <span class="progress-right">
+                    <span class="progress-bar"></span>
+                  </span>
+                  <div className="progress-value">90%</div>
+                </div>
+              </Card>
             </div>
             <div className="row">
               <StatCard {...statFields[2]} />
               <StatCard {...statFields[3]} />
-              <StatCard {...statFields[1]} />
+            </div>
+            <div className="row">
+              <StatCard {...statFields[2]} />
+              <StatCard {...statFields[3]} />
             </div>
           </div>
         </div>

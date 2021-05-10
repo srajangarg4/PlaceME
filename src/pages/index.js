@@ -14,7 +14,6 @@ const modules = { middleware: 'middleware', auth: 'auth', app: 'app' };
 
 const ApplicationNavigator = () => {
   const dispatch = useDispatch();
-
   const [module, setModule] = useState(modules.middleware);
   // @ts-ignore
   const auth = useSelector((state) => state.auth);

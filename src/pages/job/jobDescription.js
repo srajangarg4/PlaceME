@@ -1,17 +1,5 @@
 import { Navbar, Card } from '../../components';
 
-//https://preview.colorlib.com/#jobsco
-
-//https://www.creative-tim.com/bits/bootstrap/user-profile-page-argon-dashboard
-
-// https://www.bootdey.com/snippets/view/profile-edit-settings
-
-// https://codepen.io/alvaromontoro/pen/ebPEWb
-
-// https://codepen.io/alvaromontoro/full/ebPEWb
-
-// https://www.figma.com/file/DDKeuPC5fHtE9LK45HSLTp/Untitled?node-id=0%3A1
-
 const jobSummaryList = [
   { name: 'Published On', value: 'Date' },
   { name: 'Salary', value: 'Date' },
@@ -54,9 +42,7 @@ const JobTitleCard = () => {
                 />
               </div>
               <div>
-                <h3 className="text-capitalize">
-                  Papa mai choti se badi ho gyi
-                </h3>
+                <h3 className="text-capitalize">Software Engineer</h3>
                 <div className="row">
                   <div className="col-auto my-1">
                     <i className="text-muted d-flex align-items-center">
