@@ -1,13 +1,16 @@
+const STUDENT = 'STUDENT';
+const TPO = 'TPO';
+const HTPO = 'HTPO';
+const MENTOR = 'MENTOR';
+const HOD = 'HOD';
 const ADMIN = 'ADMIN';
-const OPERATOR = 'OPERATOR';
-const USER = 'USER';
-const ANNONYMOUS = 'ANNONYMOUS';
-const ANY = 'ANY';
+
 
 export default Object.freeze({
-  ADMIN,
-  OPERATOR,
-  USER,
-  ANNONYMOUS,
-  ANY,
+  STUDENT,
+  TPO,
+  HTPO,
+  MENTOR,
+  HOD,
+  ADMIN
 });

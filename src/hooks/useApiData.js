@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { apiCall } from '../actions';
 
-export default (endpoint, requestData, method) => {
+const useApiData =  (endpoint, requestData, method) => {
   const dispatch = useDispatch();
   const [apiData, setApiData] = useState({
     isLoading: true,
@@ -54,3 +54,4 @@ export default (endpoint, requestData, method) => {
     setError,
   };
 };
+export default useApiData;

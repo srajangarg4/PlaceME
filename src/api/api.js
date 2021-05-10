@@ -2,7 +2,7 @@ import { HttpMethods } from '../utils/httpUtils';
 import { getAuth } from '../reducers/auth';
 import { HOST, prefix } from './endpoints';
 
-export default (endPoint, method = HttpMethods.GET, body) => {
+const apiHandler = (endPoint, method = HttpMethods.GET, body) => {
   let apiBody = body;
   const headers = new Headers({
     'Content-Type': 'application/json',
@@ -25,3 +25,4 @@ export default (endPoint, method = HttpMethods.GET, body) => {
       });
   });
 };
+export default apiHandler;

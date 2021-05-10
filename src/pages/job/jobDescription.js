@@ -13,7 +13,7 @@ const jobSummaryList = [
 const JobDescription = () => {
   return (
     <div>
-      <Navbar />
+      <Navbar title="PlaceMe" />
       <div className="container">
         <div className="row">
           <div className="col-12 col-md-8">

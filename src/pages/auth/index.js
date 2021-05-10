@@ -5,6 +5,7 @@ import Signup from './signup';
 import Login from './login';
 import PersonalDetailsFrom from './personalDetailsForm';
 import Dashboard from './dashboard';
+import Home from '../app/home';
 
 const AppNavigator = () => (
   <Switch>

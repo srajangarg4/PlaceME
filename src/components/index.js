@@ -1,3 +1,6 @@
 export * from './form';
-export { default as Navbar } from './navBar';
-export { default as Card } from './card';
+export * from './containers';
+export { default as Navbar } from './NavBar';
+export { default as Icon } from './Icon';
+export { default as Button } from './Button';
+export { default as Loader } from './Loader';

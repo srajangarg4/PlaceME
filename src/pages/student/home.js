@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Loader } from '../../components';
+import { Loader } from '../../components';
 
 const Home = () => (
   <Loader />

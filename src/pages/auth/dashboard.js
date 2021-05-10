@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { Navbar } from '../../components';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Card, Navbar } from '../../components';
+
 const Dashboard = () => {
   return (
     <div>
-      <Navbar />
-      <WelcomeJumbo />
+      <Navbar title="PlaceMe" />
       <div className="container">
         <div className="row">
           <div className="col">
