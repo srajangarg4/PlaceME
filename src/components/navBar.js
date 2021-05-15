@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import Icon from './Icon';
+import Icon from './icon';
 
 const Navbar = ({
   links,

@@ -4,7 +4,7 @@ import { ProfileHeader } from '../profile/components';
 import Statistics from './statistics';
 const Dashboard = () => {
   return (
-    <div>
+    <>
       <Navbar />
       <ProfileHeader />
       <div className="container-fluid">
@@ -29,7 +29,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

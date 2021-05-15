@@ -26,6 +26,12 @@ const Screens = {
   editProfile: {
     path: '/profile/edit',
   },
+  addNewJob: {
+    path: '/addnewjob',
+  },
+  tpoDashboard: {
+    path: '/tpodashboard',
+  },
 };
 
 export default Screens;
