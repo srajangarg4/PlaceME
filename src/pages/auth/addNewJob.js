@@ -40,9 +40,9 @@ const AddNewJob = () => {
           <div className="card-body">
             <form>
               <div className="row my-3">
-                <h6 className="col-12 text-muted my-2">Salary</h6>
+                <h6 className="col-12 text-muted my-2">Title & Description</h6>
                 <div className="col-12">
-                  <div className="px-4 py-2 row">
+                  <div className="px-sm-4 py-2 row">
                     <div className="col-12">
                       {connectField('title', {
                         className: 'form-control',
@@ -60,23 +60,65 @@ const AddNewJob = () => {
                 </div>
               </div>
               <div className="row my-3">
-                <div className="col-12 col-sm-6">
-                  {connectField('maxAcademicGap', {
-                    className: 'form-control',
-                    placeholder: 'Max Academic gap',
-                  })(Input)}
+                <h6 className="col-12 text-muted my-2">For Courses</h6>
+                <div className="col-12">
+                  <div className="px-sm-4 py-2 row">
+                    <div className="col-12">
+                      <SelectOption
+                        multiple
+                        options={[
+                          { value: 'BTech.', text: 'B.Tech.' },
+                          { value: 'MTech.', text: 'M.Tech.' },
+                        ]}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div className="col-12 col-sm-6">
-                  {connectField('maxBacklogs', {
-                    className: 'form-control',
-                    placeholder: 'Max Backlogs Allowed',
-                  })(Input)}
+              </div>
+              <div className="row my-3">
+                <h6 className="col-12 text-muted my-2">For Departments</h6>
+                <div className="col-12">
+                  <div className="px-sm-4 py-2 row">
+                    <div className="col-12">
+                      <SelectOption
+                        multiple
+                        options={[
+                          {
+                            value: 'CSE',
+                            text: 'Computer Science and Engineering',
+                          },
+                          { value: 'CIVIL', text: 'Civil Engineering' },
+                        ]}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="row my-3">
+                <h6 className="col-12 text-muted my-2">
+                  Academic Gaps & Backlogs
+                </h6>
+                <div className="col-12">
+                  <div className="px-sm-4 py-2 row">
+                    <div className="col-12 col-sm-6">
+                      {connectField('maxAcademicGap', {
+                        className: 'form-control',
+                        placeholder: 'Max Academic gap',
+                      })(Input)}
+                    </div>
+                    <div className="col-12 col-sm-6">
+                      {connectField('maxBacklogs', {
+                        className: 'form-control',
+                        placeholder: 'Max Backlogs Allowed',
+                      })(Input)}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="row my-3">
                 <h6 className="col-12 text-muted my-2">Salary</h6>
                 <div className="col-12">
-                  <div className="px-4 py-2 row">
+                  <div className="px-sm-4 py-2 row">
                     <div className="col-12 col-sm-6">
                       {connectField('minSalary', {
                         className: 'form-control',
@@ -93,31 +135,22 @@ const AddNewJob = () => {
                 </div>
               </div>
               <div className="row my-3">
-                <div className="d-flex col-12 justify-content-between align-items-center my-2">
-                  <h6 className="text-muted">Rounds</h6>
-                  <button
-                    type="button"
-                    className="btn-sm btn-primary"
-                    onClick={() => addRoundOnClick()}
-                  >
-                    Add Round
-                  </button>
-                </div>
+                <h6 className="col-12 text-muted my-2">Rounds</h6>
                 {rounds.length !== 0 && (
                   <div className="col-12">
                     {rounds.map((round, index) => {
                       return (
-                        <div className="row px-4">
+                        <div className="row px-sm-4 py-2">
                           <div className="col-12 col-sm-6">
-                            {connectField(`round${index}`, {
+                            {connectField(`round ${index + 1}`, {
                               className: 'form-control',
-                              placeholder: `round${index} name`,
+                              placeholder: `Round ${index + 1} Name`,
                             })(Input)}
                           </div>
                           <div className="col-12 col-sm-6">
-                            {connectField(`round${index}`, {
+                            {connectField(`round ${index + 1}`, {
                               className: 'form-control',
-                              placeholder: `round${index} description`,
+                              placeholder: `Round ${index + 1} Description`,
                             })(Input)}
                           </div>
                         </div>
@@ -125,14 +158,21 @@ const AddNewJob = () => {
                     })}
                   </div>
                 )}
-                <SelectOption
-                  options={[
-                    { value: '123', text: '123' },
-                    { value: '1234', text: '223232' },
-                  ]}
-                  onChange={(val) => console.log(val.target.value)}
-                />
+                <div className="col-12">
+                  <div className="px-sm-4 py-2">
+                    <button
+                      className="btn btn-outline-secondary d-flex align-items-center"
+                      type="button"
+                      onClick={() => addRoundOnClick()}
+                    >
+                      <span className="material-icons">add</span> Add Round
+                    </button>
+                  </div>
+                </div>
               </div>
+              <button className="btn btn-block btn-primary" type="submit">
+                Add Job
+              </button>
             </form>
           </div>
         </Card>

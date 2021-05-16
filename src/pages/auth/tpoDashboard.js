@@ -1,15 +1,16 @@
 import React from 'react';
 import { Button, Card, Navbar } from '../../components';
 import ReactApexChart from 'react-apexcharts';
+import Footer from '../../components/footer';
 const TpoDashboard = () => {
   return (
     <>
       <Navbar />
       <Statistics />
-      <div className="container-fluid">
+      <div className="container">
         <div className="row">
-          <div className="col-12 col-md-8">
-            <Card>
+          <div className="col-12 col-md-8 d-md-flex">
+            <Card className="flex-md-fill">
               <div className="card-header bg-white">
                 <h5 className="text-center">Recent Jobs</h5>
               </div>
@@ -23,20 +24,36 @@ const TpoDashboard = () => {
               </div>
             </Card>
           </div>
-          <div className="col-12 col-md">
-            <Card>
+          <div className="col-12 col-md d-md-flex">
+            <Card className="flex-md-fill">
               <div className="card-header bg-white d-flex justify-content-between align-items-center">
                 <h5>Companies</h5>
                 <button className="btn btn-outline-dark">Add Company</button>
               </div>
-              <div className="card-body mx-3">
-                <Card>
-                  <h4 className="card-title">Company ka name</h4>
-                  <div className="card-body">comapny ka pata</div>
+              <div className="card-body">
+                <Card className="gradient2">
+                  <img
+                    src="https://preview.colorlib.com/theme/jobsco/assets/img/icon/1.svg"
+                    alt="Nagarro"
+                    className="card-img img-thumbnail"
+                    style={{ maxHeight: '100px', backgroundColor: '#f2fefe' }}
+                  />
+                  <div className="card-body">
+                    <h4 className="card-title">Nagarro Software Pvt Limited</h4>
+                    HR nagarro
+                  </div>
                 </Card>
-                <Card>
-                  <h4 className="card-title">Company ka name</h4>
-                  <div className="card-body">comapny ka pata</div>
+                <Card className="gradient3">
+                  <img
+                    src="https://preview.colorlib.com/theme/jobsco/assets/img/icon/1.svg"
+                    alt="Nagarro"
+                    className="card-img img-thumbnail"
+                    style={{ maxHeight: '100px', backgroundColor: '#f2fefe' }}
+                  />
+                  <div className="card-body">
+                    <h4 className="card-title">TCS</h4>
+                    TCS Recruter name
+                  </div>
                 </Card>
               </div>
               <div className="card-footer bg-white">
@@ -45,7 +62,95 @@ const TpoDashboard = () => {
             </Card>
           </div>
         </div>
+        <div className="row">
+          <div className="col-12 col-md-4 d-md-flex">
+            <Card className="flex-md-fill">
+              <div className="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5>Departments</h5>
+                <button className="btn btn-outline-dark">Add Dept</button>
+              </div>
+              <div className="card-body">
+                <input
+                  type="search"
+                  className="form-control"
+                  placeholder="Search..."
+                />
+                <div
+                  className="px-3 mt-3"
+                  style={{ height: '500px', overflowY: 'scroll' }}
+                >
+                  <Card className="gradient1">
+                    <div className="card-body">
+                      <h4 className="card-title">
+                        Computer Science and Engineering
+                      </h4>
+                      Hodname
+                    </div>
+                  </Card>
+                  <Card className="gradient2">
+                    <div className="card-body">
+                      <h4 className="card-title">
+                        Computer Science and Engineering
+                      </h4>
+                      Hodname
+                    </div>
+                  </Card>
+                  <Card className="gradient2">
+                    <div className="card-body">
+                      <h4 className="card-title">
+                        Computer Science and Engineering
+                      </h4>
+                      Hodname
+                    </div>
+                  </Card>
+                  <Card className="gradient2">
+                    <div className="card-body">
+                      <h4 className="card-title">
+                        Computer Science and Engineering
+                      </h4>
+                      Hodname
+                    </div>
+                  </Card>
+                  <Card className="gradient2">
+                    <div className="card-body">
+                      <h4 className="card-title">
+                        Computer Science and Engineering
+                      </h4>
+                      Hodname
+                    </div>
+                  </Card>
+                </div>
+              </div>
+            </Card>
+          </div>
+          <div className="col-12 col-md d-md-flex">
+            <Card className="flex-md-fill">
+              <div className="card-header bg-white">
+                <h5 className="text-center">Pending Update Requests</h5>
+              </div>
+              <div className="card-body mx-3">
+                <JobTitleCard />
+                <JobTitleCard />
+                <JobTitleCard />
+              </div>
+              <div className="card-footer bg-white">
+                <h6 className="text-muted text-center">See More</h6>
+              </div>
+            </Card>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-12">
+            <Card>
+              <div className="card-header bg-white text-center">
+                <h5>Recently Placed Students</h5>
+              </div>
+              <div className="card-body"></div>
+            </Card>
+          </div>
+        </div>
       </div>
+      <Footer />
     </>
   );
 };

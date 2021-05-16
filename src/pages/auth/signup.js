@@ -6,6 +6,7 @@ import {
   validatePassword,
   confirmPasswordValidator,
 } from '../../utils';
+import { UserService } from 'placeme-services/lib';
 
 const validators = {
   firstName: [required('First Name is required')],
@@ -20,7 +21,6 @@ const validators = {
 };
 
 const Signup = () => {
-  // #d0d0ce
   const { connectField, handleSubmit } = useFormReducer(validators);
   return (
     <div
@@ -45,8 +45,25 @@ const Signup = () => {
               <div className="card-body">
                 <form
                   className="p-1"
-                  onSubmit={handleSubmit((data) => {
-                    console.log('Data', data);
+                  onSubmit={handleSubmit(async (formData) => {
+                    const {
+                      email,
+                      password,
+                      firstName,
+                      lastName,
+                      middleName,
+                      phoneNumber,
+                    } = formData;
+                    const user = {
+                      email,
+                      mobile: phoneNumber,
+                      name: { firstName, lastName },
+                      otherDetails: {},
+                      role: 'student',
+                    };
+                    const { successful, error, data } =
+                      await UserService.signupUser(email, password, user);
+                    console.log(successful, error, data);
                   })}
                 >
                   <div className="row">
@@ -78,14 +95,6 @@ const Signup = () => {
                       placeholder: 'Mobile',
                       styles: 'col my-2',
                       iconName: 'phone',
-                    })(Input)}
-                  </div>
-                  <div className="row">
-                    {connectField('phoneNumber', {
-                      className: 'form-control',
-                      placeholder: 'Mobile',
-                      iconName: 'perm_contact_calendar',
-                      styles: 'col my-2',
                     })(Input)}
                   </div>
                   <div className="row">

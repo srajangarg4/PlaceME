@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormReducer } from '../../hooks';
 import { Input } from '../../components';
 import { required, validateEmail, validatePassword } from '../../utils';
-import { Link } from 'react-router-dom';
+import { UserService } from 'placeme-services/lib';
 
 const validators = {
   email: [required('Email is required'), validateEmail],
@@ -28,8 +28,13 @@ const LoginForm = () => {
           </div>
           <div className="card-body p-4">
             <form
-              onSubmit={handleSubmit((data) => {
-                console.log(data);
+              onSubmit={handleSubmit(async (formData) => {
+                const { email, password } = formData;
+                const { successful, error, data } = await UserService.loginUser(
+                  email,
+                  password,
+                );
+                console.log(successful, error, data);
               })}
             >
               <div className="form-group">
@@ -58,9 +63,9 @@ const LoginForm = () => {
                   </div>
                 </div>
               </div>
-              <div className="btn btn-primary" type="submit">
+              <button className="btn btn-primary" type="submit">
                 Submit
-              </div>
+              </button>
             </form>
           </div>
         </div>

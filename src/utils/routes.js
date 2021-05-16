@@ -32,6 +32,9 @@ const Screens = {
   tpoDashboard: {
     path: '/tpodashboard',
   },
+  allJobs: {
+    path: '/alljobs',
+  },
 };
 
 export default Screens;
