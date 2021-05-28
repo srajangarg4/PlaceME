@@ -1,21 +1,30 @@
 import React from 'react';
-import { useFormReducer } from '../../hooks';
-import { Input } from '../../components';
+import { useDatabase, useFormReducer } from '../../hooks';
+import { Button, Input } from '../../components';
 import { required, validateEmail, validatePassword } from '../../utils';
 import { UserService } from 'placeme-services/lib';
+import { useDispatch } from 'react-redux';
+import { login } from '../../actions/user';
 
 const validators = {
   email: [required('Email is required'), validateEmail],
   password: [required('Password is required'), validatePassword],
 };
 
-const Login = () => {
-  const { connectField, handleSubmit } = useFormReducer(validators);
-  return <LoginForm />;
+const loginUser = async ({ email, password }) => {
+  const { successful, error } = await UserService.loginUser(email, password);
+  if (successful) {
+    return UserService.getUserDetail(email);
+  }
+  return { successful: false, error };
 };
 
-const LoginForm = () => {
+const Login = () => {
   const { connectField, handleSubmit } = useFormReducer(validators);
+  const { callDatabase, loading } = useDatabase((email) =>
+    UserService.getUserDetail(email),
+  );
+  const dispatch = useDispatch();
   return (
     <div
       className="row min-vh-100 align-items-center justify-content-center"
@@ -30,11 +39,16 @@ const LoginForm = () => {
             <form
               onSubmit={handleSubmit(async (formData) => {
                 const { email, password } = formData;
-                const { successful, error, data } = await UserService.loginUser(
+                callDatabase(
+                  (userAuthDetails) => {
+                    console.log('After login successful', userAuthDetails);
+                    // dispatch(login(userAuthDetails));
+                  },
+                  (error) => {
+                    console.log(error);
+                  },
                   email,
-                  password,
                 );
-                console.log(successful, error, data);
               })}
             >
               <div className="form-group">
@@ -63,9 +77,12 @@ const LoginForm = () => {
                   </div>
                 </div>
               </div>
-              <button className="btn btn-primary" type="submit">
-                Submit
-              </button>
+              <Button
+                text="Login"
+                className="btn btn-primary"
+                loading={loading}
+                type="submit"
+              />
             </form>
           </div>
         </div>

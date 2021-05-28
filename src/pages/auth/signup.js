@@ -1,17 +1,20 @@
 import React from 'react';
-import { useFormReducer } from '../../hooks';
-import { Input } from '../../components';
+import { useDispatch } from 'react-redux';
+import { useDatabase, useFormReducer } from '../../hooks';
+import { Input, Button } from '../../components';
 import {
   required,
   validatePassword,
   confirmPasswordValidator,
+  Roles,
+  validateEmail,
 } from '../../utils';
 import { UserService } from 'placeme-services/lib';
 
 const validators = {
   firstName: [required('First Name is required')],
   lastName: [required('Last Name is required')],
-  email: [required('Email is required')],
+  email: [required('Email is required'), validateEmail],
   phoneNumber: [required('Phone Number is required')],
   password: [required('Password is required'), validatePassword],
   confPassword: [
@@ -20,8 +23,35 @@ const validators = {
   ],
 };
 
+const signupUser = ({ user, password }) => {
+  return UserService.signupUser(user, password);
+};
+
+const formatUser = ({
+  email,
+  firstName,
+  lastName,
+  phoneNumber,
+  middleName,
+}) => {
+  const user = {
+    email,
+    mobile: phoneNumber,
+    name: {
+      firstName,
+      middleName: middleName ?? null,
+      lastName,
+    },
+    role: Roles.STUDENT,
+    otherDetails: {},
+  };
+  return user;
+};
+
 const Signup = () => {
   const { connectField, handleSubmit } = useFormReducer(validators);
+  const { callDatabase, loading } = useDatabase(signupUser);
+  const dispatch = useDispatch();
   return (
     <div
       className="row align-items-center justify-content-center m-0 min-vh-100"
@@ -45,25 +75,18 @@ const Signup = () => {
               <div className="card-body">
                 <form
                   className="p-1"
-                  onSubmit={handleSubmit(async (formData) => {
-                    const {
-                      email,
-                      password,
-                      firstName,
-                      lastName,
-                      middleName,
-                      phoneNumber,
-                    } = formData;
-                    const user = {
-                      email,
-                      mobile: phoneNumber,
-                      name: { firstName, lastName },
-                      otherDetails: {},
-                      role: 'student',
-                    };
-                    const { successful, error, data } =
-                      await UserService.signupUser(email, password, user);
-                    console.log(successful, error, data);
+                  onSubmit={handleSubmit((formData) => {
+                    const user = formatUser(formData);
+                    const { password } = formData;
+                    callDatabase(
+                      (data) => {
+                        console.log('After signup', data);
+                      },
+                      (error) => {
+                        console.log('Something went wrong', error);
+                      },
+                      { user, password },
+                    );
                   })}
                 >
                   <div className="row">
@@ -112,12 +135,11 @@ const Signup = () => {
                       styles: 'col-lg-6 my-2',
                     })(Input)}
                   </div>
-                  <button
-                    className="btn btn-primary btn-block my-3"
+                  <Button
+                    text="Create Account"
                     type="submit"
-                  >
-                    Create your account
-                  </button>
+                    loading={loading}
+                  />
                 </form>
               </div>
             </div>

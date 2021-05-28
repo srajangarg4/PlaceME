@@ -1,5 +1,12 @@
 import messages from './messages';
 
+export const validateName = (firstName) => {
+  if (!firstName) {
+    return 'Invalid name. Please enter a valid name.';
+  }
+  return '';
+};
+
 export const validateFirstName = (firstName) => {
   if (!firstName) {
     return messages.signup.firstNameError;

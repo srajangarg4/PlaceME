@@ -1,12 +1,36 @@
 import React from 'react';
 
-const Button = ({ onClick, text, className, expand, ...extraProps }) => {
+const Button = ({
+  text,
+  isIcon,
+  iconName,
+  iconProps,
+  loading,
+  onClick,
+  className,
+  ...extraProps
+}) => {
   return (
     <button
+      className={`btn ${!isIcon ? 'btn-primary' : ''} ${
+        className ?? ''
+      } d-flex align-items-center
+        justify-content-center
+        `}
       onClick={onClick}
-      className={`btn btn-primary ${expand ? 'btn-block' : ''}`}
+      disabled={loading}
+      {...extraProps}
     >
-      {text}
+      {loading ? (
+        <div className="spinner-border spinner-border-sm mx-2" role="status">
+          <span className="sr-only">Loading...</span>
+        </div>
+      ) : (
+        <span className="material-icons" {...iconProps}>
+          {iconName}
+        </span>
+      )}
+      <span>{text}</span>
     </button>
   );
 };
