@@ -10,6 +10,7 @@ import {
   validateEmail,
 } from '../../utils';
 import { UserService } from 'placeme-services/lib';
+import { login } from '../../actions';
 
 const validators = {
   firstName: [required('First Name is required')],
@@ -81,6 +82,7 @@ const Signup = () => {
                     callDatabase(
                       (data) => {
                         console.log('After signup', data);
+                        dispatch(login(data));
                       },
                       (error) => {
                         console.log('Something went wrong', error);

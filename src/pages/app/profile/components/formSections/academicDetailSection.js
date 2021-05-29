@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Input } from '../../../../../components';
 import { useFormReducer } from '../../../../../hooks';
 import { required } from '../../../../../utils';
@@ -19,7 +20,21 @@ const validators = {
 };
 
 const AcademicDetailSection = ({ isFormEditable }) => {
-  const { connectField, handleSubmit } = useFormReducer(validators);
+  const academicDetail = useSelector(
+    (state) => state?.academicDetail?.[state.user?.email],
+  );
+  const { connectField, handleSubmit } = useFormReducer(validators, {
+    board12: academicDetail?.seniorSecondary?.board ?? '',
+    schoolName12: academicDetail?.seniorSecondary?.schoolName ?? '',
+    percentage12: academicDetail?.seniorSecondary?.percentage ?? '',
+    marksheet12: academicDetail?.seniorSecondary?.marksheet ?? '',
+    board10: academicDetail?.secondary?.board ?? '',
+    schoolName10: academicDetail?.secondary?.schoolName ?? '',
+    percentage10: academicDetail?.secondary?.percentage ?? '',
+    marksheet10: academicDetail?.secondary?.marksheet ?? '',
+    rollNumber: academicDetail?.gradutation?.rollNumber ?? '',
+    department: academicDetail?.gradutation?.department ?? '',
+  });
   return (
     <form
       onSubmit={handleSubmit((data) => {

@@ -1,30 +1,25 @@
 import React from 'react';
 import { useDatabase, useFormReducer } from '../../hooks';
 import { Button, Input } from '../../components';
-import { required, validateEmail, validatePassword } from '../../utils';
+import { required, Routes, validateEmail, validatePassword } from '../../utils';
 import { UserService } from 'placeme-services/lib';
 import { useDispatch } from 'react-redux';
 import { login } from '../../actions/user';
+import { useHistory } from 'react-router';
 
 const validators = {
   email: [required('Email is required'), validateEmail],
   password: [required('Password is required'), validatePassword],
 };
 
-const loginUser = async ({ email, password }) => {
-  const { successful, error } = await UserService.loginUser(email, password);
-  if (successful) {
-    return UserService.getUserDetail(email);
-  }
-  return { successful: false, error };
+const loginUser = ({ email, password }) => {
+  return UserService.loginUser(email, password);
 };
 
 const Login = () => {
   const { connectField, handleSubmit } = useFormReducer(validators);
-  const { callDatabase, loading } = useDatabase((email) =>
-    UserService.getUserDetail(email),
-  );
-  const dispatch = useDispatch();
+  const { callDatabase, loading } = useDatabase(loginUser);
+  const history = useHistory();
   return (
     <div
       className="row min-vh-100 align-items-center justify-content-center"
@@ -37,17 +32,15 @@ const Login = () => {
           </div>
           <div className="card-body p-4">
             <form
-              onSubmit={handleSubmit(async (formData) => {
-                const { email, password } = formData;
+              onSubmit={handleSubmit((formData) => {
                 callDatabase(
                   (userAuthDetails) => {
-                    console.log('After login successful', userAuthDetails);
-                    // dispatch(login(userAuthDetails));
+                    history.push(Routes.dashboard.path);
                   },
                   (error) => {
                     console.log(error);
                   },
-                  email,
+                  formData,
                 );
               })}
             >

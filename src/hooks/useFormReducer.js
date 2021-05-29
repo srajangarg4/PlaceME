@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react';
+import { useEffect } from 'react';
 
 // @ts-ignore
 export const validateValue = (key, value, formValues, validators) => {
@@ -25,6 +26,7 @@ export const REMOVE_PRISTINE = 'REMOVE_PRISTINE';
 export const START_SUBMITTING = 'START_SUBMITTING';
 export const STOP_SUBMITTING = 'STOP_SUBMITTING';
 export const UPDATE_SUBMIT_ERROR = 'UPDATE_SUBMIT_ERROR';
+export const UPDATE_INITIAL_VALUES = 'UPDATE_INITIAL_VALUES';
 
 export const createFormReducer = (validators = {}, initialValues = {}) => {
   let formValues = {};
@@ -35,7 +37,7 @@ export const createFormReducer = (validators = {}, initialValues = {}) => {
   Object.keys(validators).forEach((key) => {
     const error = validateValue(
       key,
-      formValues[key],
+      formValues[key]?.value,
       { ...formValues },
       validators?.[key],
     );
@@ -50,8 +52,8 @@ export const createFormReducer = (validators = {}, initialValues = {}) => {
     submitting: false,
     formValues: { ...formValues },
     hasError:
-      Object.keys(formValues).filter((key) => !!formValues[key].error).length
-      > 0,
+      Object.keys(formValues).filter((key) => !!formValues[key].error).length >
+      0,
   };
   const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -78,8 +80,9 @@ export const createFormReducer = (validators = {}, initialValues = {}) => {
           ...state.formValues,
           [key]: { value: newValue, error },
         };
-        const hasError = Object.keys(newFormValues).filter((k) => !!newFormValues[k].error)
-          .length > 0;
+        const hasError =
+          Object.keys(newFormValues).filter((k) => !!newFormValues[k].error)
+            .length > 0;
         return {
           ...state,
           formValues: { ...newFormValues },
@@ -100,8 +103,9 @@ export const createFormReducer = (validators = {}, initialValues = {}) => {
           );
           newFormValues = { ...newFormValues, [key]: { value, error } };
         });
-        const hasError = Object.keys(newFormValues).filter((key) => !!newFormValues[key].error)
-          .length > 0;
+        const hasError =
+          Object.keys(newFormValues).filter((key) => !!newFormValues[key].error)
+            .length > 0;
 
         return {
           ...state,
@@ -140,7 +144,12 @@ export const useFormReducer = (
     validators,
     initialValues,
   );
+
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    console.log('Change hui state');
+  }, [initialValues]);
 
   const validateForm = () => {
     // @ts-ignore
@@ -215,22 +224,25 @@ export const useFormReducer = (
     return res;
   };
 
-  const connectField = (name, extraProps = {}) => (Field) => (
-    <Field
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      name={name}
-      key={name}
-      value={state.formValues?.[name]?.value?.toString() ?? ''}
-      error={
-        shouldError(name)
-      }
-      errorMessage={shouldError(name) ? state.formValues?.[name]?.error : undefined}
-      onChange={(event) => {
-        change(name, event.target.value);
-      }}
-      {...extraProps}
-    />
-  );
+  const connectField =
+    (name, extraProps = {}) =>
+    (Field) =>
+      (
+        <Field
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          name={name}
+          key={name}
+          value={state.formValues?.[name]?.value?.toString() ?? ''}
+          error={shouldError(name)}
+          errorMessage={
+            shouldError(name) ? state.formValues?.[name]?.error : undefined
+          }
+          onChange={(event) => {
+            change(name, event.target.value);
+          }}
+          {...extraProps}
+        />
+      );
 
   return {
     ...state,

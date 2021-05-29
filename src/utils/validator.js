@@ -23,7 +23,7 @@ export const validateLastName = (lastName) => {
 
 export const validatePhoneNumber = (phoneNumber) => {
   const regex = /^\d{10}$/;
-  if (phoneNumber && phoneNumber.match(regex)) {
+  if (phoneNumber && phoneNumber?.match(regex)) {
     return '';
   }
   return 'Enter valid phone number';

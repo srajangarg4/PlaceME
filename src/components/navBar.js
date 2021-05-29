@@ -4,6 +4,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { Routes } from '../utils';
 import Icon from './icon';
 import { logout } from '../actions/user';
+import { UserService } from 'placeme-services/lib';
 
 const Navbar = ({
   links,
@@ -60,7 +61,12 @@ const Navbar = ({
           <NavItem
             icon="work"
             label="Logout"
-            onClick={() => dispatch(logout())}
+            onClick={async () => {
+              const { successful, error } = await UserService.logout();
+              if (successful) {
+                dispatch(logout());
+              }
+            }}
           />
         </div>
       </div>

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Button, Input, SelectOption } from '../../../../../components';
 import { useFormReducer } from '../../../../../hooks';
 import {
@@ -6,6 +7,8 @@ import {
   validatePhoneNumber,
   required,
   bloodGroups,
+  resolveDate,
+  getFormattedDate,
 } from '../../../../../utils';
 
 const validators = {
@@ -32,8 +35,33 @@ const validators = {
   ],
 };
 
+const getDefaultValues = (personalDetail) => ({
+  dob: getFormattedDate('yyyy-mm-dd', resolveDate(personalDetail?.dob)),
+  aadhar: personalDetail?.aadhar?.number ?? '',
+  bloodGroup: personalDetail?.bloodGroup ?? '',
+  emergencyContact: '' + personalDetail?.emergencyContact ?? '',
+  fatherName: personalDetail?.fatherDetails?.name ?? '',
+  fatherMobile: '' + personalDetail?.fatherDetails?.mobile ?? '',
+  fatherOccupation: personalDetail?.fatherDetails?.occupation ?? '',
+  motherName: personalDetail?.motherDetails?.name ?? '',
+  motherMobile: '' + personalDetail?.motherDetails?.mobile ?? '',
+  motherOccupation: personalDetail?.motherDetails?.occupation ?? '',
+  area: personalDetail?.address?.area ?? '',
+  city: personalDetail?.address?.city ?? '',
+  district: personalDetail?.address?.district ?? '',
+  state: personalDetail?.address?.state ?? '',
+  pincode: personalDetail?.address?.pincode ?? '',
+});
+
 const PersonalDetailSection = ({ isFormEditable }) => {
-  const { connectField, handleSubmit } = useFormReducer(validators);
+  const personalDetail = useSelector(
+    (state) => state?.personalDetail?.[state.user?.email],
+  );
+
+  const { connectField, handleSubmit } = useFormReducer(
+    validators,
+    getDefaultValues(personalDetail),
+  );
 
   return (
     <form

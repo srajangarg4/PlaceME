@@ -1,16 +1,11 @@
 import { LOGIN, LOGOUT } from '../actions';
-import { Roles } from '../utils';
 
-const userReducer = (
-  state = {
-    role: Roles.STUDENT,
-  },
-  action,
-) => {
+const userReducer = (state = {}, action) => {
   const { payload, type } = action;
   switch (type) {
     case LOGIN: {
-      return !payload ? state : { ...state, ...payload };
+      const newState = { ...state, ...payload };
+      return !payload ? state : newState;
     }
     case LOGOUT:
       return {};

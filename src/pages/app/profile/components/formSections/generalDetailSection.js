@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Input } from '../../../../../components';
 import { useFormReducer } from '../../../../../hooks';
 import { required } from '../../../../../utils';
@@ -11,7 +12,13 @@ const validators = {
 };
 
 const GeneralDetailSection = ({ isFormEditable }) => {
-  const { connectField, handleSubmit } = useFormReducer(validators);
+  const user = useSelector((state) => state.user);
+  const { connectField, handleSubmit } = useFormReducer(validators, {
+    firstName: user?.name?.firstName ?? '',
+    lastName: user?.name?.lastName ?? '',
+    email: user?.email ?? '',
+    phoneNumber: user?.mobile ?? '',
+  });
   return (
     <form
       onSubmit={handleSubmit((data) => {
@@ -52,7 +59,6 @@ const GeneralDetailSection = ({ isFormEditable }) => {
                 type: 'email',
                 id: 'email',
                 className: 'form-control',
-                value: 'xyz@gmail.com',
                 disabled: true,
               })(Input)}
             </div>
