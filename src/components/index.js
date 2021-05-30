@@ -1,6 +1,8 @@
 export * from './form';
 export * from './containers';
-export { default as Navbar } from './navBar';
-export { default as Icon } from './Icon';
-export { default as Button } from './Button';
-export { default as Loader } from './Loader';
+export { default as Navbar } from './navbar';
+export { default as Icon } from './icon';
+export { default as Button } from './button';
+export { default as Loader } from './loader';
+export { default as Footer } from './footer';
+export { default as Toast } from './toast';
