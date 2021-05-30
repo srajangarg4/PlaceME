@@ -6,20 +6,14 @@ const Input = ({
   iconName,
   errorMessage,
   className,
+  onChange,
   ...extraProps
 }) => {
   return (
     <div className={`form-group ${styles ?? ''}`}>
-      {/* {iconName && (
-        <div className="input-group-prepend">
-          <span className="input-group-text">
-            <i className="material-icons">{iconName}</i>
-          </span>
-        </div>
-      )} */}
-
       <input
         className={` ${error && 'is-invalid'} ${className ?? ''}`}
+        onChange={(e) => onChange(e.target.value)}
         {...extraProps}
       />
       <div className="help-block">

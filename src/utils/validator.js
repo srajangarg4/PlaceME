@@ -1,5 +1,12 @@
 import messages from './messages';
 
+export const validateName = (firstName) => {
+  if (!firstName) {
+    return 'Invalid name. Please enter a valid name.';
+  }
+  return '';
+};
+
 export const validateFirstName = (firstName) => {
   if (!firstName) {
     return messages.signup.firstNameError;
@@ -16,7 +23,7 @@ export const validateLastName = (lastName) => {
 
 export const validatePhoneNumber = (phoneNumber) => {
   const regex = /^\d{10}$/;
-  if (phoneNumber && phoneNumber.match(regex)) {
+  if (phoneNumber && phoneNumber?.match(regex)) {
     return '';
   }
   return 'Enter valid phone number';
