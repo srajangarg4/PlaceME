@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Input } from '../../../../../components';
 import { useFormReducer } from '../../../../../hooks';
@@ -12,13 +12,22 @@ const validators = {
 };
 
 const GeneralDetailSection = ({ isFormEditable }) => {
+  const { connectField, handleSubmit, change } = useFormReducer(validators);
+
   const user = useSelector((state) => state.user);
-  const { connectField, handleSubmit } = useFormReducer(validators, {
-    firstName: user?.name?.firstName ?? '',
-    lastName: user?.name?.lastName ?? '',
-    email: user?.email ?? '',
-    phoneNumber: user?.mobile ?? '',
-  });
+
+  useEffect(() => {
+    const data = {
+      firstName: user?.name?.firstName ?? '',
+      lastName: user?.name?.lastName ?? '',
+      email: user?.email ?? '',
+      phoneNumber: user?.mobile ?? '',
+    };
+    Object.keys(data).forEach((key) => {
+      change(key, data[key]);
+    });
+  }, [user, change]);
+
   return (
     <form
       onSubmit={handleSubmit((data) => {

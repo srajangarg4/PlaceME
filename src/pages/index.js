@@ -18,12 +18,12 @@ const ApplicationNavigator = () => {
   useEffect(() => {
     UserService.firebaseRef.auth().onAuthStateChanged(async (user) => {
       if (user) {
-        console.log('User ka bharosa', user);
         await fetchUserDetail(user.email);
       } else {
         history.push('/login');
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

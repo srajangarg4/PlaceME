@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import { Routes } from '../utils';
@@ -13,11 +13,11 @@ const Navbar = ({
   className,
   navItemContainerClassName,
 }) => {
-  const [state, setstate] = useState({ isNavOpen: true });
+  // const [state, setstate] = useState({ isNavOpen: true });
   const dispatch = useDispatch();
-  const toogle = () => {
-    setstate({ isNavOpen: !state.isNavOpen });
-  };
+  // const toogle = () => {
+  //   setstate({ isNavOpen: !state.isNavOpen });
+  // };
   return (
     <nav
       className={`navbar navbar-expand-md navbar-dark bg-dark 
@@ -62,7 +62,7 @@ const Navbar = ({
             icon="work"
             label="Logout"
             onClick={async () => {
-              const { successful, error } = await UserService.logout();
+              const { successful } = await UserService.logout();
               if (successful) {
                 dispatch(logout());
               }

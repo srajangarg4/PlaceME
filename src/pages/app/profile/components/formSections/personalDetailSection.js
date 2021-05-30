@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Input, SelectOption } from '../../../../../components';
 import { useFormReducer } from '../../../../../hooks';
@@ -58,10 +58,15 @@ const PersonalDetailSection = ({ isFormEditable }) => {
     (state) => state?.personalDetail?.[state.user?.email],
   );
 
-  const { connectField, handleSubmit } = useFormReducer(
-    validators,
-    getDefaultValues(personalDetail),
-  );
+  const { connectField, handleSubmit, change } = useFormReducer(validators);
+
+  // for autofill vales when data is fetched form firebase
+  useEffect(() => {
+    const data = getDefaultValues(personalDetail);
+    Object.keys(data).forEach((key) => {
+      change(key, data[key]);
+    });
+  }, [change, personalDetail]);
 
   return (
     <form

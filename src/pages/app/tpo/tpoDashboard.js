@@ -196,28 +196,28 @@ const JobTitleCard = () => {
   );
 };
 
-const StatCard = ({ gradientName, title, description }) => (
-  <div className="col d-flex align-self-stretch">
-    <Card className={`${gradientName}`}>
-      <div className="card-body">
-        <h6>{title}</h6>
-        <h3>{description}</h3>
-      </div>
-    </Card>
-  </div>
-);
+// const StatCard = ({ gradientName, title, description }) => (
+//   <div className="col d-flex align-self-stretch">
+//     <Card className={`${gradientName}`}>
+//       <div className="card-body">
+//         <h6>{title}</h6>
+//         <h3>{description}</h3>
+//       </div>
+//     </Card>
+//   </div>
+// );
 
 const Statistics = () => {
-  const statFields = [
-    { gradientName: 'gradient1', title: 'In Hand Offers', description: '8' },
-    { gradientName: 'gradient2', title: 'Applied In', description: '22' },
-    { gradientName: 'gradient3', title: 'Waiting for', description: '2' },
-    {
-      gradientName: 'red-orange',
-      title: 'Pending Update',
-      description: '12',
-    },
-  ];
+  // const statFields = [
+  //   { gradientName: 'gradient1', title: 'In Hand Offers', description: '8' },
+  //   { gradientName: 'gradient2', title: 'Applied In', description: '22' },
+  //   { gradientName: 'gradient3', title: 'Waiting for', description: '2' },
+  //   {
+  //     gradientName: 'red-orange',
+  //     title: 'Pending Update',
+  //     description: '12',
+  //   },
+  // ];
 
   return (
     <div className="col">

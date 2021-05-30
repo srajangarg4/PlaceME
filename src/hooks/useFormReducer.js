@@ -1,5 +1,4 @@
-import React, { useReducer } from 'react';
-import { useEffect } from 'react';
+import React, { useCallback, useReducer } from 'react';
 
 // @ts-ignore
 export const validateValue = (key, value, formValues, validators) => {
@@ -147,102 +146,112 @@ export const useFormReducer = (
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  useEffect(() => {
-    console.log('Change hui state');
-  }, [initialValues]);
-
-  const validateForm = () => {
-    // @ts-ignore
+  const validateForm = useCallback(() => {
     dispatch({ type: VALIDATE_FORM });
-  };
+  }, []);
 
-  const change = (key, value) => {
-    // @ts-ignore
-    dispatch({ type: UPDATE_FORM, payload: { key, value } });
-    validateForm();
-  };
+  const change = useCallback(
+    (key, value) => {
+      dispatch({ type: UPDATE_FORM, payload: { key, value } });
+      validateForm();
+    },
+    [validateForm],
+  );
 
-  const reset = () => {
-    // @ts-ignore
+  const reset = useCallback(() => {
     dispatch({ type: RESET_FORM });
-  };
+  }, []);
 
-  const dirty = () => {
-    // @ts-ignore
+  const dirty = useCallback(() => {
     dispatch({ type: REMOVE_PRISTINE });
-  };
+  }, []);
 
-  const startSubmitting = () => {
-    // @ts-ignore
+  const startSubmitting = useCallback(() => {
     dispatch({ type: START_SUBMITTING });
-  };
+  }, []);
 
-  const stopSubmitting = () => {
-    // @ts-ignore
+  const stopSubmitting = useCallback(() => {
     dispatch({ type: STOP_SUBMITTING });
-  };
+  }, []);
 
-  const setSubmitError = (error) => {
-    // @ts-ignore
+  const setSubmitError = useCallback((error) => {
     dispatch({
       type: UPDATE_SUBMIT_ERROR,
       payload: { key: 'submitError', error },
     });
-  };
+  }, []);
 
-  const handleSubmit = (callback) => (event) => {
-    event?.preventDefault();
-    dirty();
-    if (callback && !state.hasError && !state.submitting) {
-      startSubmitting();
-      const data = Object.keys(state.formValues).reduce(
-        (acc, key) => ({ ...acc, [key]: state.formValues[key].value }),
-        {},
-      );
-      setTimeout(() => {
-        callback(data);
-        stopSubmitting();
-      }, 200);
-    }
-  };
+  const handleSubmit = useCallback(
+    (callback) => (event) => {
+      event?.preventDefault();
+      dirty();
+      if (callback && !state.hasError && !state.submitting) {
+        startSubmitting();
+        const data = Object.keys(state.formValues).reduce(
+          (acc, key) => ({ ...acc, [key]: state.formValues[key].value }),
+          {},
+        );
+        setTimeout(() => {
+          callback(data);
+          stopSubmitting();
+        }, 200);
+      }
+    },
+    [
+      dirty,
+      startSubmitting,
+      state.formValues,
+      state.hasError,
+      state.submitting,
+      stopSubmitting,
+    ],
+  );
 
-  const handleChange = (value) => {
-    if (onChange) {
-      const data = Object.keys(state.formValues).reduce(
-        (acc, key) => ({ ...acc, [key]: state.formValues[key].value }),
-        {},
-      );
-      onChange(value, {
-        change,
-        values: { ...data, ...value },
-      });
-    }
-  };
-  const shouldError = (key) => {
-    const res = !state.pristine && !!state.formValues?.[key].error;
+  const handleChange = useCallback(
+    (value) => {
+      if (onChange) {
+        const data = Object.keys(state.formValues).reduce(
+          (acc, key) => ({ ...acc, [key]: state.formValues[key].value }),
+          {},
+        );
+        onChange(value, {
+          change,
+          values: { ...data, ...value },
+        });
+      }
+    },
+    [change, onChange, state.formValues],
+  );
 
-    return res;
-  };
+  const shouldError = useCallback(
+    (key) => {
+      const res = !state.pristine && !!state.formValues?.[key].error;
+      return res;
+    },
+    [state.formValues, state.pristine],
+  );
 
-  const connectField =
+  const connectField = useCallback(
     (name, extraProps = {}) =>
-    (Field) =>
-      (
-        <Field
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          name={name}
-          key={name}
-          value={state.formValues?.[name]?.value?.toString() ?? ''}
-          error={shouldError(name)}
-          errorMessage={
-            shouldError(name) ? state.formValues?.[name]?.error : undefined
-          }
-          onChange={(event) => {
-            change(name, event.target.value);
-          }}
-          {...extraProps}
-        />
-      );
+      (Field) =>
+        (
+          <Field
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            name={name}
+            key={name}
+            value={state.formValues?.[name]?.value ?? ''}
+            error={shouldError(name)}
+            errorMessage={
+              shouldError(name) ? state.formValues?.[name]?.error : undefined
+            }
+            onChange={(value) => {
+              change(name, value);
+            }}
+            {...extraProps}
+          />
+        ),
+    [change, shouldError, state.formValues],
+  );
 
   return {
     ...state,

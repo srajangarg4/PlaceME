@@ -3,8 +3,6 @@ import { useDatabase, useFormReducer } from '../../hooks';
 import { Button, Input } from '../../components';
 import { required, Routes, validateEmail, validatePassword } from '../../utils';
 import { UserService } from 'placeme-services/lib';
-import { useDispatch } from 'react-redux';
-import { login } from '../../actions/user';
 import { useHistory } from 'react-router';
 
 const validators = {
@@ -34,11 +32,11 @@ const Login = () => {
             <form
               onSubmit={handleSubmit((formData) => {
                 callDatabase(
-                  (userAuthDetails) => {
+                  () => {
                     history.push(Routes.dashboard.path);
                   },
                   (error) => {
-                    console.log(error);
+                    console.error(error);
                   },
                   formData,
                 );

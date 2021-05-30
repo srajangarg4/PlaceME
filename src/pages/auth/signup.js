@@ -85,7 +85,7 @@ const Signup = () => {
                         dispatch(login(data));
                       },
                       (error) => {
-                        console.log('Something went wrong', error);
+                        console.error('Something went wrong', error);
                       },
                       { user, password },
                     );

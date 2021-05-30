@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Input } from '../../../../../components';
 import { useFormReducer } from '../../../../../hooks';
@@ -19,22 +19,32 @@ const validators = {
   passingYear: [],
 };
 
+const getDefaultValues = (academicDetail) => ({
+  board12: academicDetail?.seniorSecondary?.board ?? '',
+  schoolName12: academicDetail?.seniorSecondary?.schoolName ?? '',
+  percentage12: academicDetail?.seniorSecondary?.percentage ?? '',
+  marksheet12: academicDetail?.seniorSecondary?.marksheet ?? '',
+  board10: academicDetail?.secondary?.board ?? '',
+  schoolName10: academicDetail?.secondary?.schoolName ?? '',
+  percentage10: academicDetail?.secondary?.percentage ?? '',
+  marksheet10: academicDetail?.secondary?.marksheet ?? '',
+  rollNumber: academicDetail?.gradutation?.rollNumber ?? '',
+  department: academicDetail?.gradutation?.department ?? '',
+});
+
 const AcademicDetailSection = ({ isFormEditable }) => {
   const academicDetail = useSelector(
     (state) => state?.academicDetail?.[state.user?.email],
   );
-  const { connectField, handleSubmit } = useFormReducer(validators, {
-    board12: academicDetail?.seniorSecondary?.board ?? '',
-    schoolName12: academicDetail?.seniorSecondary?.schoolName ?? '',
-    percentage12: academicDetail?.seniorSecondary?.percentage ?? '',
-    marksheet12: academicDetail?.seniorSecondary?.marksheet ?? '',
-    board10: academicDetail?.secondary?.board ?? '',
-    schoolName10: academicDetail?.secondary?.schoolName ?? '',
-    percentage10: academicDetail?.secondary?.percentage ?? '',
-    marksheet10: academicDetail?.secondary?.marksheet ?? '',
-    rollNumber: academicDetail?.gradutation?.rollNumber ?? '',
-    department: academicDetail?.gradutation?.department ?? '',
-  });
+  const { connectField, handleSubmit, change } = useFormReducer(validators);
+
+  useEffect(() => {
+    const values = getDefaultValues(academicDetail);
+    Object.keys(values).forEach((key) => {
+      change(key, values[key]);
+    });
+  }, [academicDetail, change]);
+
   return (
     <form
       onSubmit={handleSubmit((data) => {

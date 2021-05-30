@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input } from '../../../../../components';
+import { File, Input } from '../../../../../components';
 import { useFormReducer } from '../../../../../hooks';
 import { required } from '../../../../../utils';
 
@@ -23,7 +23,7 @@ const DocumentsDetailSection = ({ isFormEditable }) => {
         <div className="row">
           <div className="col-12 col-md-6">
             <div className="form-group">
-              <label for="first-name">First Name</label>
+              <label htmlFor="first-name">First Name</label>
               {connectField('firstName', {
                 type: 'text',
                 id: 'first-name',
@@ -34,7 +34,7 @@ const DocumentsDetailSection = ({ isFormEditable }) => {
           </div>
           <div className="col-12 col-md-6">
             <div className="form-group">
-              <label for="last-name">Last Name</label>
+              <label htmlFor="last-name">Last Name</label>
               {connectField('lastName', {
                 type: 'text',
                 id: 'last-name',
@@ -47,25 +47,23 @@ const DocumentsDetailSection = ({ isFormEditable }) => {
         <div className="row">
           <div className="col-12 col-md-6">
             <div className="form-group">
-              <label for="email">Email</label>
+              <label htmlFor="email">Email</label>
               {connectField('email', {
                 type: 'email',
                 id: 'email',
                 className: 'form-control',
-                value: 'xyz@gmail.com',
-                disabled: true,
+                disabled: !isFormEditable,
               })(Input)}
             </div>
           </div>
           <div className="col-12 col-md-6">
             <div className="form-group">
-              <label for="phone-number">Mobile</label>
+              <label htmlFor="phone-number">Mobile</label>
               {connectField('phoneNumber', {
-                type: 'text',
                 id: 'phone-number',
-                className: 'form-control',
+                className: 'form-control-file',
                 disabled: !isFormEditable,
-              })(Input)}
+              })(File)}
             </div>
           </div>
         </div>

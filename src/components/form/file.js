@@ -1,19 +1,19 @@
-import React from 'react';
-
-const Input = ({
+const File = ({
   error,
   styles,
   iconName,
   errorMessage,
   className,
+  value,
   onChange,
   ...extraProps
 }) => {
   return (
     <div className={`form-group ${styles ?? ''}`}>
       <input
+        type="file"
         className={` ${error && 'is-invalid'} ${className ?? ''}`}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange(e?.target?.files?.[0])}
         {...extraProps}
       />
       <div className="help-block">
@@ -23,4 +23,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default File;
