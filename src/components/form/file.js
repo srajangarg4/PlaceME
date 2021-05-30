@@ -1,19 +1,30 @@
+import React from 'react';
+
 const File = ({
+  id,
   error,
-  styles,
+  label,
+  value,
   iconName,
   errorMessage,
-  className,
-  value,
+  containerClassName,
+  inputFieldClassName,
+  labelClassName,
+  disabled,
   onChange,
   ...extraProps
 }) => {
   return (
-    <div className={`form-group ${styles ?? ''}`}>
+    <div className={`form-group ${containerClassName}`}>
+      <label htmlFor={id} className={labelClassName}>
+        {label}
+      </label>
       <input
         type="file"
-        className={` ${error && 'is-invalid'} ${className ?? ''}`}
+        id={id}
+        className={` ${error && 'is-invalid'} ${inputFieldClassName}`}
         onChange={(e) => onChange(e?.target?.files?.[0])}
+        disabled={disabled}
         {...extraProps}
       />
       <div className="help-block">
@@ -21,6 +32,13 @@ const File = ({
       </div>
     </div>
   );
+};
+
+File.defaultProps = {
+  labelClassName: 'text-muted',
+  inputFieldClassName: 'form-control-file',
+  disabled: false,
+  containerClassName: '',
 };
 
 export default File;

@@ -1,19 +1,28 @@
 import React from 'react';
 
 const Input = ({
+  id,
   error,
-  styles,
+  label,
   iconName,
   errorMessage,
-  className,
+  containerClassName,
+  inputFieldClassName,
+  labelClassName,
+  disabled,
   onChange,
   ...extraProps
 }) => {
   return (
-    <div className={`form-group ${styles ?? ''}`}>
+    <div className={`form-group ${containerClassName}`}>
+      <label htmlFor={id} className={labelClassName}>
+        {label}
+      </label>
       <input
-        className={` ${error && 'is-invalid'} ${className ?? ''}`}
+        className={`${error && 'is-invalid'} ${inputFieldClassName}`}
         onChange={(e) => onChange(e.target.value)}
+        id={id}
+        disabled={disabled}
         {...extraProps}
       />
       <div className="help-block">
@@ -21,6 +30,13 @@ const Input = ({
       </div>
     </div>
   );
+};
+
+Input.defaultProps = {
+  labelClassName: 'text-muted',
+  inputFieldClassName: 'form-control',
+  disabled: false,
+  containerClassName: '',
 };
 
 export default Input;

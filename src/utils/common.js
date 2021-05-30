@@ -28,3 +28,7 @@ export const getFormattedDate = (format, dateInput) => {
   formattedDate = formattedDate.replace('yyyy', `${currentYear}`);
   return formattedDate;
 };
+
+const compareObjects = (tobeCompare, compareFrom) => {
+  Object.keys(compareFrom);
+};

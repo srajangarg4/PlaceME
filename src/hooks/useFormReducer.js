@@ -2,7 +2,7 @@ import React, { useCallback, useReducer } from 'react';
 
 // @ts-ignore
 export const validateValue = (key, value, formValues, validators) => {
-  if (validators.length > 0) {
+  if (validators?.length > 0) {
     const errors = [];
     validators.forEach((validator) => {
       const error = validator(value, { ...formValues });

@@ -2,23 +2,24 @@ import React from 'react';
 
 const Button = ({
   text,
-  isIcon,
   iconName,
   iconProps,
+  buttonClassName,
   loading,
   onClick,
+  fullWidth,
   className,
+  type,
   ...extraProps
 }) => {
   return (
     <button
-      className={`btn ${!isIcon ? 'btn-primary' : ''} ${
-        className ?? ''
-      } d-flex align-items-center
-        justify-content-center
-        `}
+      className={`btn ${className} ${
+        fullWidth && 'btn-block'
+      } d-flex align-items-center justify-content-center`}
       onClick={onClick}
       disabled={loading}
+      type={type}
       {...extraProps}
     >
       {loading ? (
@@ -26,13 +27,22 @@ const Button = ({
           <span className="sr-only">Loading...</span>
         </div>
       ) : (
-        <span className="material-icons" {...iconProps}>
-          {iconName}
-        </span>
+        <>
+          <span className="material-icons" {...iconProps}>
+            {iconName}
+          </span>
+          <span>{text}</span>
+        </>
       )}
-      <span>{text}</span>
     </button>
   );
+};
+
+Button.defaultProps = {
+  className: 'btn-primary',
+  fullWidth: false,
+  loading: false,
+  type: 'button',
 };
 
 export default Button;

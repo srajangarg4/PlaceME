@@ -11,6 +11,8 @@ const validators = {
   phoneNumber: [required('Phone Number is required')],
 };
 
+const mapToGeneralDetails = (details) => ({});
+
 const GeneralDetailSection = ({ isFormEditable }) => {
   const { connectField, handleSubmit, change } = useFormReducer(validators);
 
