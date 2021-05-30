@@ -5,7 +5,6 @@ import {
   ProfileDetailCard,
   ProfileHeader,
 } from './components';
-import { formSections } from './utils';
 
 const Profile = ({ section }) => (
   <div className="main-content">
