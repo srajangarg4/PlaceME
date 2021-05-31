@@ -78,104 +78,72 @@ const PersonalDetailSection = ({ isFormEditable }) => {
       <div className="py-4 px-md-4">
         <div className="row">
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <label htmlFor="dob-field" className="text-muted">
-                Date of Birth
-              </label>
-              {connectField('dob', {
-                type: 'date',
-                id: 'dob-field',
-                className: 'form-control',
-                disabled: !isFormEditable,
-              })(Input)}
-            </div>
+            {connectField('dob', {
+              type: 'date',
+              id: 'dob-field',
+              className: 'form-control',
+              disabled: !isFormEditable,
+              label: 'Date of Birth',
+            })(Input)}
           </div>
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <label htmlFor="blood-group-field" className="text-muted">
-                Blood Group
-              </label>
-              {connectField('bloodGroup', {
-                type: 'text',
-                id: 'blood-group-field',
-                className: 'form-control',
-                disabled: !isFormEditable,
-                options: bloodGroups,
-              })(SelectOption)}
-            </div>
+            {connectField('bloodGroup', {
+              type: 'text',
+              id: 'blood-group-field',
+              className: 'form-control',
+              disabled: !isFormEditable,
+              options: bloodGroups,
+              label: 'Blood Group',
+            })(SelectOption)}
           </div>
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <label htmlFor="aadhar-field" className="text-muted">
-                Aadhar
-              </label>
-              {connectField('aadhar', {
-                id: 'aadhar-field',
-                className: 'form-control',
-                disabled: !isFormEditable,
-              })(Input)}
-            </div>
+            {connectField('aadhar', {
+              id: 'aadhar-field',
+              className: 'form-control',
+              disabled: !isFormEditable,
+              label: 'Aadhar',
+            })(Input)}
           </div>
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <label htmlFor="emergency-contact-field" className="text-muted">
-                Emergency Contact
-              </label>
-              {connectField('emergencyContact', {
-                id: 'emergency-contact-field',
-                className: 'form-control',
-                disabled: !isFormEditable,
-              })(Input)}
-            </div>
+            {connectField('emergencyContact', {
+              id: 'emergency-contact-field',
+              className: 'form-control',
+              disabled: !isFormEditable,
+              label: 'Emergency Contact',
+            })(Input)}
           </div>
           <h6 className="col-12 py-3 text-muted">Address</h6>
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <label htmlFor="area-field" className="text-muted">
-                Area
-              </label>
-              {connectField('area', {
-                id: 'area-field',
-                className: 'form-control',
-                disabled: !isFormEditable,
-              })(Input)}
-            </div>
+            {connectField('area', {
+              id: 'area-field',
+              className: 'form-control',
+              disabled: !isFormEditable,
+              label: 'Area',
+            })(Input)}
           </div>
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <label htmlFor="city-field" className="text-muted">
-                City
-              </label>
-              {connectField('city', {
-                id: 'city-field',
-                className: 'form-control',
-                disabled: !isFormEditable,
-              })(Input)}
-            </div>
+            {connectField('city', {
+              id: 'city-field',
+              className: 'form-control',
+              disabled: !isFormEditable,
+              label: 'City',
+            })(Input)}
           </div>
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <label htmlFor="state-field" className="text-muted">
-                State
-              </label>
-              {connectField('state', {
-                id: 'state-field',
-                className: 'form-control',
-                disabled: !isFormEditable,
-              })(Input)}
-            </div>
+            {connectField('state', {
+              id: 'state-field',
+              className: 'form-control',
+              disabled: !isFormEditable,
+              label: 'State',
+            })(Input)}
           </div>
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <label htmlFor="pincode-field" className="text-muted">
-                Pincode
-              </label>
-              {connectField('pincode', {
-                id: 'pincode-field',
-                className: 'form-control',
-                disabled: !isFormEditable,
-              })(Input)}
-            </div>
+            {connectField('pincode', {
+              id: 'pincode-field',
+              className: 'form-control',
+              disabled: !isFormEditable,
+              label: 'Pincode',
+            })(Input)}
           </div>
           <div className="col-12 col-md-6">
             <div className="row py-3">
@@ -183,43 +151,28 @@ const PersonalDetailSection = ({ isFormEditable }) => {
             </div>
             <div className="row">
               <div className="col-12">
-                <div className="form-group">
-                  <label htmlFor="father-email-field" className="text-muted">
-                    Name
-                  </label>
-                  {connectField('fatherName', {
-                    id: 'father-email-field',
-                    className: 'form-control',
-                    disabled: !isFormEditable,
-                  })(Input)}
-                </div>
+                {connectField('fatherName', {
+                  id: 'father-email-field',
+                  className: 'form-control',
+                  disabled: !isFormEditable,
+                  label: 'Name',
+                })(Input)}
               </div>
               <div className="col-12">
-                <div className="form-group">
-                  <label htmlFor="father-mobile-field" className="text-muted">
-                    Mobile Number
-                  </label>
-                  {connectField('fatherMobile', {
-                    id: 'father-mobile-field',
-                    className: 'form-control',
-                    disabled: !isFormEditable,
-                  })(Input)}
-                </div>
+                {connectField('fatherMobile', {
+                  id: 'father-mobile-field',
+                  className: 'form-control',
+                  disabled: !isFormEditable,
+                  label: 'Mobile Number',
+                })(Input)}
               </div>
               <div className="col-12">
-                <div className="form-group">
-                  <label
-                    htmlFor="father-occupation-field"
-                    className="text-muted"
-                  >
-                    Occupation
-                  </label>
-                  {connectField('fatherOccupation', {
-                    id: 'father-occupation-field',
-                    className: 'form-control',
-                    disabled: !isFormEditable,
-                  })(Input)}
-                </div>
+                {connectField('fatherOccupation', {
+                  id: 'father-occupation-field',
+                  className: 'form-control',
+                  disabled: !isFormEditable,
+                  label: 'Occupation',
+                })(Input)}
               </div>
             </div>
           </div>
@@ -229,43 +182,28 @@ const PersonalDetailSection = ({ isFormEditable }) => {
             </div>
             <div className="row">
               <div className="col-12">
-                <div className="form-group">
-                  <label htmlFor="mother-name-field" className="text-muted">
-                    Name
-                  </label>
-                  {connectField('motherName', {
-                    id: 'mother-name-field',
-                    className: 'form-control',
-                    disabled: !isFormEditable,
-                  })(Input)}
-                </div>
+                {connectField('motherName', {
+                  id: 'mother-name-field',
+                  className: 'form-control',
+                  disabled: !isFormEditable,
+                  label: 'Name',
+                })(Input)}
               </div>
               <div className="col-12">
-                <div className="form-group">
-                  <label htmlFor="mother-mobile-field" className="text-muted">
-                    Mobile Number
-                  </label>
-                  {connectField('motherMobile', {
-                    id: 'mother-mobile-field',
-                    className: 'form-control',
-                    disabled: !isFormEditable,
-                  })(Input)}
-                </div>
+                {connectField('motherMobile', {
+                  id: 'mother-mobile-field',
+                  className: 'form-control',
+                  disabled: !isFormEditable,
+                  label: 'Mobile Number',
+                })(Input)}
               </div>
               <div className="col-12">
-                <div className="form-group">
-                  <label
-                    htmlFor="mother-occupation-field"
-                    className="text-muted"
-                  >
-                    Occupation
-                  </label>
-                  {connectField('motherOccupation', {
-                    id: 'mother-occupation-field',
-                    className: 'form-control',
-                    disabled: !isFormEditable,
-                  })(Input)}
-                </div>
+                {connectField('motherOccupation', {
+                  id: 'mother-occupation-field',
+                  className: 'form-control',
+                  disabled: !isFormEditable,
+                  label: 'Occupation',
+                })(Input)}
               </div>
             </div>
           </div>
@@ -273,7 +211,7 @@ const PersonalDetailSection = ({ isFormEditable }) => {
         {isFormEditable && (
           <Button
             type="submit"
-            expand
+            fullWidth
             className="btn-primary"
             text="Send for update"
           />

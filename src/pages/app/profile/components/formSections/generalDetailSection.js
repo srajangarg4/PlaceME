@@ -40,50 +40,42 @@ const GeneralDetailSection = ({ isFormEditable }) => {
       <div className="py-4 px-md-4">
         <div className="row">
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <label htmlFor="first-name">First Name</label>
-              {connectField('firstName', {
-                type: 'text',
-                id: 'first-name',
-                className: 'form-control',
-                disabled: !isFormEditable,
-              })(Input)}
-            </div>
+            {connectField('firstName', {
+              type: 'text',
+              id: 'first-name',
+              className: 'form-control',
+              disabled: !isFormEditable,
+              label: 'First Name',
+            })(Input)}
           </div>
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <label htmlFor="last-name">Last Name</label>
-              {connectField('lastName', {
-                type: 'text',
-                id: 'last-name',
-                className: 'form-control',
-                disabled: !isFormEditable,
-              })(Input)}
-            </div>
+            {connectField('lastName', {
+              type: 'text',
+              id: 'last-name',
+              className: 'form-control',
+              disabled: !isFormEditable,
+              label: 'Last Name',
+            })(Input)}
           </div>
         </div>
         <div className="row">
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              {connectField('email', {
-                type: 'email',
-                id: 'email',
-                className: 'form-control',
-                disabled: true,
-              })(Input)}
-            </div>
+            {connectField('email', {
+              type: 'email',
+              id: 'email',
+              className: 'form-control',
+              disabled: true,
+              label: 'Email',
+            })(Input)}
           </div>
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <label htmlFor="phone-number">Mobile</label>
-              {connectField('phoneNumber', {
-                type: 'text',
-                id: 'phone-number',
-                className: 'form-control',
-                disabled: !isFormEditable,
-              })(Input)}
-            </div>
+            {connectField('phoneNumber', {
+              type: 'text',
+              id: 'phone-number',
+              className: 'form-control',
+              disabled: !isFormEditable,
+              label: 'Mobile',
+            })(Input)}
           </div>
         </div>
         {isFormEditable && (

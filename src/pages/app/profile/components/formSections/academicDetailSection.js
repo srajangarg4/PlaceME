@@ -149,16 +149,15 @@ const AcademicDetailSection = ({ isFormEditable }) => {
           </div>
           <h6 className="col-12 py-3 text-muted">Graduation</h6>
           <div className="col-12 col-md-6">
-            {connectField('marksheet10', {
-              id: 'marksheet-10-field',
+            {connectField('rollNumber', {
+              id: 'roll-number-field',
               label: 'Roll Number',
               disabled: !isFormEditable,
             })(Input)}
           </div>
           <div className="col-12 col-md-6">
-            {connectField('marksheet10', {
-              type: 'file',
-              id: 'marksheet-10-field',
+            {connectField('department', {
+              id: 'department-field',
               label: 'Department',
               disabled: !isFormEditable,
             })(Input)}

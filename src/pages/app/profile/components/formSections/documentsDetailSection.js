@@ -1,5 +1,5 @@
 import React from 'react';
-import { File, Input } from '../../../../../components';
+import { Button, File, Input } from '../../../../../components';
 import { useFormReducer } from '../../../../../hooks';
 import { required } from '../../../../../utils';
 
@@ -22,58 +22,48 @@ const DocumentsDetailSection = ({ isFormEditable }) => {
       <div className="py-4 px-md-4">
         <div className="row">
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <label htmlFor="first-name">First Name</label>
-              {connectField('firstName', {
-                type: 'text',
-                id: 'first-name',
-                className: 'form-control',
-                disabled: !isFormEditable,
-              })(Input)}
-            </div>
+            {connectField('firstName', {
+              type: 'text',
+              id: 'first-name',
+              className: 'form-control',
+              label: 'First Name',
+              disabled: !isFormEditable,
+            })(Input)}
           </div>
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <label htmlFor="last-name">Last Name</label>
-              {connectField('lastName', {
-                type: 'text',
-                id: 'last-name',
-                className: 'form-control',
-                disabled: !isFormEditable,
-              })(Input)}
-            </div>
+            {connectField('lastName', {
+              type: 'text',
+              id: 'last-name',
+              className: 'form-control',
+              disabled: !isFormEditable,
+              label: 'Last Name',
+            })(Input)}
           </div>
         </div>
         <div className="row">
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              {connectField('email', {
-                type: 'email',
-                id: 'email',
-                className: 'form-control',
-                disabled: !isFormEditable,
-              })(Input)}
-            </div>
+            {connectField('email', {
+              type: 'email',
+              id: 'email',
+              className: 'form-control',
+              disabled: !isFormEditable,
+              label: 'Email',
+            })(Input)}
           </div>
           <div className="col-12 col-md-6">
-            <div className="form-group">
-              <label htmlFor="phone-number">Mobile</label>
-              {connectField('phoneNumber', {
-                id: 'phone-number',
-                className: 'form-control-file',
-                disabled: !isFormEditable,
-              })(File)}
-            </div>
+            {connectField('phoneNumber', {
+              id: 'phone-number',
+              className: 'form-control-file',
+              disabled: !isFormEditable,
+              label: 'Mobile',
+            })(File)}
           </div>
         </div>
-        {isFormEditable && (
-          <input
-            type="submit"
-            className="btn btn-primary w-100"
-            value="Send for update"
-          />
-        )}
+        <div>
+          {isFormEditable && (
+            <Button text="Send for update" fullWidth type="submit" />
+          )}
+        </div>
       </div>
     </form>
   );

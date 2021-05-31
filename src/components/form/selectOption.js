@@ -1,20 +1,29 @@
 import React from 'react';
 
 const SelectOption = ({
+  id,
   error,
-  styles,
+  label,
   iconName,
   errorMessage,
-  className,
-  options,
+  containerClassName,
+  inputFieldClassName,
+  labelClassName,
+  disabled,
   onChange,
+  options,
   ...extraProps
 }) => {
   return (
-    <div className={`form-group ${styles ?? ''}`}>
+    <div className={`form-group ${containerClassName}`}>
+      <label htmlFor={id} className={labelClassName}>
+        {label}
+      </label>
       <select
-        className={`form-control ${error && 'is-invalid'} ${className ?? ''}`}
+        className={`${error && 'is-invalid'} ${inputFieldClassName}`}
+        id={id}
         onChange={onChange}
+        disabled={disabled}
         {...extraProps}
       >
         {options.map((option) => (
@@ -28,6 +37,13 @@ const SelectOption = ({
       </div>
     </div>
   );
+};
+
+SelectOption.defaultProps = {
+  labelClassName: 'text-muted',
+  inputFieldClassName: 'form-control',
+  disabled: false,
+  containerClassName: '',
 };
 
 export default SelectOption;
