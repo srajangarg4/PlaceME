@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Input, File } from '../../../../../components';
 import { useFormReducer } from '../../../../../hooks';
-import { required } from '../../../../../utils';
+import { flattenObject, required } from '../../../../../utils';
 
 const validators = {
   board12: [required('Board is required')],
@@ -20,7 +20,6 @@ const validators = {
   department: [],
   startingYear: [],
   passingYear: [],
-  semesters: [],
 
   academicGap: [],
 };
@@ -68,22 +67,54 @@ const AcademicDetailSection = ({ isFormEditable }) => {
     (state) => state?.academicDetail?.[state.user?.email],
   );
 
-  const [semesters, setSemester] = useState();
+  const [semesters, setSemester] = useState([]);
 
-  const { connectField, handleSubmit, change } = useFormReducer(validators);
+  const { connectField, handleSubmit, change, addField } =
+    useFormReducer(validators);
+
+  // to add percentage, marksheet anf backlogs fields inside form reducer.
+  const addSemesterField = useCallback(
+    (index, { percentage, activeBacklogs }) => {
+      addField(
+        `semester${index}Percentage`,
+        [required('This is required')],
+        percentage,
+      );
+      addField(
+        `semester${index}Backlogs`,
+        [required('This is required')],
+        activeBacklogs,
+      );
+      addField(`semester${index}Marksheets`, []);
+    },
+    [addField],
+  );
 
   useEffect(() => {
     const values = getDefaultValues(academicDetail);
+
     Object.keys(values).forEach((key) => {
       change(key, values[key]);
     });
+
     setSemester(academicDetail?.graduation?.semesters);
-  }, [academicDetail, change]);
+
+    /**
+     * To initailize prefilled semesters details
+     */
+    const size = academicDetail?.graduation?.semesters?.length;
+    let i = 1;
+    while (i <= size) {
+      addSemesterField(i, academicDetail?.graduation?.semesters[i - 1]);
+      i++;
+    }
+  }, [academicDetail, addSemesterField, change]);
 
   return (
     <form
       onSubmit={handleSubmit((data) => {
-        console.log(data);
+        console.log('Data', data);
+        console.log('Flatten', flattenObject(academicDetail));
       })}
     >
       <h4 className="text-muted text-center pb-4">Academic Details</h4>
@@ -163,35 +194,46 @@ const AcademicDetailSection = ({ isFormEditable }) => {
             })(Input)}
           </div>
           <div className="col-12">
-            {semesters?.map(({ activeBacklogs, percentage }, index) => (
+            {semesters?.map((item, index) => (
               <div className="row" key={index.toString()}>
                 <h6 className="col-12 py-3 text-muted">Semester {index + 1}</h6>
-                <div className="col-12 col-md-6">
-                  <Input
-                    disabled={!isFormEditable}
-                    onChange={(text) =>
-                      change(`activeBacklog${index + 1}`, text)
-                    }
-                    label="Active Backlogs"
-                  />
+                <div className="col-12 col-md-4">
+                  {connectField(`semester${index + 1}Backlogs`, {
+                    disabled: !isFormEditable,
+                    onChange: (text) =>
+                      change(`semester${index + 1}Backlogs`, text),
+                    label: 'Active Backlogs',
+                  })(Input)}
                 </div>
-                <div className="col-12 col-md-6">
-                  <Input
-                    disabled={!isFormEditable}
-                    onChange={(text) => change(`percentage${index + 1}`, text)}
-                    label="Percentage"
-                  />
+                <div className="col-12 col-md-4">
+                  {connectField(`semester${index + 1}Percentage`, {
+                    disabled: !isFormEditable,
+                    onChange: (text) =>
+                      change(`semester${index + 1}Percentage`, text),
+                    label: 'Percentage',
+                  })(Input)}
                 </div>
-                <div className="col-12">
-                  <File
-                    disabled={!isFormEditable}
-                    onChange={(file) => change(`marksheet${index + 1}`, file)}
-                    label="Marksheet"
-                  />
+                <div className="col-12 col-md-4">
+                  {connectField(`semester${index + 1}Marksheets`, {
+                    disabled: !isFormEditable,
+                    onChange: (file) =>
+                      change(`semester${index + 1}Marksheets`, file),
+                    label: 'Marksheet',
+                  })(File)}
                 </div>
               </div>
             ))}
           </div>
+        </div>
+        <div className="row d-flex justify-content-end my-3 mx-0">
+          <Button
+            disabled={!isFormEditable}
+            text="Add Semester"
+            onClick={() => {
+              setSemester([...semesters, {}]);
+              addSemesterField(semesters.length + 1);
+            }}
+          />
         </div>
         {isFormEditable && (
           <Button type="submit" fullWidth text="Send for Update" />
