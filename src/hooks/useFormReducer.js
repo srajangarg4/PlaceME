@@ -19,6 +19,7 @@ export const validateValue = (key, value, formValues, validators) => {
 };
 
 export const UPDATE_FORM = 'UPDATE_FORM';
+export const ADD_FIELD = 'ADD_FIELD';
 export const VALIDATE_FORM = 'VALIDATE_FORM';
 export const RESET_FORM = 'RESET_FORM';
 export const REMOVE_PRISTINE = 'REMOVE_PRISTINE';
@@ -56,6 +57,21 @@ export const createFormReducer = (validators = {}, initialValues = {}) => {
   };
   const reducer = (state = initialState, action) => {
     switch (action.type) {
+      case ADD_FIELD: {
+        const {
+          payload: { key },
+        } = action;
+        const newValidtor = action.payload.validators;
+        const defaultValue = action.payload.defaultValue;
+        validators[key] = newValidtor;
+        state.formValues[key] = {
+          value: defaultValue,
+          error: validateValue(key, defaultValue, formValues),
+        };
+        return {
+          ...state,
+        };
+      }
       case UPDATE_FORM: {
         if (!action?.payload) {
           return state;
@@ -158,6 +174,10 @@ export const useFormReducer = (
     [validateForm],
   );
 
+  const addField = useCallback((key, validators, defaultValue) => {
+    dispatch({ type: ADD_FIELD, payload: { key, validators, defaultValue } });
+  }, []);
+
   const reset = useCallback(() => {
     dispatch({ type: RESET_FORM });
   }, []);
@@ -225,10 +245,10 @@ export const useFormReducer = (
 
   const shouldError = useCallback(
     (key) => {
-      const res = !state.pristine && !!state.formValues?.[key].error;
+      const res = !state.pristine && !!state.formValues?.[key]?.error;
       return res;
     },
-    [state.formValues, state.pristine],
+    [state],
   );
 
   const connectField = useCallback(
@@ -236,7 +256,6 @@ export const useFormReducer = (
       (Field) =>
         (
           <Field
-            // eslint-disable-next-line react/jsx-props-no-spreading
             name={name}
             key={name}
             value={state.formValues?.[name]?.value ?? ''}
@@ -261,6 +280,7 @@ export const useFormReducer = (
     handleSubmit,
     setSubmitError,
     connectField,
+    addField,
     handleChange,
   };
 };
