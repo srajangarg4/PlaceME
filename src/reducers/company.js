@@ -1,4 +1,4 @@
-import { ADD_COMPANIES, ADD_COMPANY } from '../actions/companies';
+import { ADD_COMPANIES, ADD_COMPANY } from 'actions/companies';
 
 const comapnyReducer = (
   state = {

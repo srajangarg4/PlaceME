@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Input, SelectOption } from '../../../../../components';
-import { useFormReducer } from '../../../../../hooks';
+import { Button, Input, SelectOption } from 'components';
+import { useFormReducer } from 'hooks';
 import {
   validateName,
   validatePhoneNumber,
@@ -9,7 +9,7 @@ import {
   bloodGroups,
   resolveDate,
   getFormattedDate,
-} from '../../../../../utils';
+} from 'utils';
 
 const validators = {
   fatherName: [required("Father's name is required."), validateName],

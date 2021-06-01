@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Routes } from '../utils';
+import { Routes } from 'utils';
 import ComponentResolver from './componentResolver';
 import { Login, Signup } from './auth';
 import { StudentDashboard, StudentProfile } from './app/student';
@@ -9,7 +9,7 @@ import Home from './app/home';
 import { formSections } from './app/profile/utils';
 import { AllJobs, JobDescription } from './app/job';
 import { UserService } from 'placeme-services/lib';
-import { fetchUserDetail } from '../middleware/auth';
+import { fetchUserDetail } from 'middleware/auth';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 

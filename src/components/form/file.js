@@ -12,16 +12,17 @@ const File = ({
   labelClassName,
   disabled,
   onChange,
+  name,
   ...extraProps
 }) => {
   return (
     <div className={`form-group ${containerClassName}`}>
-      <label htmlFor={id} className={labelClassName}>
+      <label htmlFor={name} className={labelClassName}>
         {label}
       </label>
       <input
         type="file"
-        id={id}
+        id={name}
         className={` ${error && 'is-invalid'} ${inputFieldClassName}`}
         onChange={(e) => onChange(e?.target?.files?.[0])}
         disabled={disabled}

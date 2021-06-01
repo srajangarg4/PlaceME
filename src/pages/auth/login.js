@@ -1,7 +1,7 @@
 import React from 'react';
-import { useDatabase, useFormReducer } from '../../hooks';
-import { Button, Input } from '../../components';
-import { required, Routes, validateEmail, validatePassword } from '../../utils';
+import { useDatabase, useFormReducer } from 'hooks';
+import { Button, Input } from 'components';
+import { required, Routes, validateEmail, validatePassword } from 'utils';
 import { UserService } from 'placeme-services/lib';
 import { useHistory } from 'react-router';
 

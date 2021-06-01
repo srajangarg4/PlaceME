@@ -11,17 +11,18 @@ const Input = ({
   labelClassName,
   disabled,
   onChange,
+  name,
   ...extraProps
 }) => {
   return (
     <div className={`form-group ${containerClassName}`}>
-      <label htmlFor={id} className={labelClassName}>
+      <label htmlFor={name} className={labelClassName}>
         {label}
       </label>
       <input
         className={`${error && 'is-invalid'} ${inputFieldClassName}`}
         onChange={(e) => onChange(e.target.value)}
-        id={id}
+        id={name}
         disabled={disabled}
         {...extraProps}
       />

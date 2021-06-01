@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { apiCall } from '../actions';
+import { apiCall } from 'actions';
 
-const useApiData =  (endpoint, requestData, method) => {
+const useApiData = (endpoint, requestData, method) => {
   const dispatch = useDispatch();
   const [apiData, setApiData] = useState({
     isLoading: true,
@@ -43,7 +43,7 @@ const useApiData =  (endpoint, requestData, method) => {
       requestData,
     );
     dispatch(call);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const { data, errors, isLoading } = apiData;
   return {

@@ -1,4 +1,4 @@
-import { ADD_ACADEMIC_DETAIL } from '../actions/academicDetails';
+import { ADD_ACADEMIC_DETAIL } from 'actions/academicDetails';
 
 const academicDetailReducer = (state = null, action) => {
   const { payload, type } = action;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
-import { Routes } from '../utils';
+import { Routes } from 'utils';
 import Icon from './icon';
-import { logout } from '../actions/user';
+import { logout } from 'actions/user';
 import { UserService } from 'placeme-services/lib';
 
 const Navbar = ({

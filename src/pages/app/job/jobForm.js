@@ -1,14 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
-import {
-  Card,
-  Input,
-  Navbar,
-  TextArea,
-  SelectOption,
-} from '../../../components';
-import { useFormReducer } from '../../../hooks';
-import { required } from '../../../utils';
+import { Card, Input, Navbar, TextArea, SelectOption } from 'components';
+import { useFormReducer } from 'hooks';
+import { required } from 'utils';
 
 const validators = {
   company: [required('Company name is required')],

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../../../gradients.css';
+import 'gradients.css';
 
 const ProfileHeader = () => {
   return (

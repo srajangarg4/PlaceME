@@ -46,7 +46,7 @@ export const validatePassword = (password) => {
 };
 
 export const required = (message) => (data) => {
-  if (!data) {
+  if (data === undefined || data === null) {
     return message;
   }
   return '';

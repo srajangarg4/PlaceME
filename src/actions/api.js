@@ -1,4 +1,4 @@
-import { HttpMethods } from '../utils';
+import { HttpMethods } from 'utils';
 import { action } from './common';
 
 const { GET } = HttpMethods;

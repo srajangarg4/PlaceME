@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Routes } from '../../utils';
+import { Routes } from 'utils';
 import Home from './home';
 
 const AppNavigator = () => (

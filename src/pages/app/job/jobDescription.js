@@ -3,9 +3,9 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { addCompany, addJob } from '../../../actions';
-import { Navbar, Card } from '../../../components';
-import { useDatabase } from '../../../hooks';
+import { addCompany, addJob } from 'actions';
+import { Navbar, Card } from 'components';
+import { useDatabase } from 'hooks';
 
 const jobSummaryList = [
   { name: 'Published On', value: 'Date' },

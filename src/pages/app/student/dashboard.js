@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Navbar } from '../../../components';
-import { Routes } from '../../../utils';
+import { Card, Navbar } from 'components';
+import { Routes } from 'utils';
 import { ProfileHeader } from '../profile/components';
 import Statistics from './statistics';
 const Dashboard = () => {

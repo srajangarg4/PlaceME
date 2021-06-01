@@ -3,11 +3,9 @@ import {
   PersonalDetailService,
   UserService,
 } from 'placeme-services/lib';
-import { Roles } from '../utils';
-import { dispatch } from '../store';
-import { addPersonalDetail } from '../actions/personalDetails';
-import { addAcademicDetail } from '../actions/academicDetails';
-import { login } from '../actions';
+import { Roles } from 'utils';
+import { dispatch } from 'store';
+import { login, addPersonalDetail, addAcademicDetail } from 'actions';
 
 export const fetchUserDetail = async (email) => {
   const { successful, result } = await UserService.getUserDetail(email);

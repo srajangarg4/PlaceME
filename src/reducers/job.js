@@ -1,4 +1,4 @@
-import { ADD_JOB, ADD_JOBS } from '../actions';
+import { ADD_JOB, ADD_JOBS } from 'actions';
 
 const jobReducer = (
   state = {

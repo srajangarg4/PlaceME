@@ -12,16 +12,17 @@ const SelectOption = ({
   disabled,
   onChange,
   options,
+  name,
   ...extraProps
 }) => {
   return (
     <div className={`form-group ${containerClassName}`}>
-      <label htmlFor={id} className={labelClassName}>
+      <label htmlFor={name} className={labelClassName}>
         {label}
       </label>
       <select
         className={`${error && 'is-invalid'} ${inputFieldClassName}`}
-        id={id}
+        id={name}
         onChange={onChange}
         disabled={disabled}
         {...extraProps}

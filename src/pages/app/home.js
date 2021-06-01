@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Routes } from '../../utils';
+import { Routes } from 'utils';
 
 const Home = () => {
   return (

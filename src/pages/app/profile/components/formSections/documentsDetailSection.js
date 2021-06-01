@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, File, Input } from '../../../../../components';
-import { useFormReducer } from '../../../../../hooks';
-import { required } from '../../../../../utils';
+import { Button, File, Input } from 'components';
+import { useFormReducer } from 'hooks';
+import { required } from 'utils';
 
 const validators = {
   firstName: [required('First Name is required')],

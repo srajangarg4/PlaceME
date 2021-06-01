@@ -1,4 +1,4 @@
-import { ADD_PERSONAL_DETAIL } from '../actions/personalDetails';
+import { ADD_PERSONAL_DETAIL } from 'actions/personalDetails';
 
 const personalDetailReducer = (state = null, action) => {
   const { payload, type } = action;

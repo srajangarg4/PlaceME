@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Input } from '../../../../../components';
-import { useFormReducer } from '../../../../../hooks';
-import { required } from '../../../../../utils';
+import { Input } from 'components';
+import { useFormReducer } from 'hooks';
+import { required } from 'utils';
 
 const validators = {
   firstName: [required('First Name is required')],
@@ -11,13 +11,10 @@ const validators = {
   phoneNumber: [required('Phone Number is required')],
 };
 
-const mapToGeneralDetails = (details) => ({});
-
 const GeneralDetailSection = ({ isFormEditable }) => {
   const { connectField, handleSubmit, change } = useFormReducer(validators);
 
   const user = useSelector((state) => state.user);
-
   useEffect(() => {
     const data = {
       firstName: user?.name?.firstName ?? '',

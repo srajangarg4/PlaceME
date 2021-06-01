@@ -1,4 +1,4 @@
-import { Routes } from '../../../../utils';
+import { Routes } from 'utils';
 import {
   GeneralDetailSection,
   PersonalDetailSection,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card } from '../../../../components';
+import { Card } from 'components';
 import { formSections } from '../utils';
 
 const ProfileDetailCard = ({ selectedNavigationOption }) => {

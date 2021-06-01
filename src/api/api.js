@@ -1,5 +1,5 @@
-import { HttpMethods } from '../utils/httpUtils';
-import { getAuth } from '../reducers/auth';
+import { HttpMethods } from 'utils/httpUtils';
+import { getAuth } from 'reducers/auth';
 import { HOST, prefix } from './endpoints';
 
 const apiHandler = (endPoint, method = HttpMethods.GET, body) => {

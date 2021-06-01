@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Navbar, Footer } from '../../../components';
+import { Card, Navbar, Footer } from 'components';
 const TpoDashboard = () => {
   return (
     <>

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { Card, Navbar, Loader, Toast } from '../../../components';
-import { useDatabase } from '../../../hooks';
+import { Card, Navbar, Loader, Toast } from 'components';
+import { useDatabase } from 'hooks';
 import { JobService, CompanyService } from 'placeme-services/lib';
 import { useSelector, useDispatch } from 'react-redux';
-import { addJobs, addCompanies } from '../../../actions';
+import { addJobs, addCompanies } from 'actions';
 import { Link } from 'react-router-dom';
-import { Routes } from '../../../utils';
+import { Routes } from 'utils';
 
 const fetchCompaniesAndJobs = async () => {
   const jobService = new JobService();

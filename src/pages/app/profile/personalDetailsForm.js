@@ -1,11 +1,7 @@
 import React from 'react';
-import { useFormReducer } from '../../hooks';
-import { Input } from '../../components';
-import {
-  required,
-  validatePassword,
-  confirmPasswordValidator,
-} from '../../../utils';
+import { useFormReducer } from 'hooks';
+import { Input } from 'components';
+import { required, validatePassword, confirmPasswordValidator } from 'utils';
 
 const validators = {
   firstName: [required('First Name is required')],

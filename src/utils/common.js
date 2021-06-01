@@ -29,6 +29,71 @@ export const getFormattedDate = (format, dateInput) => {
   return formattedDate;
 };
 
-const compareObjects = (tobeCompare, compareFrom) => {
-  Object.keys(compareFrom);
+export const flattenObject = (ob, seperator = '_') => {
+  var toReturn = {};
+
+  for (var i in ob) {
+    if (!ob.hasOwnProperty(i)) continue;
+
+    if (typeof ob[i] == 'object' && ob[i] !== null) {
+      var flatObject = flattenObject(ob[i]);
+      for (var x in flatObject) {
+        if (!flatObject.hasOwnProperty(x)) continue;
+
+        toReturn[i + seperator + x] = flatObject[x];
+      }
+    } else {
+      toReturn[i] = ob[i];
+    }
+  }
+  return toReturn;
+};
+
+export const unflatten = (obj = {}, seperator = '_') => {
+  const result = {};
+  let temp, substrings, property, i;
+  for (property in obj) {
+    substrings = property.split(seperator);
+    temp = result;
+    for (i = 0; i < substrings.length - 1; i++) {
+      if (!(substrings[i] in temp)) {
+        if (isFinite(substrings[i + 1])) {
+          temp[substrings[i]] = [];
+        } else {
+          temp[substrings[i]] = {};
+        }
+      }
+      temp = temp[substrings[i]];
+    }
+    temp[substrings[substrings.length - 1]] = obj[property];
+  }
+  return result;
+};
+
+const areEqualFields = (first, second, key, ignoreKeys = []) => {
+  const areBothEmpty = !first[key] && !second[key];
+  const areBothEqual = first[key] === second[key];
+  const shouldIgnore = ignoreKeys.includes(key);
+  return (areBothEmpty || areBothEqual) && !shouldIgnore;
+};
+
+export const areEqualObjects = (
+  firstObj = {},
+  secondObj = {},
+  ignoreKeys = [],
+) => {
+  const keysInFirstObj = Object.keys(firstObj);
+  const keysInSecondObj = Object.keys(secondObj);
+
+  const keys =
+    keysInFirstObj.length > keysInSecondObj.length
+      ? keysInFirstObj
+      : keysInSecondObj;
+
+  for (var key of keys) {
+    if (!areEqualFields(firstObj, secondObj, key, ignoreKeys)) {
+      return false;
+    }
+  }
+  return true;
 };

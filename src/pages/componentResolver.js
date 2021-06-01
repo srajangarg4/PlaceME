@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { Roles } from '../utils';
+import { Roles } from 'utils';
 import PageNotFound from './pageNotFound';
 
 const ComponentResolver = ({

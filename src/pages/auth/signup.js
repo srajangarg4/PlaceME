@@ -1,16 +1,16 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { useDatabase, useFormReducer } from '../../hooks';
-import { Input, Button } from '../../components';
+import { useDatabase, useFormReducer } from 'hooks';
+import { Input, Button } from 'components';
 import {
   required,
   validatePassword,
   confirmPasswordValidator,
   Roles,
   validateEmail,
-} from '../../utils';
+} from 'utils';
 import { UserService } from 'placeme-services/lib';
-import { login } from '../../actions';
+import { login } from 'actions';
 
 const validators = {
   firstName: [required('First Name is required')],
