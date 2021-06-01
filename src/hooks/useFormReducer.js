@@ -1,8 +1,25 @@
-import React, { useCallback, useReducer } from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
 
-// @ts-ignore
-export const validateValue = (key, value, formValues, validators) => {
-  if (validators?.length > 0) {
+export const UPDATE_FORM = 'UPDATE_FORM';
+export const ADD_FIELD = 'ADD_FIELD';
+export const VALIDATE_FORM = 'VALIDATE_FORM';
+export const RESET_FORM = 'RESET_FORM';
+export const REMOVE_PRISTINE = 'REMOVE_PRISTINE';
+export const START_SUBMITTING = 'START_SUBMITTING';
+export const STOP_SUBMITTING = 'STOP_SUBMITTING';
+export const UPDATE_SUBMIT_ERROR = 'UPDATE_SUBMIT_ERROR';
+export const UPDATE_INITIAL_VALUES = 'UPDATE_INITIAL_VALUES';
+
+/**
+ * Validates a form field based on its validators and other related data.
+ * @param {} key Key of the field to be validated.
+ * @param {@type String} value value of the field to be validated.
+ * @param {*} formValues all other data in the form if required.
+ * @param {*} validators a list of all the validator functions.
+ * @returns error in order of the validators provided.
+ */
+export const validateValue = (key, value, formValues, validators = []) => {
+  if (validators.length > 0) {
     const errors = [];
     validators.forEach((validator) => {
       const error = validator(value, { ...formValues });
@@ -18,16 +35,12 @@ export const validateValue = (key, value, formValues, validators) => {
   return undefined;
 };
 
-export const UPDATE_FORM = 'UPDATE_FORM';
-export const ADD_FIELD = 'ADD_FIELD';
-export const VALIDATE_FORM = 'VALIDATE_FORM';
-export const RESET_FORM = 'RESET_FORM';
-export const REMOVE_PRISTINE = 'REMOVE_PRISTINE';
-export const START_SUBMITTING = 'START_SUBMITTING';
-export const STOP_SUBMITTING = 'STOP_SUBMITTING';
-export const UPDATE_SUBMIT_ERROR = 'UPDATE_SUBMIT_ERROR';
-export const UPDATE_INITIAL_VALUES = 'UPDATE_INITIAL_VALUES';
-
+/**
+ * Creates a reducer function for form validation with given validations and default values.
+ * @param {*} validators an object repersenting form fields with corresponding validators.
+ * @param {*} initialValues an object repersenting form fields with corresponding default values.
+ * @returns a reducer function.
+ */
 export const createFormReducer = (validators = {}, initialValues = {}) => {
   let formValues = {};
   Object.keys(initialValues).forEach((key) => {
@@ -39,14 +52,13 @@ export const createFormReducer = (validators = {}, initialValues = {}) => {
       key,
       formValues[key]?.value,
       { ...formValues },
-      validators?.[key],
+      validators[key],
     );
     formValues = {
       ...formValues,
       [key]: { value: formValues[key]?.value, error },
     };
   });
-
   const initialState = {
     pristine: true,
     submitting: false,
@@ -59,18 +71,26 @@ export const createFormReducer = (validators = {}, initialValues = {}) => {
     switch (action.type) {
       case ADD_FIELD: {
         const {
-          payload: { key },
+          payload: { key, validators: newValidtor, defaultValue },
         } = action;
-        const newValidtor = action.payload.validators;
-        const defaultValue = action.payload.defaultValue;
-        validators[key] = newValidtor;
-        state.formValues[key] = {
+
+        validators[key] = newValidtor ?? [];
+        const newFormValues = { ...state.formValues };
+        const errorOfValue = validateValue(
+          key,
+          defaultValue,
+          formValues,
+          validators[key],
+        );
+        newFormValues[key] = {
           value: defaultValue,
-          error: validateValue(key, defaultValue, formValues),
+          error: errorOfValue,
         };
-        return {
+        const newState = {
           ...state,
+          formValues: newFormValues,
         };
+        return newState;
       }
       case UPDATE_FORM: {
         if (!action?.payload) {
@@ -98,16 +118,16 @@ export const createFormReducer = (validators = {}, initialValues = {}) => {
         const hasError =
           Object.keys(newFormValues).filter((k) => !!newFormValues[k].error)
             .length > 0;
-        return {
+        const newState = {
           ...state,
           formValues: { ...newFormValues },
           hasError,
           submitError: undefined,
         };
+        return newState;
       }
       case VALIDATE_FORM: {
         let newFormValues = { ...state.formValues };
-
         Object.keys(validators).forEach((key) => {
           const value = state.formValues[key]?.value;
           const error = validateValue(
@@ -121,12 +141,11 @@ export const createFormReducer = (validators = {}, initialValues = {}) => {
         const hasError =
           Object.keys(newFormValues).filter((key) => !!newFormValues[key].error)
             .length > 0;
-
-        return {
+        const newState = {
           ...state,
-          formValues: { ...newFormValues },
           hasError,
         };
+        return newState;
       }
       case UPDATE_SUBMIT_ERROR: {
         if (!action?.payload) {
@@ -150,11 +169,21 @@ export const createFormReducer = (validators = {}, initialValues = {}) => {
   return { reducer, initialState };
 };
 
+/**
+ *
+ * @param {Object} validators An object containing field-name and validator.
+ * @param {Object} initialValues An object containing field-name with its default values.
+ * @param {*} onChange
+ * @returns a custom hook with some properties.
+ */
 export const useFormReducer = (
   validators = {},
   initialValues = {},
   onChange,
 ) => {
+  /**
+   * Will create an reducer function and an object of initail values.
+   */
   const { reducer, initialState } = createFormReducer(
     validators,
     initialValues,
@@ -162,18 +191,22 @@ export const useFormReducer = (
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  // Action for validating form.
   const validateForm = useCallback(() => {
     dispatch({ type: VALIDATE_FORM });
   }, []);
 
-  const change = useCallback(
-    (key, value) => {
-      dispatch({ type: UPDATE_FORM, payload: { key, value } });
-      validateForm();
-    },
-    [validateForm],
-  );
+  //Validate form when values in form values changes.
+  useEffect(() => {
+    validateForm();
+  }, [state.formValues, validateForm]);
 
+  // to change a particular field value.
+  const change = useCallback((key, value) => {
+    dispatch({ type: UPDATE_FORM, payload: { key, value } });
+  }, []);
+
+  // to change add new form field with key, validators and defaultValues.
   const addField = useCallback((key, validators, defaultValue) => {
     dispatch({ type: ADD_FIELD, payload: { key, validators, defaultValue } });
   }, []);
@@ -186,6 +219,7 @@ export const useFormReducer = (
     dispatch({ type: REMOVE_PRISTINE });
   }, []);
 
+  // to indicate that form is submitting
   const startSubmitting = useCallback(() => {
     dispatch({ type: START_SUBMITTING });
   }, []);
