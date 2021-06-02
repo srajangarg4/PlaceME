@@ -1,71 +1,115 @@
-import React from 'react';
-import { Button, File, Input } from 'components';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Button, Card, File, Input } from 'components';
 import { useFormReducer } from 'hooks';
 import { required } from 'utils';
+import { useSelector } from 'react-redux';
 
-const validators = {
-  firstName: [required('First Name is required')],
-  lastName: [required('Last Name is required')],
-  email: [required('Email is required')],
-  phoneNumber: [required('Phone Number is required')],
+const DocumentCard = ({ link, title, uploadedOn }) => (
+  <Card className="p-3">
+    <div>
+      <h5>{title}</h5>
+      <p className="blockquote-footer">
+        Uploaded on : {uploadedOn?.toString()}
+      </p>
+      <a
+        href={link}
+        target="_blank"
+        rel="noreferrer"
+        className="btn btn-primary"
+      >
+        View
+      </a>
+    </div>
+  </Card>
+);
+
+const NewDocumentUploadCard = ({
+  connectField,
+  titleFieldName,
+  fileFieldName,
+}) => {
+  return (
+    <Card className="p-3">
+      <div>
+        {connectField(titleFieldName, {
+          label: 'File title',
+        })(Input)}
+        {connectField(fileFieldName, {
+          label: 'Upload document',
+        })(File)}
+      </div>
+    </Card>
+  );
 };
 
 const DocumentsDetailSection = ({ isFormEditable }) => {
-  const { connectField, handleSubmit } = useFormReducer(validators);
+  const documents = useSelector((state) => state.documents);
+
+  const { addField, connectField, handleSubmit, submitting } = useFormReducer();
+
+  const [numOfDocs, setNumOfDocs] = useState(0);
+
+  const [positionOfNewDoc, setPositionOfNewDoc] = useState(0);
+
+  useEffect(() => {
+    const numOfDocsFetched = documents?.length ?? 3;
+    setNumOfDocs(numOfDocsFetched);
+    setPositionOfNewDoc(numOfDocsFetched);
+  }, [documents]);
+
+  const addDocumentField = useCallback(
+    (index) => {
+      addField(`doc_${index}_title`, [
+        required('Title is required for easy navigation.'),
+      ]);
+      addField(`doc_${index}_file`, [
+        required("We can't proceed without a document."),
+      ]);
+    },
+    [addField],
+  );
+
   return (
-    <form
-      onSubmit={handleSubmit((data) => {
-        console.log('Documents data', data);
+    <div>
+      {/* to render already uploaded documents */}
+      {[...Array(numOfDocs)].map((_, index) => {
+        return <DocumentCard key={index.toString()} {...documents[index]} />;
       })}
-    >
-      <h6 className="text-muted">Document Information</h6>
-      <div className="py-4 px-md-4">
-        <div className="row">
-          <div className="col-12 col-md-6">
-            {connectField('firstName', {
-              type: 'text',
-              id: 'first-name',
-              className: 'form-control',
-              label: 'First Name',
-              disabled: !isFormEditable,
-            })(Input)}
-          </div>
-          <div className="col-12 col-md-6">
-            {connectField('lastName', {
-              type: 'text',
-              id: 'last-name',
-              className: 'form-control',
-              disabled: !isFormEditable,
-              label: 'Last Name',
-            })(Input)}
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-12 col-md-6">
-            {connectField('email', {
-              type: 'email',
-              id: 'email',
-              className: 'form-control',
-              disabled: !isFormEditable,
-              label: 'Email',
-            })(Input)}
-          </div>
-          <div className="col-12 col-md-6">
-            {connectField('phoneNumber', {
-              id: 'phone-number',
-              className: 'form-control-file',
-              disabled: !isFormEditable,
-              label: 'Mobile',
-            })(File)}
-          </div>
-        </div>
-        <div>
-          {isFormEditable && (
-            <Button text="Send for update" fullWidth type="submit" />
-          )}
-        </div>
+
+      {/* for new document upload */}
+      {[...Array(positionOfNewDoc - numOfDocs)].map((_, index) => {
+        const position = numOfDocs + index;
+        return (
+          <NewDocumentUploadCard
+            key={position?.toString()}
+            connectField={connectField}
+            fileFieldName={`doc_${position}_file`}
+            titleFieldName={`doc_${position}_title`}
+          />
+        );
+      })}
+
+      <div className="row d-flex justify-content-end my-3 mx-0">
+        <Button
+          disabled={!isFormEditable}
+          text="Add Document"
+          onClick={() => {
+            addDocumentField(positionOfNewDoc);
+            setPositionOfNewDoc(positionOfNewDoc + 1);
+          }}
+        />
       </div>
-    </form>
+      {isFormEditable && (
+        <Button
+          onClick={handleSubmit((data) => {
+            console.log(data);
+          })}
+          fullWidth
+          text="Send for Update"
+          loading={submitting}
+        />
+      )}
+    </div>
   );
 };
 

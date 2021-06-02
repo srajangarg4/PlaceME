@@ -6,29 +6,35 @@ import {
   validateName,
   validatePhoneNumber,
   required,
-  bloodGroups,
-  resolveDate,
   getFormattedDate,
+  // flattenObject,
 } from 'utils';
+import { bloodGroups } from 'assets';
 
 const validators = {
-  fatherName: [required("Father's name is required."), validateName],
-  fatherMobile: [
+  father_name: [required("Father's name is required."), validateName],
+  father_mobile: [
     required("Father's mobile number is required."),
     validatePhoneNumber,
   ],
-  fatherOccupation: [],
-  motherName: [required("Mother's name is required."), validateName],
-  motherMobile: [validatePhoneNumber],
-  motherOccupation: [],
+  father_occupation: [],
+
+  mother_name: [required("Mother's name is required."), validateName],
+  mother_mobile: [validatePhoneNumber],
+  mother_occupation: [],
+
   dob: [required('Date of birth is required.')],
-  area: [required('Area is required.')],
-  state: [required('State is required.')],
-  district: [required('District is required.')],
-  city: [required('City is required.')],
-  pincode: [required('Pin code is required.')],
+  address_area: [required('Area is required.')],
+  address_state: [required('State is required.')],
+  address_district: [required('District is required.')],
+  address_city: [required('City is required.')],
+  address_pincode: [required('Pin code is required.')],
+
   bloodGroup: [required('Blood group is required.')],
-  aadhar: [required('Aadhar is required.')],
+
+  aadhar_number: [required('Aadhar is required.')],
+  aadhar_url: [],
+
   emergencyContact: [
     required('Emergency Contact is required.'),
     validatePhoneNumber,
@@ -36,7 +42,7 @@ const validators = {
 };
 
 const getDefaultValues = (personalDetail) => ({
-  dob: getFormattedDate('yyyy-mm-dd', resolveDate(personalDetail?.dob)),
+  dob: getFormattedDate('yyyy-mm-dd', new Date(personalDetail?.dob?.toDate())),
   aadhar: personalDetail?.aadhar?.number ?? '',
   bloodGroup: personalDetail?.bloodGroup ?? '',
   emergencyContact: '' + personalDetail?.emergencyContact ?? '',
@@ -60,8 +66,8 @@ const PersonalDetailSection = ({ isFormEditable }) => {
 
   const { connectField, handleSubmit, change } = useFormReducer(validators);
 
-  // for autofill vales when data is fetched form firebase
   useEffect(() => {
+    // const data = flattenObject(personalDetail);
     const data = getDefaultValues(personalDetail);
     Object.keys(data).forEach((key) => {
       change(key, data[key]);
@@ -97,6 +103,7 @@ const PersonalDetailSection = ({ isFormEditable }) => {
             })(SelectOption)}
           </div>
           <div className="col-12 col-md-6">
+            {/* {connectField('aadhar_number', { */}
             {connectField('aadhar', {
               id: 'aadhar-field',
               className: 'form-control',
@@ -114,6 +121,7 @@ const PersonalDetailSection = ({ isFormEditable }) => {
           </div>
           <h6 className="col-12 py-3 text-muted">Address</h6>
           <div className="col-12 col-md-6">
+            {/* {connectField('address_area', { */}
             {connectField('area', {
               id: 'area-field',
               className: 'form-control',
@@ -122,6 +130,7 @@ const PersonalDetailSection = ({ isFormEditable }) => {
             })(Input)}
           </div>
           <div className="col-12 col-md-6">
+            {/* {connectField('address_city', { */}
             {connectField('city', {
               id: 'city-field',
               className: 'form-control',
@@ -130,6 +139,7 @@ const PersonalDetailSection = ({ isFormEditable }) => {
             })(Input)}
           </div>
           <div className="col-12 col-md-6">
+            {/* {connectField('address_state', { */}
             {connectField('state', {
               id: 'state-field',
               className: 'form-control',
@@ -138,6 +148,7 @@ const PersonalDetailSection = ({ isFormEditable }) => {
             })(Input)}
           </div>
           <div className="col-12 col-md-6">
+            {/* {connectField('address_pincode', { */}
             {connectField('pincode', {
               id: 'pincode-field',
               className: 'form-control',
@@ -151,6 +162,7 @@ const PersonalDetailSection = ({ isFormEditable }) => {
             </div>
             <div className="row">
               <div className="col-12">
+                {/* {connectField('father_name', { */}
                 {connectField('fatherName', {
                   id: 'father-email-field',
                   className: 'form-control',
@@ -159,6 +171,7 @@ const PersonalDetailSection = ({ isFormEditable }) => {
                 })(Input)}
               </div>
               <div className="col-12">
+                {/* {connectField('father_mobile', { */}
                 {connectField('fatherMobile', {
                   id: 'father-mobile-field',
                   className: 'form-control',
@@ -167,6 +180,7 @@ const PersonalDetailSection = ({ isFormEditable }) => {
                 })(Input)}
               </div>
               <div className="col-12">
+                {/* {connectField('father_occupation', { */}
                 {connectField('fatherOccupation', {
                   id: 'father-occupation-field',
                   className: 'form-control',
@@ -182,6 +196,7 @@ const PersonalDetailSection = ({ isFormEditable }) => {
             </div>
             <div className="row">
               <div className="col-12">
+                {/* {connectField('mother_name', { */}
                 {connectField('motherName', {
                   id: 'mother-name-field',
                   className: 'form-control',
@@ -190,6 +205,7 @@ const PersonalDetailSection = ({ isFormEditable }) => {
                 })(Input)}
               </div>
               <div className="col-12">
+                {/* {connectField('mother_mobile', { */}
                 {connectField('motherMobile', {
                   id: 'mother-mobile-field',
                   className: 'form-control',
@@ -198,6 +214,7 @@ const PersonalDetailSection = ({ isFormEditable }) => {
                 })(Input)}
               </div>
               <div className="col-12">
+                {/* {connectField('mother_occupation', { */}
                 {connectField('motherOccupation', {
                   id: 'mother-occupation-field',
                   className: 'form-control',

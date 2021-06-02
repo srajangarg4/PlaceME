@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Input, File } from 'components';
 import { useFormReducer } from 'hooks';
-import { areEqualObjects, flattenObject, required, unflatten } from 'utils';
+import { flattenObject, getDifference, required, unflatten } from 'utils';
+import { PendingRequestService } from 'placeme-services/lib';
 
 const validators = {
   academicGap: [],
@@ -11,8 +12,8 @@ const validators = {
   graduation_rollNumber: [],
   graduation_department: [],
   graduation_course: [],
-  graduation_startingYear: [],
-  graduation_passingYear: [],
+  graduation_batch_startingYear: [],
+  graduation_batch_passingYear: [],
 
   secondary_board: [required('Board is required')],
   secondary_percentage: [required('School Name is required')],
@@ -71,13 +72,27 @@ const AcademicDetailSection = ({ isFormEditable }) => {
 
   return (
     <form
-      onSubmit={handleSubmit((data) => {
-        console.log(
-          'Are equal',
-          areEqualObjects(data, flattenObject(academicDetail)),
-        );
-        console.log('Academic Details data', unflatten(data));
-        console.log('Academic Details store', academicDetail);
+      onSubmit={handleSubmit(async (data) => {
+        const prevData = academicDetail;
+        const updatedData = unflatten(data);
+        const changes = getDifference(prevData, updatedData);
+        const updateRequest = new PendingRequestService();
+
+        if (changes !== null) {
+          const { successful, error } = await updateRequest.add({
+            requestedOn: new Date(),
+            updatesRequired: changes,
+            studentEmail: data?.email,
+          });
+
+          if (successful) {
+            console.log('Sucessful');
+          } else {
+            console.log('Erorr', error);
+          }
+        } else {
+          console.log('No modification done.');
+        }
       })}
     >
       <h4 className="text-muted text-center pb-4">Academic Details</h4>

@@ -44,7 +44,10 @@ export const validateValue = (key, value, formValues, validators = []) => {
 export const createFormReducer = (validators = {}, initialValues = {}) => {
   let formValues = {};
   Object.keys(initialValues).forEach((key) => {
-    formValues = { ...formValues, [key]: { value: initialValues[key] } };
+    formValues = {
+      ...formValues,
+      [key]: { value: initialValues[key] ?? null },
+    };
   });
 
   Object.keys(validators).forEach((key) => {
@@ -67,6 +70,7 @@ export const createFormReducer = (validators = {}, initialValues = {}) => {
       Object.keys(formValues).filter((key) => !!formValues[key].error).length >
       0,
   };
+
   const reducer = (state = initialState, action) => {
     switch (action.type) {
       case ADD_FIELD: {
@@ -83,7 +87,7 @@ export const createFormReducer = (validators = {}, initialValues = {}) => {
           validators[key],
         );
         newFormValues[key] = {
-          value: defaultValue,
+          value: defaultValue ?? null,
           error: errorOfValue,
         };
         const newState = {
@@ -99,7 +103,7 @@ export const createFormReducer = (validators = {}, initialValues = {}) => {
         const { key, value, error: customError } = action.payload;
         let newValue = value;
 
-        if (value === '') {
+        if (value === '' || value === undefined) {
           newValue = null;
         }
         let error = validateValue(
@@ -245,10 +249,10 @@ export const useFormReducer = (
           (acc, key) => ({ ...acc, [key]: state.formValues[key].value }),
           {},
         );
-        setTimeout(() => {
-          callback(data);
+        setTimeout(async () => {
+          await callback(data);
           stopSubmitting();
-        }, 200);
+        }, 2000);
       }
     },
     [

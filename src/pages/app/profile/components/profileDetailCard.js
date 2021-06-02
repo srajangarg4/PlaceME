@@ -2,8 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from 'components';
 import { formSections } from '../utils';
+import { useSelector } from 'react-redux';
 
 const ProfileDetailCard = ({ selectedNavigationOption }) => {
+  const user = useSelector((state) => state.user);
+  const { name, role } = { ...user };
+  const { firstName, lastName } = { ...name };
   return (
     <div className="col-md order-md-2">
       <Card>
@@ -14,8 +18,8 @@ const ProfileDetailCard = ({ selectedNavigationOption }) => {
               src="https://img.icons8.com/bubbles/100/000000/administrator-male.png"
               alt="profile"
             />
-            <h4 className="text-capitalize">tera naam</h4>
-            <p>Student</p>
+            <h4 className="text-capitalize">{firstName + ' ' + lastName}</h4>
+            <p>{role}</p>
           </div>
           <hr />
           <div className="card-text">

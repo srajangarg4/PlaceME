@@ -1,13 +1,3 @@
-export const bloodGroups = [
-  { text: 'A+', value: 'A+' },
-  { text: 'A-', value: 'A-' },
-  { text: 'B+', value: 'B+' },
-  { text: 'B-', value: 'B-' },
-  { text: 'O+', value: 'O+' },
-  { text: 'O-', value: 'O-' },
-  { text: 'AB+', value: 'AB+' },
-  { text: 'AB-', value: 'AB-' },
-];
 export const resolveDate = (date) => new Date(date?.toDate());
 
 export const getFormattedDate = (format, dateInput) => {
@@ -70,6 +60,8 @@ export const unflatten = (obj = {}, seperator = '_') => {
   return result;
 };
 
+const isObject = (obj) => typeof obj === 'object';
+
 const areEqualFields = (first, second, key, ignoreKeys = []) => {
   const areBothEmpty = !first[key] && !second[key];
   const areBothEqual = first[key] === second[key];
@@ -96,4 +88,30 @@ export const areEqualObjects = (
     }
   }
   return true;
+};
+
+export const getDifference = (baseObj, targetObj) => {
+  if (!baseObj || !targetObj) {
+    if (!baseObj) {
+      return targetObj;
+    }
+    return null;
+  }
+
+  const result = {};
+  const keys = Object.keys(targetObj);
+
+  for (const key of keys) {
+    const baseValue = baseObj[key];
+    const targetValue = targetObj[key];
+    if (isObject(baseValue) && isObject(targetValue)) {
+      const innerDifference = getDifference(baseValue, targetValue);
+      if (innerDifference !== null) {
+        result[key] = innerDifference;
+      }
+    } else if (baseValue !== targetValue) {
+      result[key] = targetValue;
+    }
+  }
+  return Object.keys(result).length === 0 ? null : result;
 };
