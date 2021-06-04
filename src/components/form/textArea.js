@@ -1,25 +1,33 @@
 import React from 'react';
 
-const Input = ({
+const TextArea = ({
+  id,
   error,
-  styles,
+  label,
   iconName,
   errorMessage,
-  className,
+  containerClassName,
+  inputFieldClassName,
+  labelClassName,
+  disabled,
+  onChange,
+  required,
+  name,
   ...extraProps
 }) => {
   return (
-    <div className={`form-group ${styles ?? ''}`}>
-      {/* {iconName && (
-        <div className="input-group-prepend">
-          <span className="input-group-text">
-            <i className="material-icons">{iconName}</i>
-          </span>
-        </div>
-      )} */}
-
+    <div className={`form-group ${containerClassName}`}>
+      <label
+        htmlFor={name}
+        className={`${labelClassName} ${required ? 'required' : ''}`}
+      >
+        {label}
+      </label>
       <textarea
-        className={` ${error && 'is-invalid'} ${className ?? ''}`}
+        className={`${error && 'is-invalid'} ${inputFieldClassName}`}
+        onChange={(e) => onChange(e.target.value)}
+        id={name}
+        disabled={disabled}
         {...extraProps}
       />
       <div className="help-block">
@@ -29,4 +37,12 @@ const Input = ({
   );
 };
 
-export default Input;
+TextArea.defaultProps = {
+  labelClassName: 'text-muted',
+  inputFieldClassName: 'form-control',
+  disabled: false,
+  containerClassName: '',
+  required: false,
+};
+
+export default TextArea;

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, Card, File, Input } from 'components';
+import { Button, Card, File as FileInput, Input } from 'components';
 import { useFormReducer } from 'hooks';
-import { required } from 'utils';
+import { flattenObject, required, unflatten } from 'utils';
 import { useSelector } from 'react-redux';
 
 const DocumentCard = ({ link, title, uploadedOn }) => (
@@ -36,7 +36,7 @@ const NewDocumentUploadCard = ({
         })(Input)}
         {connectField(fileFieldName, {
           label: 'Upload document',
-        })(File)}
+        })(FileInput)}
       </div>
     </Card>
   );
@@ -78,7 +78,7 @@ const DocumentsDetailSection = ({ isFormEditable }) => {
 
       {/* for new document upload */}
       {[...Array(positionOfNewDoc - numOfDocs)].map((_, index) => {
-        const position = numOfDocs + index;
+        const position = index;
         return (
           <NewDocumentUploadCard
             key={position?.toString()}
@@ -94,7 +94,7 @@ const DocumentsDetailSection = ({ isFormEditable }) => {
           disabled={!isFormEditable}
           text="Add Document"
           onClick={() => {
-            addDocumentField(positionOfNewDoc);
+            addDocumentField(positionOfNewDoc - numOfDocs);
             setPositionOfNewDoc(positionOfNewDoc + 1);
           }}
         />
@@ -102,7 +102,7 @@ const DocumentsDetailSection = ({ isFormEditable }) => {
       {isFormEditable && (
         <Button
           onClick={handleSubmit((data) => {
-            console.log(data);
+            // console.log(new File([doc], 'Ritik'));
           })}
           fullWidth
           text="Send for Update"

@@ -8,15 +8,14 @@ const Button = ({
   loading,
   onClick,
   fullWidth,
-  className,
   type,
   ...extraProps
 }) => {
   return (
     <button
-      className={`btn ${className} ${
+      className={`btn ${buttonClassName} ${
         fullWidth && 'btn-block'
-      } d-flex align-items-center justify-content-center`}
+      } d-flex align-items-center justify-content-center `}
       onClick={onClick}
       disabled={loading}
       type={type}
@@ -39,7 +38,7 @@ const Button = ({
 };
 
 Button.defaultProps = {
-  className: 'btn-primary',
+  buttonClassName: 'btn-primary',
   fullWidth: false,
   loading: false,
   type: 'button',

@@ -1,27 +1,43 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useState } from 'react';
-import { Card, Input, Navbar, TextArea, SelectOption } from 'components';
+import {
+  Card,
+  Input,
+  Navbar,
+  TextArea,
+  SelectOption,
+  Button,
+} from 'components';
 import { useFormReducer } from 'hooks';
-import { required } from 'utils';
+import { required, unflatten } from 'utils';
+import { courses, departments } from 'assets';
+import { companies } from 'assets/companies';
 
 const validators = {
-  company: [required('Company name is required')],
+  title: [required('Title is required to continue.')],
+  description: [required('Description is required.')],
+  forCourse: [required('Please select a course')],
+  forDept: [required('Please select the target deptartment')],
+  maxBacklogs: [],
+  academicGap: [],
+  company: [required('Please choose a compnay.')],
   minSalary: [required('min salary is required')],
   maxSalary: [required('max salary is required')],
 };
 
 const JobForm = () => {
-  const { connectField } = useFormReducer(validators);
-  const [rounds, setRounds] = useState([]);
-  const addRoundOnClick = () => {
-    setRounds([
-      ...rounds,
-      {
-        name: '',
-        description: '',
-      },
-    ]);
-  };
+  const { connectField, addField, handleSubmit, submitting } =
+    useFormReducer(validators);
+  const [numOfRounds, setNumOfRounds] = useState(0);
+
+  const addRoundField = useCallback(
+    (index) => {
+      addField(`round_${index}_name`, [required('Enter round name.')]);
+      addField(`round_${index}_description`, []);
+    },
+    [addField],
+  );
+
   return (
     <div>
       <Navbar />
@@ -31,97 +47,102 @@ const JobForm = () => {
             <h4 className="text-center">Add New Job</h4>
           </div>
           <div className="card-body">
-            <form>
+            <form
+              onSubmit={handleSubmit((data) => {
+                console.log('Data', unflatten(data));
+              })}
+            >
               <div className="row my-3">
-                <h6 className="col-12 text-muted my-2">Title & Description</h6>
                 <div className="col-12">
                   <div className="px-sm-4 py-2 row">
                     <div className="col-12">
                       {connectField('title', {
-                        className: 'form-control',
-                        placeholder: 'Title',
+                        label: 'Title',
+                        required: true,
                       })(Input)}
                     </div>
                     <div className="col-12">
-                      {connectField('jobDescription', {
-                        className: 'form-control',
-                        placeholder: 'Description',
+                      {connectField('description', {
+                        label: 'Description',
                         rows: 4,
+                        required: true,
                       })(TextArea)}
                     </div>
                   </div>
                 </div>
               </div>
               <div className="row my-3">
-                <h6 className="col-12 text-muted my-2">For Courses</h6>
                 <div className="col-12">
                   <div className="px-sm-4 py-2 row">
                     <div className="col-12">
-                      <SelectOption
-                        multiple
-                        options={[
-                          { value: 'BTech.', text: 'B.Tech.' },
-                          { value: 'MTech.', text: 'M.Tech.' },
-                        ]}
-                      />
+                      {connectField('company', {
+                        options: companies,
+                        required: true,
+                        label: 'Company',
+                      })(SelectOption)}
                     </div>
                   </div>
                 </div>
               </div>
               <div className="row my-3">
-                <h6 className="col-12 text-muted my-2">For Departments</h6>
                 <div className="col-12">
                   <div className="px-sm-4 py-2 row">
                     <div className="col-12">
-                      <SelectOption
-                        multiple
-                        options={[
-                          {
-                            value: 'CSE',
-                            text: 'Computer Science and Engineering',
-                          },
-                          { value: 'CIVIL', text: 'Civil Engineering' },
-                        ]}
-                      />
+                      {connectField('forCourse', {
+                        label: 'For courses',
+                        required: true,
+                        options: courses,
+                      })(SelectOption)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="row my-3">
+                <div className="col-12">
+                  <div className="px-sm-4 py-2 row">
+                    <div className="col-12">
+                      {connectField('forDept', {
+                        options: departments,
+                        required: true,
+                        label: 'For Departments',
+                      })(SelectOption)}
                     </div>
                   </div>
                 </div>
               </div>
               <div className="row my-3">
-                <h6 className="col-12 text-muted my-2">
-                  Academic Gaps & Backlogs
-                </h6>
                 <div className="col-12">
                   <div className="px-sm-4 py-2 row">
                     <div className="col-12 col-sm-6">
-                      {connectField('maxAcademicGap', {
+                      {connectField('academicGap', {
                         className: 'form-control',
-                        placeholder: 'Max Academic gap',
+                        label: 'Max Academic gap',
                       })(Input)}
                     </div>
                     <div className="col-12 col-sm-6">
                       {connectField('maxBacklogs', {
+                        required: true,
                         className: 'form-control',
-                        placeholder: 'Max Backlogs Allowed',
+                        label: 'Max Backlogs Allowed',
                       })(Input)}
                     </div>
                   </div>
                 </div>
               </div>
               <div className="row my-3">
-                <h6 className="col-12 text-muted my-2">Salary</h6>
                 <div className="col-12">
                   <div className="px-sm-4 py-2 row">
                     <div className="col-12 col-sm-6">
                       {connectField('minSalary', {
                         className: 'form-control',
-                        placeholder: 'Min salary',
+                        label: 'Min salary',
                       })(Input)}
                     </div>
                     <div className="col-12 col-sm-6">
                       {connectField('maxSalary', {
                         className: 'form-control',
-                        placeholder: 'Max salary',
+                        label: 'Max salary',
                       })(Input)}
                     </div>
                   </div>
@@ -129,43 +150,49 @@ const JobForm = () => {
               </div>
               <div className="row my-3">
                 <h6 className="col-12 text-muted my-2">Rounds</h6>
-                {rounds.length !== 0 && (
-                  <div className="col-12">
-                    {rounds.map((round, index) => {
-                      return (
-                        <div className="row px-sm-4 py-2">
-                          <div className="col-12 col-sm-6">
-                            {connectField(`round ${index + 1}`, {
-                              className: 'form-control',
-                              placeholder: `Round ${index + 1} Name`,
-                            })(Input)}
-                          </div>
-                          <div className="col-12 col-sm-6">
-                            {connectField(`round ${index + 1}`, {
-                              className: 'form-control',
-                              placeholder: `Round ${index + 1} Description`,
-                            })(Input)}
-                          </div>
+
+                <div className="col-12">
+                  {[...Array(numOfRounds)].map((_, index) => {
+                    return (
+                      <div className="row px-sm-4 py-2" key={index.toString()}>
+                        <div className="col-12 col-sm-6">
+                          {connectField(`round_${index}_name`, {
+                            className: 'form-control',
+                            label: `Round ${index + 1} Name`,
+                          })(Input)}
                         </div>
-                      );
-                    })}
-                  </div>
-                )}
+                        <div className="col-12 col-sm-6">
+                          {connectField(`round_${index}_description`, {
+                            className: 'form-control',
+                            label: `Round ${index + 1} Description`,
+                          })(Input)}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
                 <div className="col-12">
                   <div className="px-sm-4 py-2">
-                    <button
+                    <Button
                       className="btn btn-outline-secondary d-flex align-items-center"
                       type="button"
-                      onClick={() => addRoundOnClick()}
-                    >
-                      <span className="material-icons">add</span> Add Round
-                    </button>
+                      text="Add Round"
+                      iconName="add"
+                      onClick={() => {
+                        addRoundField(numOfRounds);
+                        setNumOfRounds(numOfRounds + 1);
+                      }}
+                    />
                   </div>
                 </div>
               </div>
-              <button className="btn btn-block btn-primary" type="submit">
-                Add Job
-              </button>
+              <Button
+                className="btn btn-block btn-primary"
+                type="submit"
+                text="Add Job"
+                loading={submitting}
+              />
             </form>
           </div>
         </Card>

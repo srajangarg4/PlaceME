@@ -11,6 +11,7 @@ export const apiRequest = (request, success, failure) =>
     success,
     failure,
   });
+
 export const makeApiCall = (endPoint, method, payload, resolve, reject) => ({
   request: {
     endPoint,
@@ -24,6 +25,7 @@ export const makeApiCall = (endPoint, method, payload, resolve, reject) => ({
     reject,
   },
 });
+
 export const apiCall = (endPoint, resolve, reject, method = GET, data) => {
   const api = makeApiCall(endPoint, method, data, resolve, reject);
   const { request, success, failure } = api;

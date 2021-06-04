@@ -104,6 +104,7 @@ export const getDifference = (baseObj, targetObj) => {
   for (const key of keys) {
     const baseValue = baseObj[key];
     const targetValue = targetObj[key];
+
     if (isObject(baseValue) && isObject(targetValue)) {
       const innerDifference = getDifference(baseValue, targetValue);
       if (innerDifference !== null) {

@@ -14,6 +14,12 @@ const CompanyRoutes = {
   companies: {
     path: '/companies',
   },
+  addCompany: {
+    path: '/company/add',
+  },
+  editCompany: {
+    path: '/company/edit/',
+  },
 };
 
 const StudentRoutes = {
@@ -41,8 +47,17 @@ const JobRoutes = {
   allJobs: {
     path: '/jobs',
   },
+  jobDetailsBase: {
+    path: '/job/detail/',
+  },
   jobDetails: {
-    path: '/job/:id',
+    path: '/job/detail/:id',
+  },
+  jobApplicants: {
+    path: '/job/applicants',
+  },
+  jobApplicantDetails: {
+    path: '/job/applicants/details',
   },
 };
 
@@ -55,6 +70,9 @@ const UpdateRequestRoutes = {
   },
   updateRequestDetails: {
     path: '/update/requests/details',
+  },
+  allUpdateRequests: {
+    path: '/update/requests',
   },
 };
 

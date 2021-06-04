@@ -3,7 +3,9 @@ import React from 'react';
 const UpdateRequestDetails = () => {
   return (
     <div>
-      <h1>Update Request Details</h1>
+      <p className="display-4 text-capitalize text-center">
+        Update Request Details
+      </p>
     </div>
   );
 };

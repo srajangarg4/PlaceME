@@ -13,20 +13,25 @@ const SelectOption = ({
   onChange,
   options,
   name,
+  required,
   ...extraProps
 }) => {
   return (
     <div className={`form-group ${containerClassName}`}>
-      <label htmlFor={name} className={labelClassName}>
+      <label
+        htmlFor={name}
+        className={`${labelClassName} ${required ? 'required' : ''}`}
+      >
         {label}
       </label>
       <select
         className={`${error && 'is-invalid'} ${inputFieldClassName}`}
         id={name}
-        onChange={onChange}
+        onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
         {...extraProps}
       >
+        <option>Choose a option</option>
         {options.map((option) => (
           <option value={option.value} key={option.value}>
             {option.text}
@@ -45,6 +50,7 @@ SelectOption.defaultProps = {
   inputFieldClassName: 'form-control',
   disabled: false,
   containerClassName: '',
+  required: false,
 };
 
 export default SelectOption;

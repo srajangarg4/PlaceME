@@ -252,7 +252,7 @@ export const useFormReducer = (
         setTimeout(async () => {
           await callback(data);
           stopSubmitting();
-        }, 2000);
+        }, 500);
       }
     },
     [

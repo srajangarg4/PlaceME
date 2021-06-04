@@ -79,17 +79,18 @@ const AcademicDetailSection = ({ isFormEditable }) => {
         const updateRequest = new PendingRequestService();
 
         if (changes !== null) {
-          const { successful, error } = await updateRequest.add({
-            requestedOn: new Date(),
-            updatesRequired: changes,
-            studentEmail: data?.email,
-          });
+          console.log('Chnages', changes);
+          // const { successful, error } = await updateRequest.add({
+          //   requestedOn: new Date(),
+          //   updatesRequired: changes,
+          //   studentEmail: data?.email,
+          // });
 
-          if (successful) {
-            console.log('Sucessful');
-          } else {
-            console.log('Erorr', error);
-          }
+          // if (successful) {
+          //   console.log('Sucessful');
+          // } else {
+          //   console.log('Erorr', error);
+          // }
         } else {
           console.log('No modification done.');
         }
@@ -157,6 +158,7 @@ const AcademicDetailSection = ({ isFormEditable }) => {
           </div>
           <div className="col-12 col-md-6">
             {connectField('graduation_department', {
+              required: true,
               label: 'Department',
               disabled: !isFormEditable,
             })(Input)}
@@ -189,17 +191,19 @@ const AcademicDetailSection = ({ isFormEditable }) => {
               </div>
             ))}
           </div>
+          <div className="col-12 d-flex">
+            <Button
+              buttonClassName="btn-outline-dark btn-sm ml-auto"
+              disabled={!isFormEditable}
+              text="Add Semester"
+              onClick={() => {
+                setSemester(semesters + 1);
+                addSemesterField(semesters);
+              }}
+            />
+          </div>
         </div>
-        <div className="row d-flex justify-content-end my-3 mx-0">
-          <Button
-            disabled={!isFormEditable}
-            text="Add Semester"
-            onClick={() => {
-              setSemester(semesters + 1);
-              addSemesterField(semesters);
-            }}
-          />
-        </div>
+        <div className="row d-flex justify-content-end my-3 mx-0"></div>
         {isFormEditable && (
           <Button type="submit" fullWidth text="Send for Update" />
         )}

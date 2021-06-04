@@ -11,12 +11,16 @@ const Input = ({
   labelClassName,
   disabled,
   onChange,
+  required,
   name,
   ...extraProps
 }) => {
   return (
     <div className={`form-group ${containerClassName}`}>
-      <label htmlFor={name} className={labelClassName}>
+      <label
+        htmlFor={name}
+        className={`${labelClassName} ${required ? 'required' : ''}`}
+      >
         {label}
       </label>
       <input
@@ -38,6 +42,7 @@ Input.defaultProps = {
   inputFieldClassName: 'form-control',
   disabled: false,
   containerClassName: '',
+  required: false,
 };
 
 export default Input;

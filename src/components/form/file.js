@@ -11,13 +11,17 @@ const File = ({
   inputFieldClassName,
   labelClassName,
   disabled,
+  required,
   onChange,
   name,
   ...extraProps
 }) => {
   return (
     <div className={`form-group ${containerClassName}`}>
-      <label htmlFor={name} className={labelClassName}>
+      <label
+        htmlFor={name}
+        className={`${labelClassName} ${required ? 'required' : ''}`}
+      >
         {label}
       </label>
       <input
@@ -40,6 +44,7 @@ File.defaultProps = {
   inputFieldClassName: 'form-control-file',
   disabled: false,
   containerClassName: '',
+  required: false,
 };
 
 export default File;

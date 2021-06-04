@@ -7,11 +7,14 @@ import { StudentDashboard, StudentProfile } from './app/student';
 import { TPODashboard } from './app/tpo';
 import Home from './app/home';
 import { formSections } from './app/profile/utils';
-import { AllJobs, JobDescription } from './app/job';
+import { AllJobs, JobDescription, JobForm } from './app/job';
 import { UserService } from 'placeme-services/lib';
 import { fetchUserDetail } from 'middleware/auth';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { AllUpdateRequests, UpdateRequestDetails } from './app/updateRequest';
+import { CompanyForm } from './app/company';
+import { JobApplicantDeatils, JobApplicants } from './app/job/jobApplicants';
 
 const ApplicationNavigator = () => {
   const history = useHistory();
@@ -23,8 +26,7 @@ const ApplicationNavigator = () => {
         history.push('/login');
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [history]);
 
   return (
     <Switch>
@@ -95,6 +97,50 @@ const ApplicationNavigator = () => {
         exact
         path={Routes.jobDetails.path}
         component={ComponentResolver({ studentComponent: JobDescription })}
+      />
+      <Route
+        exact
+        path={Routes.addNewJob.path}
+        component={ComponentResolver({ studentComponent: JobForm })}
+      />
+      <Route
+        exact
+        path={Routes.allUpdateRequests.path}
+        component={ComponentResolver({
+          studentComponent: AllUpdateRequests,
+          tpoComponent: AllUpdateRequests,
+        })}
+      />
+      <Route
+        exact
+        path={Routes.updateRequestDetails.path}
+        component={ComponentResolver({
+          studentComponent: UpdateRequestDetails,
+          tpoComponent: UpdateRequestDetails,
+        })}
+      />
+      <Route
+        exact
+        path={Routes.addCompany.path}
+        component={ComponentResolver({
+          tpoComponent: CompanyForm,
+        })}
+      />
+      <Route
+        exact
+        path={Routes.jobApplicants.path}
+        component={ComponentResolver({
+          tpoComponent: JobApplicants,
+          studentComponent: JobApplicants,
+        })}
+      />
+      <Route
+        exact
+        path={`${Routes.jobApplicantDetails.path}/:id`}
+        component={ComponentResolver({
+          tpoComponent: JobApplicantDeatils,
+          studentComponent: JobApplicantDeatils,
+        })}
       />
       <Route component={ComponentResolver({})} />
     </Switch>

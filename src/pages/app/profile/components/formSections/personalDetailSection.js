@@ -226,12 +226,7 @@ const PersonalDetailSection = ({ isFormEditable }) => {
           </div>
         </div>
         {isFormEditable && (
-          <Button
-            type="submit"
-            fullWidth
-            className="btn-primary"
-            text="Send for update"
-          />
+          <Button type="submit" fullWidth text="Send for update" />
         )}
       </div>
     </form>
