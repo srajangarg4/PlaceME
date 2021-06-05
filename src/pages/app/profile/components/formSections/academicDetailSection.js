@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Input, File } from 'components';
+import { Button, Input } from 'components';
 import { useFormReducer } from 'hooks';
 import { flattenObject, getDifference, required, unflatten } from 'utils';
 import { PendingRequestService } from 'placeme-services/lib';
@@ -18,12 +18,10 @@ const validators = {
   secondary_board: [required('Board is required')],
   secondary_percentage: [required('School Name is required')],
   secondary_schoolName: [required('Percentage is required')],
-  secondary_markSheet: [],
 
   seniorSecondary_board: [required('Board is required')],
   seniorSecondary_percentage: [required('School Name is required')],
   seniorSecondary_schoolName: [required('Percentage is required')],
-  seniorSecondary_markSheet: [],
 };
 
 const AcademicDetailSection = ({ isFormEditable }) => {
@@ -36,7 +34,6 @@ const AcademicDetailSection = ({ isFormEditable }) => {
   const { connectField, handleSubmit, change, addField } =
     useFormReducer(validators);
 
-  // to add percentage, marksheet anf backlogs fields inside form reducer.
   const addSemesterField = useCallback(
     (index, data) => {
       const percentage = data?.percentage;
@@ -51,7 +48,6 @@ const AcademicDetailSection = ({ isFormEditable }) => {
         [required('This is required')],
         activeBacklogs,
       );
-      addField(`graduation_semesters_${index}_marksheet`, []);
     },
     [addField],
   );
@@ -74,26 +70,30 @@ const AcademicDetailSection = ({ isFormEditable }) => {
     <form
       onSubmit={handleSubmit(async (data) => {
         const prevData = academicDetail;
+        console.log("flatten object", flattenObject(data));
         const updatedData = unflatten(data);
+        console.log("unfaltten", updatedData);
         const changes = getDifference(prevData, updatedData);
+        console.log("changes", changes);
+
         const updateRequest = new PendingRequestService();
 
-        if (changes !== null) {
-          console.log('Chnages', changes);
-          // const { successful, error } = await updateRequest.add({
-          //   requestedOn: new Date(),
-          //   updatesRequired: changes,
-          //   studentEmail: data?.email,
-          // });
+        // if (changes !== null) {
+        //   console.log('Chnages', changes);
+        //   const { successful, error } = await updateRequest.add({
+        //     requestedOn: new Date(),
+        //     updatesRequired: changes,
+        //     studentEmail: data?.email,
+        //   });
 
-          // if (successful) {
-          //   console.log('Sucessful');
-          // } else {
-          //   console.log('Erorr', error);
-          // }
-        } else {
-          console.log('No modification done.');
-        }
+        //   if (successful) {
+        //     console.log('Sucessful');
+        //   } else {
+        //     console.log('Erorr', error);
+        //   }
+        // } else {
+        //   console.log('No modification done.');
+        // }
       })}
     >
       <h4 className="text-muted text-center pb-4">Academic Details</h4>
@@ -107,22 +107,16 @@ const AcademicDetailSection = ({ isFormEditable }) => {
             })(Input)}
           </div>
           <div className="col-12 col-md-6">
-            {connectField('seniorSecondary_schoolName', {
-              label: 'School Name',
-              disabled: !isFormEditable,
-            })(Input)}
-          </div>
-          <div className="col-12 col-md-6">
             {connectField('seniorSecondary_percentage', {
               label: ' Percentage',
               disabled: !isFormEditable,
             })(Input)}
           </div>
-          <div className="col-12 col-md-6">
-            {connectField('seniorSecondary_markSheet', {
-              label: 'Marksheet',
+          <div className="col-12">
+            {connectField('seniorSecondary_schoolName', {
+              label: 'School Name',
               disabled: !isFormEditable,
-            })(File)}
+            })(Input)}
           </div>
           <h6 className="col-12 py-3 text-muted">Secondary</h6>
           <div className="col-12 col-md-6">
@@ -132,20 +126,15 @@ const AcademicDetailSection = ({ isFormEditable }) => {
             })(Input)}
           </div>
           <div className="col-12 col-md-6">
-            {connectField('secondary_schoolName', {
-              label: ' School Name',
-              disabled: !isFormEditable,
-            })(Input)}
-          </div>
-          <div className="col-12 col-md-6">
             {connectField('secondary_percentage', {
               label: 'Percentage',
               disabled: !isFormEditable,
             })(Input)}
           </div>
-          <div className="col-12 col-md-6">
-            {connectField('secondary_markSheet', {
-              label: 'Marksheet',
+          
+          <div className="col-12">
+            {connectField('secondary_schoolName', {
+              label: ' School Name',
               disabled: !isFormEditable,
             })(Input)}
           </div>
@@ -167,7 +156,14 @@ const AcademicDetailSection = ({ isFormEditable }) => {
             {[...Array(semesters)]?.map((_, index) => (
               <div className="row" key={index.toString()}>
                 <h6 className="col-12 py-3 text-muted">Semester {index + 1}</h6>
-                <div className="col-12 col-md-4">
+                
+                <div className="col-12 col-md-6">
+                  {connectField(`graduation_semesters_${index}_percentage`, {
+                    disabled: !isFormEditable,
+                    label: 'Percentage',
+                  })(Input)}
+                </div>
+                <div className="col-12 col-md-6">
                   {connectField(
                     `graduation_semesters_${index}_activeBacklogs`,
                     {
@@ -175,18 +171,6 @@ const AcademicDetailSection = ({ isFormEditable }) => {
                       label: 'Active Backlogs',
                     },
                   )(Input)}
-                </div>
-                <div className="col-12 col-md-4">
-                  {connectField(`graduation_semesters_${index}_percentage`, {
-                    disabled: !isFormEditable,
-                    label: 'Percentage',
-                  })(Input)}
-                </div>
-                <div className="col-12 col-md-4">
-                  {connectField(`graduation_semesters_${index}_marksheet`, {
-                    disabled: !isFormEditable,
-                    label: 'Marksheet',
-                  })(File)}
                 </div>
               </div>
             ))}

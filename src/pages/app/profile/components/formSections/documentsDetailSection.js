@@ -3,6 +3,7 @@ import { Button, Card, File as FileInput, Input } from 'components';
 import { useFormReducer } from 'hooks';
 import { flattenObject, required, unflatten } from 'utils';
 import { useSelector } from 'react-redux';
+import { DocumentUpdateService } from 'placeme-services/lib';
 
 const DocumentCard = ({ link, title, uploadedOn }) => (
   <Card className="p-3">
@@ -62,7 +63,7 @@ const DocumentsDetailSection = ({ isFormEditable }) => {
       addField(`doc_${index}_title`, [
         required('Title is required for easy navigation.'),
       ]);
-      addField(`doc_${index}_file`, [
+      addField(`doc_${index}_doc`, [
         required("We can't proceed without a document."),
       ]);
     },
@@ -83,7 +84,7 @@ const DocumentsDetailSection = ({ isFormEditable }) => {
           <NewDocumentUploadCard
             key={position?.toString()}
             connectField={connectField}
-            fileFieldName={`doc_${position}_file`}
+            fileFieldName={`doc_${position}_doc`}
             titleFieldName={`doc_${position}_title`}
           />
         );
@@ -101,8 +102,21 @@ const DocumentsDetailSection = ({ isFormEditable }) => {
       </div>
       {isFormEditable && (
         <Button
-          onClick={handleSubmit((data) => {
-            // console.log(new File([doc], 'Ritik'));
+          onClick={handleSubmit(async (data) => {
+            const docs = unflatten(data);
+            const file = docs.doc[0];
+            const service = new DocumentUpdateService();
+
+            const { successful, error, result } = await service.add({
+              type: 'DOCUMENT',
+              updatesRequired: file,
+            });
+
+            if (successful) {
+              console.log('Sucessfully', result);
+            } else {
+              console.error('Eroror', error);
+            }
           })}
           fullWidth
           text="Send for Update"
