@@ -1,18 +1,26 @@
 export const companies = [
   {
-    text: 'Nagarro',
-    value: 'Nagarro',
+    id: '1',
+    text: 'Nagarro Digital Pvt. Ltd',
+    value: 'Nagarro Digital Pvt. Ltd',
+    registeredOn: '12/12/2018',
   },
   {
-    text: 'Google',
-    value: 'Google',
+    id: '2',
+    text: 'Larsen & Toubro Infotech Ltd',
+    value: 'Larsen & Toubro Infotech Ltd',
+    registeredOn: '21/09/2013',
   },
   {
-    text: 'Yahho',
-    value: 'Yahho',
+    id: '3',
+    text: 'HCL Technologies',
+    value: 'HCL Technologies',
+    registeredOn: '01/09/2020',
   },
   {
-    text: 'MTX',
-    value: 'MTX',
+    id: '4',
+    text: 'Tech Mahindra Ltd',
+    value: 'Tech Mahindra Ltd',
+    registeredOn: '22/01/2016',
   },
 ];

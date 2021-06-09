@@ -5,12 +5,13 @@ import React, { useCallback, useState } from 'react';
 import { required, unflatten } from 'utils';
 
 const validators = {
-  name: [],
-  type: [],
+  name: [required('Please enter a name.')],
+  type: [required('Please provide company type')],
 };
 
 const CompanyForm = ({ title, defaultValues }) => {
-  const { connectField, addField, handleSubmit } = useFormReducer(validators);
+  const { connectField, addField, handleSubmit, submitting } =
+    useFormReducer(validators);
 
   const addRepersentatives = useCallback(
     (index) => {
@@ -28,9 +29,10 @@ const CompanyForm = ({ title, defaultValues }) => {
   const [numOfReps, setNumOfReps] = useState(0);
 
   return (
-    <Card className="container bg-primary">
+    <Card className="container bg-primary p-5">
       <p className="display-4 text-center">{title}</p>
-      <div className="row">
+      {/* <hr /> */}
+      <div className="row mt-3">
         <div className="col-12">
           {connectField('name', {
             label: 'Name',
@@ -47,7 +49,7 @@ const CompanyForm = ({ title, defaultValues }) => {
           })(SelectOption)}
         </div>
       </div>
-      <p>Repersentatives</p>
+      <p className="text-muted">Repersentatives</p>
       {[...Array(numOfReps)].map((_, index) => (
         <div className="row" key={index.toString()}>
           <div className="col-4">
@@ -70,17 +72,23 @@ const CompanyForm = ({ title, defaultValues }) => {
           </div>
         </div>
       ))}
-
       <div className="row">
-        <Button
-          text="add"
-          onClick={() => {
-            addRepersentatives(numOfReps);
-            setNumOfReps(numOfReps + 1);
-          }}
-        />
+        <div className="col-12">
+          <Button
+            text="Add Repersentative"
+            onClick={() => {
+              addRepersentatives(numOfReps);
+              setNumOfReps(numOfReps + 1);
+            }}
+            buttonClassName="btn btn-outline-secondary"
+          />
+        </div>
+      </div>
+
+      <div className="row d-flex justify-content-center mt-4">
         <Button
           text="Submit"
+          loading={submitting}
           onClick={handleSubmit((data) => {
             console.log('Data', unflatten(data));
           })}

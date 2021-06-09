@@ -20,6 +20,9 @@ const CompanyRoutes = {
   editCompany: {
     path: '/company/edit/',
   },
+  search: {
+    path: '/search',
+  },
 };
 
 const StudentRoutes = {

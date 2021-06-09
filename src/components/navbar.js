@@ -11,12 +11,6 @@ import { useSelector } from 'react-redux';
 const navOptions = {
   [Roles.STUDENT]: [
     {
-      icon: 'home',
-      label: 'Home',
-      toPath: Routes.dashboard.path,
-      exact: true,
-    },
-    {
       icon: 'account_circle',
       label: 'Profile',
       toPath: Routes.profile.path,
@@ -46,12 +40,6 @@ const navOptions = {
   ],
   [Roles.TPO]: [
     {
-      icon: 'home',
-      label: 'Home',
-      toPath: Routes.dashboard.path,
-      exact: true,
-    },
-    {
       icon: 'work',
       label: 'Jobs',
       toPath: Routes.allJobs.path,
@@ -62,6 +50,11 @@ const navOptions = {
       icon: 'pending_actions',
       label: 'Pending Requests',
       toPath: Routes.allUpdateRequests.path,
+    },
+    {
+      icon: 'business',
+      label: 'Companies',
+      toPath: Routes.companies.path,
     },
     {
       icon: 'logout',

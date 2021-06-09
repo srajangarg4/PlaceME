@@ -13,8 +13,10 @@ import { fetchUserDetail } from 'middleware/auth';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AllUpdateRequests, UpdateRequestDetails } from './app/updateRequest';
-import { CompanyForm } from './app/company';
+import { CompanyDetails, CompanyForm } from './app/company';
 import { JobApplicantDeatils, JobApplicants } from './app/job/jobApplicants';
+import Companies from './app/company/companies';
+import SearchPage from './app/searchPage';
 
 const ApplicationNavigator = () => {
   const history = useHistory();
@@ -96,7 +98,10 @@ const ApplicationNavigator = () => {
       <Route
         exact
         path={Routes.jobDetails.path}
-        component={ComponentResolver({ studentComponent: JobDescription })}
+        component={ComponentResolver({
+          studentComponent: JobDescription,
+          tpoComponent: JobDescription,
+        })}
       />
       <Route
         exact
@@ -113,7 +118,7 @@ const ApplicationNavigator = () => {
       />
       <Route
         exact
-        path={Routes.updateRequestDetails.path}
+        path={Routes.updateRequestDetails.path + '/:id'}
         component={ComponentResolver({
           studentComponent: UpdateRequestDetails,
           tpoComponent: UpdateRequestDetails,
@@ -124,6 +129,20 @@ const ApplicationNavigator = () => {
         path={Routes.addCompany.path}
         component={ComponentResolver({
           tpoComponent: CompanyForm,
+        })}
+      />
+      <Route
+        exact
+        path={Routes.search.path}
+        component={ComponentResolver({
+          tpoComponent: SearchPage,
+        })}
+      />
+      <Route
+        exact
+        path={Routes.companyDetails.path + '/:id'}
+        component={ComponentResolver({
+          tpoComponent: CompanyDetails,
         })}
       />
       <Route
@@ -140,6 +159,13 @@ const ApplicationNavigator = () => {
         component={ComponentResolver({
           tpoComponent: JobApplicantDeatils,
           studentComponent: JobApplicantDeatils,
+        })}
+      />
+      <Route
+        exact
+        path={Routes.companies.path}
+        component={ComponentResolver({
+          tpoComponent: Companies,
         })}
       />
       <Route component={ComponentResolver({})} />

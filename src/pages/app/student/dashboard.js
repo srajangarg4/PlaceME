@@ -22,7 +22,7 @@ const Dashboard = () => {
                 <h5 className="text-center">Recent Jobs</h5>
               </div>
               <div className="card-body mx-3">
-                <JobTitleCard />
+                <JobTitleCard id="1" job={{ jobType: 'Software ' }} />
               </div>
               <div className="card-footer bg-white">
                 <Link className="text-decoration-none" to={Routes.allJobs.path}>
