@@ -7,3 +7,4 @@ export { default as Loader } from './loader';
 export { default as Footer } from './footer';
 export { default as Toast } from './toast';
 export { default as Badge } from './badge';
+export { default as Modal } from './modal';

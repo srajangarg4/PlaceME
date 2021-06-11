@@ -1,5 +1,5 @@
-import { Badge, Input } from 'components';
-import React from 'react';
+import { Badge, Input, Modal } from 'components';
+import React, { useState } from 'react';
 
 const SearchBar = () => (
   <div className="row">
@@ -25,11 +25,29 @@ const Filters = () => (
 const PagingOptions = () => <div></div>;
 
 const SearchPage = () => {
+  const [show, setShow] = useState(false);
   return (
     <div className="container">
       <SearchBar />
       <Filters />
       <PagingOptions />
+      <button
+        type="button"
+        className="btn btn-primary"
+        data-toggle="modal"
+        data-target="#exampleModalCenter"
+      >
+        Launch demo modal
+      </button>
+      <Modal
+        show={show}
+        onSelected={() => {
+          console.log('Pressed');
+          setShow(!setShow);
+        }}
+      >
+        <h2>Hello</h2>
+      </Modal>
     </div>
   );
 };

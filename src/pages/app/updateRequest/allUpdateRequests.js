@@ -1,9 +1,10 @@
-import React from 'react';
-// import { Badge, Button, Input } from 'components';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Routes } from 'utils';
+import { resolveDate, Routes } from 'utils';
 import { Card, Navbar } from 'components';
-import { pendingRequests } from 'assets';
+import { PendingRequestService } from 'placeme-services/lib';
+import { useDispatch, useSelector } from 'react-redux';
+import { addRequests } from 'actions/pendingRequests';
 
 const PendingRequests = ({ type, title, requestedBy, requestedOn, id }) => (
   <Card className="row rounded p-4 mt-4">
@@ -19,13 +20,38 @@ const PendingRequests = ({ type, title, requestedBy, requestedOn, id }) => (
 );
 
 const AllUpdateRequests = () => {
+  const updateRequests = useSelector((state) => state.updateRequests);
+  const { requests } = { ...updateRequests };
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const service = new PendingRequestService();
+    service.getAll().then((docs) => {
+      const { result } = docs;
+      dispatch(addRequests(result));
+    });
+  }, [dispatch]);
+
   return (
     <div>
       <Navbar />
       <div className="container">
-        {pendingRequests.map((request) => (
-          <PendingRequests {...request} key={request.id} />
-        ))}
+        {requests?.map((request, i) => {
+          const {
+            data: { requestedOn, studentEmail, title },
+            id,
+          } = request;
+          return (
+            <PendingRequests
+              key={id}
+              requestedOn={resolveDate(requestedOn).toLocaleDateString()}
+              requestedBy={studentEmail}
+              id={id}
+              title={title}
+            />
+          );
+        })}
         {/* <PendingRequests />
         <PendingRequests />
         <PendingRequests /> */}

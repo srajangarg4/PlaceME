@@ -26,11 +26,15 @@ export const flattenObject = (ob, seperator = '_') => {
     if (!ob.hasOwnProperty(i)) continue;
 
     if (typeof ob[i] == 'object' && ob[i] !== null) {
-      var flatObject = flattenObject(ob[i]);
-      for (var x in flatObject) {
-        if (!flatObject.hasOwnProperty(x)) continue;
+      if (ob[i] instanceof Date) {
+        toReturn[i] = ob[i];
+      } else {
+        var flatObject = flattenObject(ob[i]);
+        for (var x in flatObject) {
+          if (!flatObject.hasOwnProperty(x)) continue;
 
-        toReturn[i + seperator + x] = flatObject[x];
+          toReturn[i + seperator + x] = flatObject[x];
+        }
       }
     } else {
       toReturn[i] = ob[i];
@@ -115,4 +119,68 @@ export const getDifference = (baseObj, targetObj) => {
     }
   }
   return Object.keys(result).length === 0 ? null : result;
+};
+
+export const reduceToLevel = (obj = {}, level = 0) => {
+  const depth = {};
+
+  (function getDepth(prefix, obj) {
+    if (!obj) {
+      return 0;
+    }
+    if (typeof obj === 'object') {
+      let maxDepth = Number.MIN_VALUE;
+
+      Object.keys(obj).forEach((key) => {
+        const depth = 1 + getDepth(`${prefix} ${key}`, obj[key]);
+        maxDepth = Math.max(depth, maxDepth);
+      });
+      depth[prefix] = maxDepth;
+
+      return maxDepth;
+    } else {
+      depth[prefix] = 0;
+      return 0;
+    }
+  })('', obj);
+  const reducedObj = {};
+  (function reduce(obj, prefix) {
+    if (!obj) {
+      return;
+    }
+    if (typeof obj === 'object') {
+      Object.keys(obj).forEach((key) => {
+        if (depth[`${prefix} ${key}`] > level) {
+          reduce(obj[key], `${prefix} ${key}`);
+        } else {
+          reducedObj[key] = obj[key];
+        }
+      });
+    } else {
+      reducedObj[prefix] = obj;
+    }
+  })(obj, '');
+  return reducedObj;
+};
+
+/**
+ * Add data to target object that is different
+ * @param {Object} source source of new data
+ * @param {Object} target object to which new data should be mapped
+ * @returns
+ */
+export const map = (source, target) => {
+  if (!isObject(source) || !isObject(target)) {
+    return;
+  }
+
+  Object.keys(source).forEach((key) => {
+    const sourceValue = source[key];
+    const targetValue = target[key];
+    if (!targetValue || !isObject(sourceValue) || !isObject(targetValue)) {
+      target[key] = source[key];
+    } else {
+      map(source[key], target[key]);
+    }
+  });
 };

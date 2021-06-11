@@ -21,6 +21,8 @@ export const fetchUserDetail = async (email) => {
         const { successful: adSuccess, result: adResult } =
           await academicDetailService.get(email);
         if (pdSuccess && adSuccess) {
+          const newDB = new Date(pdResult.data.dob?.toDate());
+          pdResult.data.dob = newDB;
           dispatch(addPersonalDetail(pdResult));
           dispatch(addAcademicDetail(adResult));
         }

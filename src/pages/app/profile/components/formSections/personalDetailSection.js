@@ -1,27 +1,32 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Input, SelectOption } from 'components';
+import { Button, DatePicker, Input, SelectOption } from 'components';
 import { useFormReducer } from 'hooks';
 import {
   validateName,
   validatePhoneNumber,
   required,
   getFormattedDate,
-  // flattenObject,
+  flattenObject,
+  getDifference,
+  unflatten,
 } from 'utils';
 import { bloodGroups } from 'assets';
 
 const validators = {
-  father_name: [required("Father's name is required."), validateName],
-  father_mobile: [
+  fatherDetails_name: [required("Father's name is required."), validateName],
+  fatherDetails_mobile: [
     required("Father's mobile number is required."),
     validatePhoneNumber,
   ],
-  father_occupation: [],
+  fatherDetails_occupation: [],
 
-  mother_name: [required("Mother's name is required."), validateName],
-  mother_mobile: [validatePhoneNumber],
-  mother_occupation: [],
+  motherDetails_name: [required("Mother's name is required."), validateName],
+  motherDetails_mobile: [
+    required("Mother's mobile number is required."),
+    validatePhoneNumber,
+  ],
+  motherDetails_occupation: [],
 
   dob: [required('Date of birth is required.')],
   address_area: [required('Area is required.')],
@@ -41,24 +46,6 @@ const validators = {
   ],
 };
 
-const getDefaultValues = (personalDetail) => ({
-  dob: getFormattedDate('yyyy-mm-dd', new Date(personalDetail?.dob?.toDate())),
-  aadhar: personalDetail?.aadhar?.number ?? '',
-  bloodGroup: personalDetail?.bloodGroup ?? '',
-  emergencyContact: '' + personalDetail?.emergencyContact ?? '',
-  fatherName: personalDetail?.fatherDetails?.name ?? '',
-  fatherMobile: '' + personalDetail?.fatherDetails?.mobile ?? '',
-  fatherOccupation: personalDetail?.fatherDetails?.occupation ?? '',
-  motherName: personalDetail?.motherDetails?.name ?? '',
-  motherMobile: '' + personalDetail?.motherDetails?.mobile ?? '',
-  motherOccupation: personalDetail?.motherDetails?.occupation ?? '',
-  area: personalDetail?.address?.area ?? '',
-  city: personalDetail?.address?.city ?? '',
-  district: personalDetail?.address?.district ?? '',
-  state: personalDetail?.address?.state ?? '',
-  pincode: personalDetail?.address?.pincode ?? '',
-});
-
 const PersonalDetailSection = ({ isFormEditable }) => {
   const personalDetail = useSelector(
     (state) => state?.personalDetail?.[state.user?.email],
@@ -67,9 +54,11 @@ const PersonalDetailSection = ({ isFormEditable }) => {
   const { connectField, handleSubmit, change } = useFormReducer(validators);
 
   useEffect(() => {
-    // const data = flattenObject(personalDetail);
-    const data = getDefaultValues(personalDetail);
+    const data = flattenObject(personalDetail);
     Object.keys(data).forEach((key) => {
+      if (key === 'dob') {
+        data.dob = getFormattedDate('yyyy-mm-dd', data.dob);
+      }
       change(key, data[key]);
     });
   }, [change, personalDetail]);
@@ -77,7 +66,7 @@ const PersonalDetailSection = ({ isFormEditable }) => {
   return (
     <form
       onSubmit={handleSubmit((data) => {
-        console.log(data);
+        console.log(getDifference(unflatten(data), personalDetail));
       })}
     >
       <h4 className="text-muted text-center pb-4">Personal Details</h4>
@@ -86,16 +75,14 @@ const PersonalDetailSection = ({ isFormEditable }) => {
           <div className="col-12 col-md-6">
             {connectField('dob', {
               type: 'date',
-              id: 'dob-field',
               className: 'form-control',
               disabled: !isFormEditable,
               label: 'Date of Birth',
-            })(Input)}
+            })(DatePicker)}
           </div>
           <div className="col-12 col-md-6">
             {connectField('bloodGroup', {
               type: 'text',
-              id: 'blood-group-field',
               className: 'form-control',
               disabled: !isFormEditable,
               options: bloodGroups,
@@ -103,9 +90,7 @@ const PersonalDetailSection = ({ isFormEditable }) => {
             })(SelectOption)}
           </div>
           <div className="col-12 col-md-6">
-            {/* {connectField('aadhar_number', { */}
-            {connectField('aadhar', {
-              id: 'aadhar-field',
+            {connectField('aadhar_number', {
               className: 'form-control',
               disabled: !isFormEditable,
               label: 'Aadhar',
@@ -113,7 +98,6 @@ const PersonalDetailSection = ({ isFormEditable }) => {
           </div>
           <div className="col-12 col-md-6">
             {connectField('emergencyContact', {
-              id: 'emergency-contact-field',
               className: 'form-control',
               disabled: !isFormEditable,
               label: 'Emergency Contact',
@@ -121,36 +105,28 @@ const PersonalDetailSection = ({ isFormEditable }) => {
           </div>
           <h6 className="col-12 py-3 text-muted">Address</h6>
           <div className="col-12 col-md-6">
-            {/* {connectField('address_area', { */}
-            {connectField('area', {
-              id: 'area-field',
+            {connectField('address_area', {
               className: 'form-control',
               disabled: !isFormEditable,
               label: 'Area',
             })(Input)}
           </div>
           <div className="col-12 col-md-6">
-            {/* {connectField('address_city', { */}
-            {connectField('city', {
-              id: 'city-field',
+            {connectField('address_city', {
               className: 'form-control',
               disabled: !isFormEditable,
               label: 'City',
             })(Input)}
           </div>
           <div className="col-12 col-md-6">
-            {/* {connectField('address_state', { */}
-            {connectField('state', {
-              id: 'state-field',
+            {connectField('address_state', {
               className: 'form-control',
               disabled: !isFormEditable,
               label: 'State',
             })(Input)}
           </div>
           <div className="col-12 col-md-6">
-            {/* {connectField('address_pincode', { */}
-            {connectField('pincode', {
-              id: 'pincode-field',
+            {connectField('address_pincode', {
               className: 'form-control',
               disabled: !isFormEditable,
               label: 'Pincode',
@@ -162,27 +138,21 @@ const PersonalDetailSection = ({ isFormEditable }) => {
             </div>
             <div className="row">
               <div className="col-12">
-                {/* {connectField('father_name', { */}
-                {connectField('fatherName', {
-                  id: 'father-email-field',
+                {connectField('fatherDetails_name', {
                   className: 'form-control',
                   disabled: !isFormEditable,
                   label: 'Name',
                 })(Input)}
               </div>
               <div className="col-12">
-                {/* {connectField('father_mobile', { */}
-                {connectField('fatherMobile', {
-                  id: 'father-mobile-field',
+                {connectField('fatherDetails_mobile', {
                   className: 'form-control',
                   disabled: !isFormEditable,
                   label: 'Mobile Number',
                 })(Input)}
               </div>
               <div className="col-12">
-                {/* {connectField('father_occupation', { */}
-                {connectField('fatherOccupation', {
-                  id: 'father-occupation-field',
+                {connectField('fatherDetails_occupation', {
                   className: 'form-control',
                   disabled: !isFormEditable,
                   label: 'Occupation',
@@ -196,27 +166,21 @@ const PersonalDetailSection = ({ isFormEditable }) => {
             </div>
             <div className="row">
               <div className="col-12">
-                {/* {connectField('mother_name', { */}
-                {connectField('motherName', {
-                  id: 'mother-name-field',
+                {connectField('motherDetails_name', {
                   className: 'form-control',
                   disabled: !isFormEditable,
                   label: 'Name',
                 })(Input)}
               </div>
               <div className="col-12">
-                {/* {connectField('mother_mobile', { */}
-                {connectField('motherMobile', {
-                  id: 'mother-mobile-field',
+                {connectField('motherDetails_mobile', {
                   className: 'form-control',
                   disabled: !isFormEditable,
                   label: 'Mobile Number',
                 })(Input)}
               </div>
               <div className="col-12">
-                {/* {connectField('mother_occupation', { */}
-                {connectField('motherOccupation', {
-                  id: 'mother-occupation-field',
+                {connectField('motherDetails_occupation', {
                   className: 'form-control',
                   disabled: !isFormEditable,
                   label: 'Occupation',

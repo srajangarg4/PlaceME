@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SelectOption = ({
+const DatePicker = ({
   id,
   error,
   label,
@@ -11,9 +11,8 @@ const SelectOption = ({
   labelClassName,
   disabled,
   onChange,
-  options,
-  name,
   required,
+  name,
   ...extraProps
 }) => {
   return (
@@ -24,20 +23,14 @@ const SelectOption = ({
       >
         {label}
       </label>
-      <select
+      <input
         className={`${error && 'is-invalid'} ${inputFieldClassName}`}
-        id={name}
         onChange={(e) => onChange(e.target.value)}
+        id={name}
         disabled={disabled}
+        type="date"
         {...extraProps}
-      >
-        <option>Choose a option</option>
-        {options.map((option) => (
-          <option value={option.value} key={option.value}>
-            {option.text}
-          </option>
-        ))}
-      </select>
+      />
       <div className="help-block">
         {error && <span className="text-danger">{errorMessage}</span>}
       </div>
@@ -45,13 +38,12 @@ const SelectOption = ({
   );
 };
 
-SelectOption.defaultProps = {
+DatePicker.defaultProps = {
   labelClassName: 'text-muted',
   inputFieldClassName: 'form-control',
   disabled: false,
   containerClassName: '',
   required: false,
-  options: [],
 };
 
-export default SelectOption;
+export default DatePicker;

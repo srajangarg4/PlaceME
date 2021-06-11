@@ -5,7 +5,7 @@ const userReducer = (state = {}, action) => {
   const { payload, type } = action;
   switch (type) {
     case LOGIN: {
-      const newState = { ...state, ...payload, role: Roles.TPO };
+      const newState = { ...state, ...payload };
       return !payload ? state : newState;
     }
     case LOGOUT:

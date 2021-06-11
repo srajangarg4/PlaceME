@@ -31,7 +31,7 @@ const AcademicDetailSection = ({ isFormEditable }) => {
 
   const [semesters, setSemester] = useState(0);
 
-  const { connectField, handleSubmit, change, addField } =
+  const { connectField, handleSubmit, change, addField, loading } =
     useFormReducer(validators);
 
   const addSemesterField = useCallback(
@@ -57,6 +57,7 @@ const AcademicDetailSection = ({ isFormEditable }) => {
     Object.keys(values).forEach((key) => {
       change(key, values[key]);
     });
+
     setSemester(academicDetail?.graduation?.semesters.length);
     const size = academicDetail?.graduation?.semesters?.length;
     let i = 0;
@@ -69,31 +70,31 @@ const AcademicDetailSection = ({ isFormEditable }) => {
   return (
     <form
       onSubmit={handleSubmit(async (data) => {
-        const prevData = academicDetail;
-        console.log("flatten object", flattenObject(data));
-        const updatedData = unflatten(data);
-        console.log("unfaltten", updatedData);
-        const changes = getDifference(prevData, updatedData);
-        console.log("changes", changes);
-
+        const changes = getDifference(academicDetail, unflatten(data));
         const updateRequest = new PendingRequestService();
 
-        // if (changes !== null) {
-        //   console.log('Chnages', changes);
-        //   const { successful, error } = await updateRequest.add({
-        //     requestedOn: new Date(),
-        //     updatesRequired: changes,
-        //     studentEmail: data?.email,
-        //   });
+        if (changes !== null) {
+          let title = '';
+          do {
+            title = prompt('Enter a message for this update');
+            console.log('Title obtained', title);
+          } while (!title);
+          const { successful, error } = await updateRequest.add({
+            requestedOn: new Date(),
+            updatesRequired: changes,
+            studentEmail: data?.email,
+            title,
+            type: 'ACADEMICS',
+          });
 
-        //   if (successful) {
-        //     console.log('Sucessful');
-        //   } else {
-        //     console.log('Erorr', error);
-        //   }
-        // } else {
-        //   console.log('No modification done.');
-        // }
+          if (successful) {
+            console.log('Sucessful');
+          } else {
+            console.log('Erorr', error);
+          }
+        } else {
+          alert('No modification done.');
+        }
       })}
     >
       <h4 className="text-muted text-center pb-4">Academic Details</h4>
@@ -131,7 +132,7 @@ const AcademicDetailSection = ({ isFormEditable }) => {
               disabled: !isFormEditable,
             })(Input)}
           </div>
-          
+
           <div className="col-12">
             {connectField('secondary_schoolName', {
               label: ' School Name',
@@ -156,7 +157,7 @@ const AcademicDetailSection = ({ isFormEditable }) => {
             {[...Array(semesters)]?.map((_, index) => (
               <div className="row" key={index.toString()}>
                 <h6 className="col-12 py-3 text-muted">Semester {index + 1}</h6>
-                
+
                 <div className="col-12 col-md-6">
                   {connectField(`graduation_semesters_${index}_percentage`, {
                     disabled: !isFormEditable,
@@ -189,7 +190,12 @@ const AcademicDetailSection = ({ isFormEditable }) => {
         </div>
         <div className="row d-flex justify-content-end my-3 mx-0"></div>
         {isFormEditable && (
-          <Button type="submit" fullWidth text="Send for Update" />
+          <Button
+            type="submit"
+            fullWidth
+            text="Send for Update"
+            loading={loading}
+          />
         )}
       </div>
     </form>

@@ -1,9 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, Card, File as FileInput, Input } from 'components';
+import {
+  Button,
+  Card,
+  File as FileInput,
+  Input,
+  SelectOption,
+} from 'components';
 import { useFormReducer } from 'hooks';
-import { flattenObject, required, unflatten } from 'utils';
+import { required, unflatten } from 'utils';
 import { useSelector } from 'react-redux';
-import { DocumentUpdateService } from 'placeme-services/lib';
+import { DocumentUploadService } from 'placeme-services/lib';
+import { documentType } from 'assets';
 
 const DocumentCard = ({ link, title, uploadedOn }) => (
   <Card className="p-3">
@@ -28,6 +35,7 @@ const NewDocumentUploadCard = ({
   connectField,
   titleFieldName,
   fileFieldName,
+  typeFieldName,
 }) => {
   return (
     <Card className="p-3">
@@ -38,6 +46,10 @@ const NewDocumentUploadCard = ({
         {connectField(fileFieldName, {
           label: 'Upload document',
         })(FileInput)}
+        {connectField(typeFieldName, {
+          label: 'Choose document type',
+          options: documentType,
+        })(SelectOption)}
       </div>
     </Card>
   );
@@ -66,6 +78,7 @@ const DocumentsDetailSection = ({ isFormEditable }) => {
       addField(`doc_${index}_doc`, [
         required("We can't proceed without a document."),
       ]);
+      addField(`doc_${index}_type`, [required('Please choose a type')]);
     },
     [addField],
   );
@@ -86,6 +99,7 @@ const DocumentsDetailSection = ({ isFormEditable }) => {
             connectField={connectField}
             fileFieldName={`doc_${position}_doc`}
             titleFieldName={`doc_${position}_title`}
+            typeFieldName={`doc_${position}_type`}
           />
         );
       })}
@@ -105,11 +119,14 @@ const DocumentsDetailSection = ({ isFormEditable }) => {
           onClick={handleSubmit(async (data) => {
             const docs = unflatten(data);
             const file = docs.doc[0];
-            const service = new DocumentUpdateService();
+            const { title, doc, type } = { ...file };
 
+            const service = new DocumentUploadService();
+            console.log('Data for update', docs);
             const { successful, error, result } = await service.add({
-              type: 'DOCUMENT',
-              updatesRequired: file,
+              doc,
+              title,
+              type,
             });
 
             if (successful) {
