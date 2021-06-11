@@ -110,9 +110,15 @@ export const getDifference = (baseObj, targetObj) => {
     const targetValue = targetObj[key];
 
     if (isObject(baseValue) && isObject(targetValue)) {
-      const innerDifference = getDifference(baseValue, targetValue);
-      if (innerDifference !== null) {
-        result[key] = innerDifference;
+      if (baseValue instanceof Date || targetValue instanceof Date) {
+        if (baseValue?.toDateString() !== targetValue?.toDateString()) {
+          result[key] = targetValue;
+        }
+      } else {
+        const innerDifference = getDifference(baseValue, targetValue);
+        if (innerDifference !== null) {
+          result[key] = innerDifference;
+        }
       }
     } else if (baseValue !== targetValue) {
       result[key] = targetValue;

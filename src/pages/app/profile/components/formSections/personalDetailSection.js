@@ -6,12 +6,12 @@ import {
   validateName,
   validatePhoneNumber,
   required,
-  getFormattedDate,
   flattenObject,
   getDifference,
   unflatten,
 } from 'utils';
 import { bloodGroups } from 'assets';
+import { PendingRequestService } from 'placeme-services/lib';
 
 const validators = {
   fatherDetails_name: [required("Father's name is required."), validateName],
@@ -56,17 +56,40 @@ const PersonalDetailSection = ({ isFormEditable }) => {
   useEffect(() => {
     const data = flattenObject(personalDetail);
     Object.keys(data).forEach((key) => {
-      if (key === 'dob') {
-        data.dob = getFormattedDate('yyyy-mm-dd', data.dob);
-      }
       change(key, data[key]);
     });
   }, [change, personalDetail]);
 
   return (
     <form
-      onSubmit={handleSubmit((data) => {
-        console.log(getDifference(unflatten(data), personalDetail));
+      onSubmit={handleSubmit(async (data) => {
+        console.log('Data from form', data);
+        const changes = getDifference(personalDetail, unflatten(data));
+        const updateRequest = new PendingRequestService();
+        if (changes !== null) {
+          let title = '';
+
+          title = prompt('Enter a message for this update');
+          console.log('Title obtained', title);
+          if (title) {
+            const { successful, error } = await updateRequest.add({
+              requestedOn: new Date(),
+              updatesRequired: changes,
+              studentEmail: data?.email,
+              title,
+              type: 'PERSONAL',
+            });
+
+            if (successful) {
+              console.log('Sucessful');
+            } else {
+              console.log('Erorr', error);
+            }
+          }
+        } else {
+          alert('No modification done.');
+        }
+
       })}
     >
       <h4 className="text-muted text-center pb-4">Personal Details</h4>
@@ -74,7 +97,6 @@ const PersonalDetailSection = ({ isFormEditable }) => {
         <div className="row">
           <div className="col-12 col-md-6">
             {connectField('dob', {
-              type: 'date',
               className: 'form-control',
               disabled: !isFormEditable,
               label: 'Date of Birth',

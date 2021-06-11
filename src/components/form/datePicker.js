@@ -1,4 +1,5 @@
 import React from 'react';
+import { getFormattedDate } from 'utils';
 
 const DatePicker = ({
   id,
@@ -13,8 +14,12 @@ const DatePicker = ({
   onChange,
   required,
   name,
+  value,
   ...extraProps
 }) => {
+  if(value instanceof Date) {
+    value = getFormattedDate("yyyy-mm-dd", value);
+  }
   return (
     <div className={`form-group ${containerClassName}`}>
       <label
@@ -25,10 +30,11 @@ const DatePicker = ({
       </label>
       <input
         className={`${error && 'is-invalid'} ${inputFieldClassName}`}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange(new Date(e.target.value))}
         id={name}
         disabled={disabled}
         type="date"
+        value={value}
         {...extraProps}
       />
       <div className="help-block">

@@ -75,22 +75,23 @@ const AcademicDetailSection = ({ isFormEditable }) => {
 
         if (changes !== null) {
           let title = '';
-          do {
-            title = prompt('Enter a message for this update');
-            console.log('Title obtained', title);
-          } while (!title);
-          const { successful, error } = await updateRequest.add({
-            requestedOn: new Date(),
-            updatesRequired: changes,
-            studentEmail: data?.email,
-            title,
-            type: 'ACADEMICS',
-          });
 
-          if (successful) {
-            console.log('Sucessful');
-          } else {
-            console.log('Erorr', error);
+          title = prompt('Enter a message for this update');
+          console.log('Title obtained', title);
+          if (title) {
+            const { successful, error } = await updateRequest.add({
+              requestedOn: new Date(),
+              updatesRequired: changes,
+              studentEmail: data?.email,
+              title,
+              type: 'ACADEMICS',
+            });
+
+            if (successful) {
+              console.log('Sucessful');
+            } else {
+              console.log('Erorr', error);
+            }
           }
         } else {
           alert('No modification done.');
