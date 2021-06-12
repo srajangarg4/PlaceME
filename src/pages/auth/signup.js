@@ -64,10 +64,10 @@ const Signup = () => {
           style={{ borderRadius: '15px' }}
         >
           <div className="row">
-            <div className="col-12 col-sm-5 align-self-center">
+            <div className="col-12 col-sm-5 align-items-center">
               <img
-                src="https://res.cloudinary.com/mhmd/image/upload/v1569543678/form_d9sh6m.svg"
-                alt=""
+                src="https://firebasestorage.googleapis.com/v0/b/placeme-d4e2a.appspot.com/o/SignUp%2Fsignup.png?alt=media&token=472b6a78-a715-44ed-9178-c642bdf965a3"
+                alt="hihkhkh"
                 className="img-fluid p-3"
               />
               <h2 className="text-center">Sign Up</h2>
@@ -93,54 +93,50 @@ const Signup = () => {
                 >
                   <div className="row">
                     {connectField('firstName', {
-                      className: 'form-control',
                       placeholder: 'First Name',
-                      styles: 'col-lg-6 my-2',
+                      containerClassName: 'col-lg-6 my-2',
                       iconName: 'person',
                     })(Input)}
 
                     {connectField('lastName', {
-                      className: 'form-control',
                       placeholder: 'Last Name',
-                      styles: 'col-lg-6 my-2',
+                      containerClassName: 'col-lg-6 my-2',
                       iconName: 'person',
                     })(Input)}
                   </div>
                   <div className="row">
                     {connectField('email', {
-                      className: 'form-control',
                       placeholder: 'Email',
-                      styles: 'col my-2',
+                      containerClassName: 'col my-2',
                       iconName: 'email',
                     })(Input)}
                   </div>
                   <div className="row">
                     {connectField('phoneNumber', {
-                      className: 'form-control',
                       placeholder: 'Mobile',
-                      styles: 'col my-2',
+                      containerClassName: 'col my-2',
                       iconName: 'phone',
                     })(Input)}
                   </div>
                   <div className="row">
                     {connectField('password', {
-                      className: 'form-control',
                       placeholder: 'Password',
                       iconName: 'lock',
-                      styles: 'col-lg-6 my-2',
+                      containerClassName: 'col-lg-6 my-2',
                     })(Input)}
 
                     {connectField('confPassword', {
-                      className: 'form-control',
                       placeholder: 'Confirm Password',
                       iconName: 'lock',
-                      styles: 'col-lg-6 my-2',
+                      containerClassName: 'col-lg-6 my-2',
                     })(Input)}
                   </div>
                   <Button
+                    buttonClassName="btn-primary mt-3"
                     text="Create Account"
                     type="submit"
                     loading={loading}
+                    fullWidth
                   />
                 </form>
               </div>

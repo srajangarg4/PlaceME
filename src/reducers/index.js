@@ -16,4 +16,7 @@ const rootReducer = combineReducers({
   documents,
   updateRequests,
 });
+
+
+
 export default rootReducer;

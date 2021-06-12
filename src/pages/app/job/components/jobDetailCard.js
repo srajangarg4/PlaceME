@@ -14,7 +14,7 @@ const JobTitleCard = ({
           <div className="col-12 col-md">
             <div className="d-flex align-items-center">
               <div className="p-2 p-sm-3 mr-3 mr-sm-5">
-                <img height={48} width={46} src={photoUrl} alt="" />
+                <img height={48} width={46} src={"https://preview.colorlib.com/theme/jobsco/assets/img/icon/1.svg"} alt="" />
               </div>
               <div>
                 <h3 className="text-capitalize">{title}</h3>

@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { resolveDate, Routes } from 'utils';
 import { Card, Navbar } from 'components';
 import { useDispatch, useSelector } from 'react-redux';
-import { addRequests } from 'actions/pendingRequests';
-import { fetchPendingRequests } from 'middleware/updateRequests';
+import { CompletedRequestService } from 'placeme-services/lib';
 
 const PendingRequests = ({ type, title, requestedBy, requestedOn, id }) => (
   <Card className="row rounded p-4 mt-4">
@@ -19,27 +18,26 @@ const PendingRequests = ({ type, title, requestedBy, requestedOn, id }) => (
   </Card>
 );
 
-const AllUpdateRequests = () => {
-  const updateRequests = useSelector((state) => state.updateRequests);
+const AllCompletedRequests = () => {
   const user = useSelector(state => state.user);
-  const { requests } = { ...updateRequests };
+    const [updateRequests, setUpdateRequests] = useState([])
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchPendingRequests(user?.role).then(result => {
-      if (result.successful) {
-        dispatch(addRequests(result.result));
-      }
-    })
+      const service = new CompletedRequestService();
+      service.getCurrentUserCompletedRequests().then((result) => {
+          if (result.successful) {
+              setUpdateRequests(result.result)
+          }
+      });
   }, [dispatch, user?.role]);
 
   return (
     <div>
       <Navbar />
       <div className="container">
-        
-        { requests?.length !==0  ? requests?.map((request) => {
+        {updateRequests?.length!==0 ? updateRequests?.map((request) => {
           const {
             data: { requestedOn, studentEmail, title },
             id,
@@ -53,10 +51,9 @@ const AllUpdateRequests = () => {
               title={title}
             />
           );
-        }) : <h4>No pending Request</h4>
-        }
+        }): <h4>No Completed Request</h4>}
       </div>
     </div>
   );
 };
-export default AllUpdateRequests;
+export default AllCompletedRequests;

@@ -28,6 +28,11 @@ const navOptions = {
       toPath: Routes.allUpdateRequests.path,
     },
     {
+      icon: 'how_to_reg',
+      label: 'Completed Update Requests',
+      toPath: Routes.allCompletedUpdateRequests.path,
+    },
+    {
       icon: 'logout',
       label: 'Logout',
       onClick: async () => {

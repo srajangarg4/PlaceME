@@ -12,7 +12,7 @@ import { UserService } from 'placeme-services/lib';
 import { fetchUserDetail } from 'middleware/auth';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { AllUpdateRequests, UpdateRequestDetails } from './app/updateRequest';
+import { AllCompletedRequests, AllUpdateRequests, UpdateRequestDetails } from './app/updateRequest';
 import { CompanyDetails, CompanyForm } from './app/company';
 import { JobApplicantDeatils, JobApplicants } from './app/job/jobApplicants';
 import Companies from './app/company/companies';
@@ -25,7 +25,7 @@ const ApplicationNavigator = () => {
       if (user) {
         await fetchUserDetail(user.email);
       } else {
-        history.push('/login');
+        history.push('/');
       }
     });
   }, [history]);
@@ -166,6 +166,13 @@ const ApplicationNavigator = () => {
         path={Routes.companies.path}
         component={ComponentResolver({
           tpoComponent: Companies,
+        })}
+      />
+      <Route
+        exact
+        path={Routes.allCompletedUpdateRequests.path}
+        component={ComponentResolver({
+          studentComponent: AllCompletedRequests,
         })}
       />
       <Route component={ComponentResolver({})} />

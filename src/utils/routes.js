@@ -79,6 +79,18 @@ const UpdateRequestRoutes = {
   },
 };
 
+const CompletedRequestRoutes = {
+  updateRequestDetails: {
+    path: '/update/requests/details',
+  },
+  allCompletedUpdateRequests: {
+    path: '/update/completed/requests',
+  },
+  completedUpdateRequestsDetail: {
+    path: '/update/completed/request/detail',
+  },
+};
+
 const AuthRoutes = {
   login: {
     path: '/login',
@@ -111,6 +123,7 @@ const Route = {
   ...UpdateRequestRoutes,
   ...AuthRoutes,
   ...ProfileRoutes,
+  ...CompletedRequestRoutes,
   dashboard: {
     path: '/',
   },
