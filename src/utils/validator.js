@@ -47,7 +47,7 @@ export const validatePassword = (password) => {
 };
 
 export const required = (message) => (data) => {
-  if (data === undefined || data === null) {
+  if (data === undefined || data === null || !data) {
     return message;
   }
   return '';
@@ -55,3 +55,22 @@ export const required = (message) => (data) => {
 
 export const confirmPasswordValidator = (value, other) =>
   value !== other?.password?.value ? 'Password Does not match' : undefined;
+
+export const validateURL = (str) => {
+  // var pattern = new RegExp(
+  //   // eslint-disable-next-line no-useless-escape
+  //   /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
+  // );
+  // // fragment locator
+  // return !!pattern?.test(str) ? undefined : 'Invalid URL';
+  var pattern = new RegExp(
+    '^(https?:\\/\\/)?' + // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$',
+    'i',
+  ); // fragment locator
+  return !!pattern?.test(str) ? undefined : 'Invalid URL';
+};

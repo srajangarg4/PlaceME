@@ -1,10 +1,15 @@
-import { Button } from 'components';
-import Card from 'components/card';
-import { PendingRequestService } from 'placeme-services/lib';
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router';
-import { flattenObject, map, reduceToLevel, resolveDate } from 'utils';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams, useHistory } from 'react-router';
+import { Button, Loader, Navbar, Toast, Card } from 'components';
+import { useDatabase } from 'hooks';
+import { flattenObject, reduceToLevel, resolveDate } from 'utils';
+import { addUpdateRequest } from 'actions';
+import {
+  approveRequest,
+  rejectRequest,
+  fetchPendingRequestDetail,
+} from 'middleware';
 
 const CurrentData = () => {
   return (
@@ -66,7 +71,7 @@ const Header = ({ heading }) => {
   );
 };
 
-const ApprovalOptions = ({ onApprove }) => {
+const ApprovalOptions = ({ onApprove, onReject }) => {
   return (
     <Card className="p-3">
       <Button
@@ -81,53 +86,86 @@ const ApprovalOptions = ({ onApprove }) => {
         text="Reject Update"
         buttonClassName="btn  btn-outline-danger"
         iconName="close"
+        onClick={onReject}
       />
     </Card>
   );
 };
 
-const UpdateRequestDetails = () => {
-  const updateRequests = useSelector((state) => state.updateRequests);
-  const academicDetail = useSelector((state) => state.academicDetail);
-  const { id } = useParams();
-
-  const service = new PendingRequestService();
-
-  const { requests } = { ...updateRequests };
-  const request = requests?.filter((req) => req?.id === id)[0];
-  const { data } = { ...request };
-  const { updatesRequired, title } = { ...data };
-  const { requestedOn, studentEmail: requestedBy, type } = { ...data };
-  console.log('Data recived', updatesRequired, requestedOn, requestedBy, type);
-  const temp = academicDetail['17egjcs161@gitjaipur.com'];
-  map(updatesRequired, temp);
-  console.log('Personal Detail after modify', temp);
+const PendingRequestDetail = ({
+  title,
+  updatesRequired,
+  requestedBy,
+  requestedOn,
+  type,
+  id,
+  approveRequest,
+  rejectRequest,
+}) => {
+  const history = useHistory();
   return (
     <div className="container">
       <Header heading={title} />
       <div className="row">
-        <div className="col-md-8 col-sm-12">
+        <div className="col-md-8 col-12">
           <NewData data={flattenObject(reduceToLevel(updatesRequired, 2))} />
           <CurrentData />
         </div>
-        <div className="col-md-4 col-sm-12">
+        <div className="col-md-4 col-12">
           <MetaData
             requestedBy={requestedBy}
             requestedOn={resolveDate(requestedOn).toLocaleDateString()}
             type={type}
           />
           <ApprovalOptions
-            onApprove={async () => {
-              const { successful, error } = await service.approveRequest(id);
-              if (successful) {
-                console.log('Successful');
-              } else {
-                console.log('Ërror', error);
-              }
-            }}
+            onApprove={approveRequest}
+            onReject={rejectRequest}
           />
         </div>
       </div>
+    </div>
+  );
+};
+
+const UpdateRequestDetails = () => {
+  const { id } = useParams();
+  const { loading, callDatabase, errors } = useDatabase(() =>
+    fetchPendingRequestDetail(id),
+  );
+  const { requests } = useSelector((state) => state.updateRequest);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!requests[id]) {
+      callDatabase(
+        (data) => {
+          dispatch(addUpdateRequest(data));
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
+    }
+  }, []);
+  return (
+    <div>
+      <Toast show={!!errors} />
+      <Navbar />
+      {loading ? (
+        <div className="d-flex justify-content-center align-items-center">
+          <Loader />
+        </div>
+      ) : (
+        <PendingRequestDetail
+          type={requests[id]?.type}
+          updatesRequired={requests[id]?.updatesRequired}
+          id={id}
+          requestedBy={requests[id]?.studentEmail}
+          requestedOn={requests[id]?.requestedOn}
+          title={requests[id]?.title}
+          approveRequest={approveRequest}
+        />
+      )}
     </div>
   );
 };

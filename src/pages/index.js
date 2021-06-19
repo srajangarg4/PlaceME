@@ -9,10 +9,14 @@ import Home from './app/home';
 import { formSections } from './app/profile/utils';
 import { AllJobs, JobDescription, JobForm } from './app/job';
 import { UserService } from 'placeme-services/lib';
-import { fetchUserDetail } from 'middleware/auth';
+import { onStartup } from 'middleware';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { AllCompletedRequests, AllUpdateRequests, UpdateRequestDetails } from './app/updateRequest';
+import {
+  AllCompletedRequests,
+  AllUpdateRequests,
+  UpdateRequestDetails,
+} from './app/updateRequest';
 import { CompanyDetails, CompanyForm } from './app/company';
 import { JobApplicantDeatils, JobApplicants } from './app/job/jobApplicants';
 import Companies from './app/company/companies';
@@ -23,7 +27,7 @@ const ApplicationNavigator = () => {
   useEffect(() => {
     UserService.firebaseRef.auth().onAuthStateChanged(async (user) => {
       if (user) {
-        await fetchUserDetail(user.email);
+        await onStartup(user.email);
       } else {
         history.push('/');
       }
@@ -106,7 +110,7 @@ const ApplicationNavigator = () => {
       <Route
         exact
         path={Routes.addNewJob.path}
-        component={ComponentResolver({ studentComponent: JobForm })}
+        component={ComponentResolver({ tpoComponent: JobForm })}
       />
       <Route
         exact
@@ -118,7 +122,7 @@ const ApplicationNavigator = () => {
       />
       <Route
         exact
-        path={Routes.updateRequestDetails.path + '/:id'}
+        path={Routes.updateRequestDetails.path}
         component={ComponentResolver({
           studentComponent: UpdateRequestDetails,
           tpoComponent: UpdateRequestDetails,

@@ -42,7 +42,7 @@ const JobForm = () => {
     <div>
       <Navbar />
       <div className="container">
-        <Card>
+        <Card shadow>
           <div className="card-header">
             <h4 className="text-center">Add New Job</h4>
           </div>

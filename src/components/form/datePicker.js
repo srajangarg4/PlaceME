@@ -17,8 +17,8 @@ const DatePicker = ({
   value,
   ...extraProps
 }) => {
-  if(value instanceof Date) {
-    value = getFormattedDate("yyyy-mm-dd", value);
+  if (value instanceof Date) {
+    value = getFormattedDate('yyyy-mm-dd', value);
   }
   return (
     <div className={`form-group ${containerClassName}`}>

@@ -46,12 +46,13 @@ const validators = {
   ],
 };
 
-const PersonalDetailSection = ({ isFormEditable }) => {
+const PersonalDetailSection = ({ isFormEditable, setIsFormEditable }) => {
   const personalDetail = useSelector(
     (state) => state?.personalDetail?.[state.user?.email],
   );
 
-  const { connectField, handleSubmit, change } = useFormReducer(validators);
+  const { connectField, handleSubmit, change, submitting } =
+    useFormReducer(validators);
 
   useEffect(() => {
     const data = flattenObject(personalDetail);
@@ -68,20 +69,21 @@ const PersonalDetailSection = ({ isFormEditable }) => {
         const updateRequest = new PendingRequestService();
         if (changes !== null) {
           let title = '';
-
+          let comment = '';
           title = prompt('Enter a message for this update');
+          comment = prompt('Enter a comment.');
           console.log('Title obtained', title);
-          if (title) {
+          if (title && comment) {
             const { successful, error } = await updateRequest.add({
-              requestedOn: new Date(),
               updatesRequired: changes,
-              studentEmail: data?.email,
               title,
               type: 'PERSONAL',
+              comment,
             });
 
             if (successful) {
               console.log('Sucessful');
+              setIsFormEditable(false);
             } else {
               console.log('Erorr', error);
             }
@@ -89,7 +91,6 @@ const PersonalDetailSection = ({ isFormEditable }) => {
         } else {
           alert('No modification done.');
         }
-
       })}
     >
       <h4 className="text-muted text-center pb-4">Personal Details</h4>
@@ -212,7 +213,12 @@ const PersonalDetailSection = ({ isFormEditable }) => {
           </div>
         </div>
         {isFormEditable && (
-          <Button type="submit" fullWidth text="Send for update" />
+          <Button
+            type="submit"
+            fullWidth
+            text="Send for update"
+            loading={submitting}
+          />
         )}
       </div>
     </form>

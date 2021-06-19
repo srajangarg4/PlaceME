@@ -1,10 +1,10 @@
 export const companyTypes = [
   {
-    text: 'Service based',
-    value: 'Service based',
+    text: 'Service Based',
+    value: 'SERVICE BASED',
   },
   {
     text: 'Product based',
-    value: 'Product based',
+    value: 'PRODUCT BASED',
   },
 ];

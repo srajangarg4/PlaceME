@@ -3,7 +3,7 @@ import { Card } from 'components';
 
 const StatCard = ({ gradientName, title, description }) => (
   <div className="col d-flex align-self-stretch">
-    <Card className={`w-100 ${gradientName}`}>
+    <Card className={`w-100 ${gradientName}`} shadow>
       <div className="card-body">
         <h6>{title}</h6>
         <h3>{description}</h3>
@@ -26,7 +26,7 @@ const Statistics = () => {
 
   return (
     <div className="col">
-      <Card>
+      <Card shadow>
         <div className="card-body">
           <h4 className="text-center card-title">Statistics</h4>
           <div className="text-white p-2">

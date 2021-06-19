@@ -16,14 +16,14 @@ export const saveData = (key, data) => {
 export const getData = (key) => {
   let data = null;
   try {
-    data = (storage.getItem(key)) || null;
+    data = storage.getItem(key) || null;
   } catch (error) {
     console.error(error.message); // eslint-disable-line no-console
   }
   return JSON.parse(data);
 };
 
-export const deleteData =  (key) => {
+export const deleteData = (key) => {
   try {
     storage.removeItem(key);
   } catch (error) {

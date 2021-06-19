@@ -24,14 +24,14 @@ const validators = {
   seniorSecondary_schoolName: [required('Percentage is required')],
 };
 
-const AcademicDetailSection = ({ isFormEditable }) => {
+const AcademicDetailSection = ({ isFormEditable, setIsFormEditable }) => {
   const academicDetail = useSelector(
     (state) => state?.academicDetail?.[state.user?.email],
   );
 
   const [semesters, setSemester] = useState(0);
 
-  const { connectField, handleSubmit, change, addField, loading } =
+  const { connectField, handleSubmit, change, addField, submitting } =
     useFormReducer(validators);
 
   const addSemesterField = useCallback(
@@ -75,20 +75,22 @@ const AcademicDetailSection = ({ isFormEditable }) => {
 
         if (changes !== null) {
           let title = '';
+          let comment = '';
 
           title = prompt('Enter a message for this update');
+          comment = prompt('Enter a comment');
           console.log('Title obtained', title);
-          if (title) {
+          if (title && comment) {
             const { successful, error } = await updateRequest.add({
-              requestedOn: new Date(),
               updatesRequired: changes,
-              studentEmail: data?.email,
               title,
               type: 'ACADEMICS',
+              comment,
             });
 
             if (successful) {
               console.log('Sucessful');
+              setIsFormEditable(false);
             } else {
               console.log('Erorr', error);
             }
@@ -195,7 +197,7 @@ const AcademicDetailSection = ({ isFormEditable }) => {
             type="submit"
             fullWidth
             text="Send for Update"
-            loading={loading}
+            loading={submitting}
           />
         )}
       </div>

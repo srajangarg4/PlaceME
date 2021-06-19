@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 
 const Card = ({
   children,
@@ -6,14 +7,25 @@ const Card = ({
   verticalCentered,
   style,
   horizontalCenter,
+  shadow,
+  border,
 }) => {
-  const containerStyle = `card shadow-lg bg-white my-4 rounded d-flex
+  const [shadowState, setShadow] = useState(shadow);
+  const containerStyle = `card ${
+    shadowState && 'shadow-lg'
+  } bg-white my-4 rounded d-flex
   ${className ?? ''}
   ${horizontalCenter ? 'justify-content-center' : ''}
   ${verticalCentered ? 'align-items-center' : ''}
+  ${border && 'border border-dark'}
   `;
   return (
-    <div className={containerStyle} style={style}>
+    <div
+      className={containerStyle}
+      style={style}
+      onMouseEnter={() => setShadow(true)}
+      onMouseLeave={() => setShadow(shadow)}
+    >
       {children}
     </div>
   );

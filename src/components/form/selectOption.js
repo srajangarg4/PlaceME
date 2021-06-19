@@ -31,7 +31,7 @@ const SelectOption = ({
         disabled={disabled}
         {...extraProps}
       >
-        <option>Choose a option</option>
+        <option value="">Choose a option</option>
         {options.map((option) => (
           <option value={option.value} key={option.value}>
             {option.text}

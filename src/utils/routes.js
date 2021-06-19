@@ -71,8 +71,11 @@ const UpdateRequestRoutes = {
   editUpdateRequest: {
     path: '/update/requests/edit',
   },
+  updateRequestDetailsBase: {
+    path: '/update/requests/detail/',
+  },
   updateRequestDetails: {
-    path: '/update/requests/details',
+    path: '/update/requests/detail/:id',
   },
   allUpdateRequests: {
     path: '/update/requests',
@@ -80,9 +83,6 @@ const UpdateRequestRoutes = {
 };
 
 const CompletedRequestRoutes = {
-  updateRequestDetails: {
-    path: '/update/requests/details',
-  },
   allCompletedUpdateRequests: {
     path: '/update/completed/requests',
   },

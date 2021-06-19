@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Navbar } from 'components';
 import {
   ProfilePageForm,
@@ -15,18 +15,11 @@ const Profile = ({ section }) => (
 );
 
 const ProfilePageContent = ({ section }) => {
-  const [isFormEditable, setIsFormEditable] = useState(false);
   return (
     <div className="container-fluid">
       <div className="row">
         <ProfileDetailCard selectedNavigationOption={section.text} />
-        <ProfilePageForm
-          section={section}
-          isFormEditable={isFormEditable}
-          onToggle={(option) => {
-            setIsFormEditable(option);
-          }}
-        />
+        <ProfilePageForm section={section} />
       </div>
     </div>
   );

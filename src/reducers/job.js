@@ -1,12 +1,11 @@
-import { ADD_JOB, ADD_JOBS } from 'actions';
+import { ADD_JOB, ADD_JOBS, ADD_LIMITED_JOBS } from 'actions';
 
-const jobReducer = (
-  state = {
-    jobs: {},
-    hasAlreadyFetchedJobs: false,
-  },
-  action,
-) => {
+const initialState = {
+  jobs: {},
+  hasAlreadyFetchedJobs: false,
+};
+
+const jobReducer = (state = initialState, action) => {
   const { payload, type } = action;
   switch (type) {
     case ADD_JOB: {
@@ -24,6 +23,15 @@ const jobReducer = (
         };
       });
       return { ...state, hasAlreadyFetchedJobs: true };
+    }
+    case ADD_LIMITED_JOBS: {
+      payload?.forEach(({ data, id }) => {
+        state = {
+          ...state,
+          jobs: { ...state.jobs, [id]: data },
+        };
+      });
+      return { ...state };
     }
     default: {
       return state;

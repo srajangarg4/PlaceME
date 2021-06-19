@@ -1,12 +1,11 @@
 import { useState, useCallback } from 'react';
 
-const useDatabase = (databaseFetchCall) => {
+const useDatabase = (databaseFetchCall, loading = false) => {
   const [state, setState] = useState({
-    loading: false,
+    loading,
     errors: null,
     data: null,
   });
-
   const setData = useCallback(
     (dataFromApi) => {
       setState({
@@ -29,24 +28,35 @@ const useDatabase = (databaseFetchCall) => {
     [state],
   );
 
-  const callDatabase = async (resolve, reject, data) => {
-    setState({ ...state, loading: true });
-    const result = await databaseFetchCall(data);
-    setState({ ...state, loading: false });
-    if (result?.successful) {
-      setData(result.result);
-      resolve?.(result.result);
-    } else {
-      setError(result.error);
-      reject?.(result.error);
-    }
-  };
+  const setLoading = useCallback(
+    (isLoading) => {
+      setState({ ...state, loading: isLoading });
+    },
+    [state],
+  );
+
+  const callDatabase = useCallback(
+    async (resolve, reject, data) => {
+      setLoading(true);
+      const result = await databaseFetchCall(data);
+      setLoading(false);
+      if (result?.successful) {
+        setData(result.result);
+        resolve?.(result.result);
+      } else {
+        setError(result.error);
+        reject?.(result.error);
+      }
+    },
+    [databaseFetchCall, setData, setError, setLoading],
+  );
 
   return {
     ...state,
     setData,
     setError,
     callDatabase,
+    setLoading,
   };
 };
 export default useDatabase;

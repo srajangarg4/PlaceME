@@ -7,7 +7,7 @@ import { Roles } from 'utils';
 import { dispatch } from 'store';
 import { login, addPersonalDetail, addAcademicDetail } from 'actions';
 
-export const fetchUserDetail = async (email) => {
+export const onStartup = async (email) => {
   const { successful, result } = await UserService.getUserDetail(email);
   if (successful) {
     dispatch(login(result));
@@ -17,13 +17,15 @@ export const fetchUserDetail = async (email) => {
         const personalDetailService = new PersonalDetailService();
         const { successful: pdSuccess, result: pdResult } =
           await personalDetailService.get(email);
-        const academicDetailService = new AcademicDetailService();
-        const { successful: adSuccess, result: adResult } =
-          await academicDetailService.get(email);
-        if (pdSuccess && adSuccess) {
+        if (pdSuccess) {
           const newDB = new Date(pdResult.data.dob?.toDate());
           pdResult.data.dob = newDB;
           dispatch(addPersonalDetail(pdResult));
+        }
+        const academicDetailService = new AcademicDetailService();
+        const { successful: adSuccess, result: adResult } =
+          await academicDetailService.get(email);
+        if (adSuccess) {
           dispatch(addAcademicDetail(adResult));
         }
         break;

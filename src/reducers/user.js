@@ -1,5 +1,4 @@
 import { LOGIN, LOGOUT } from 'actions';
-import { Roles } from 'utils';
 
 const userReducer = (state = {}, action) => {
   const { payload, type } = action;

@@ -4,8 +4,10 @@ import job from './job';
 import company from './company';
 import personalDetail from './personalDetail';
 import academicDetail from './academicDetail';
-import documents from './documents';
-import updateRequests from './updateRequests';
+import document from './documents';
+import updateRequest from './updateRequests';
+import completedRequest from './completedRequest';
+import department from './departments';
 
 const rootReducer = combineReducers({
   user,
@@ -13,10 +15,10 @@ const rootReducer = combineReducers({
   company,
   personalDetail,
   academicDetail,
-  documents,
-  updateRequests,
+  document,
+  updateRequest,
+  completedRequest,
+  department,
 });
-
-
 
 export default rootReducer;

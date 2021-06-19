@@ -63,6 +63,7 @@ const Login = () => {
                   <div className="col">
                     {connectField('password', {
                       placeholder: 'Enter your password',
+                      type: 'password',
                       className: 'form-control',
                     })(Input)}
                   </div>

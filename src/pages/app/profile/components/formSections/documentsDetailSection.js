@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import {
   Button,
   Card,
@@ -7,9 +7,8 @@ import {
   SelectOption,
 } from 'components';
 import { useFormReducer } from 'hooks';
-import { required, unflatten } from 'utils';
 import { useSelector } from 'react-redux';
-import { DocumentUploadService } from 'placeme-services/lib';
+import { PendingRequestService } from 'placeme-services/lib';
 import { documentType } from 'assets';
 
 const DocumentCard = ({ link, title, uploadedOn }) => (
@@ -31,22 +30,17 @@ const DocumentCard = ({ link, title, uploadedOn }) => (
   </Card>
 );
 
-const NewDocumentUploadCard = ({
-  connectField,
-  titleFieldName,
-  fileFieldName,
-  typeFieldName,
-}) => {
+const NewDocumentUploadCard = ({ connectField }) => {
   return (
     <Card className="p-3">
       <div>
-        {connectField(titleFieldName, {
+        {connectField('doc', {
           label: 'File title',
         })(Input)}
-        {connectField(fileFieldName, {
+        {connectField('title', {
           label: 'Upload document',
         })(FileInput)}
-        {connectField(typeFieldName, {
+        {connectField('type', {
           label: 'Choose document type',
           options: documentType,
         })(SelectOption)}
@@ -55,33 +49,11 @@ const NewDocumentUploadCard = ({
   );
 };
 
-const DocumentsDetailSection = ({ isFormEditable }) => {
-  const documents = useSelector((state) => state.documents);
+const DocumentsDetailSection = ({ isFormEditable, setIsFormEditable }) => {
+  const documents = useSelector((state) => state.document);
+  const { connectField, handleSubmit, submitting } = useFormReducer();
 
-  const { addField, connectField, handleSubmit, submitting } = useFormReducer();
-
-  const [numOfDocs, setNumOfDocs] = useState(0);
-
-  const [positionOfNewDoc, setPositionOfNewDoc] = useState(0);
-
-  useEffect(() => {
-    const numOfDocsFetched = documents?.length ?? 3;
-    setNumOfDocs(numOfDocsFetched);
-    setPositionOfNewDoc(numOfDocsFetched);
-  }, [documents]);
-
-  const addDocumentField = useCallback(
-    (index) => {
-      addField(`doc_${index}_title`, [
-        required('Title is required for easy navigation.'),
-      ]);
-      addField(`doc_${index}_doc`, [
-        required("We can't proceed without a document."),
-      ]);
-      addField(`doc_${index}_type`, [required('Please choose a type')]);
-    },
-    [addField],
-  );
+  const numOfDocs = documents?.length ?? 0;
 
   return (
     <div>
@@ -91,54 +63,40 @@ const DocumentsDetailSection = ({ isFormEditable }) => {
       })}
 
       {/* for new document upload */}
-      {[...Array(positionOfNewDoc - numOfDocs)].map((_, index) => {
-        const position = index;
-        return (
-          <NewDocumentUploadCard
-            key={position?.toString()}
-            connectField={connectField}
-            fileFieldName={`doc_${position}_doc`}
-            titleFieldName={`doc_${position}_title`}
-            typeFieldName={`doc_${position}_type`}
-          />
-        );
-      })}
 
-      <div className="row d-flex justify-content-end my-3 mx-0">
-        <Button
-          disabled={!isFormEditable}
-          text="Add Document"
-          onClick={() => {
-            addDocumentField(positionOfNewDoc - numOfDocs);
-            setPositionOfNewDoc(positionOfNewDoc + 1);
-          }}
-        />
-      </div>
       {isFormEditable && (
-        <Button
-          onClick={handleSubmit(async (data) => {
-            const docs = unflatten(data);
-            const file = docs.doc[0];
-            const { title, doc, type } = { ...file };
+        <>
+          <NewDocumentUploadCard connectField={connectField} />
+          <Button
+            onClick={handleSubmit(async (data) => {
+              const { doc, type, title } = { ...data };
 
-            const service = new DocumentUploadService();
-            console.log('Data for update', docs);
-            const { successful, error, result } = await service.add({
-              doc,
-              title,
-              type,
-            });
+              const service = new PendingRequestService();
+              let requestTitle = '';
+              let comment = '';
+              requestTitle = prompt('Enter a message for this update');
+              comment = prompt('Enter a comment.');
+              if (requestTitle && comment) {
+                const { successful, error, result } = await service.add({
+                  updatesRequired: { file: doc, title, type },
+                  type: 'DOCUMENT',
+                  title: requestTitle,
+                  comment,
+                });
 
-            if (successful) {
-              console.log('Sucessfully', result);
-            } else {
-              console.error('Eroror', error);
-            }
-          })}
-          fullWidth
-          text="Send for Update"
-          loading={submitting}
-        />
+                if (successful) {
+                  console.log('Sucessfully', result);
+                  setIsFormEditable(false);
+                } else {
+                  console.error('Eroror', error);
+                }
+              }
+            })}
+            fullWidth
+            text="Send for Update"
+            loading={submitting}
+          />
+        </>
       )}
     </div>
   );

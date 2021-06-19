@@ -1,5 +1,19 @@
-import React from 'react';
-import { Card, Navbar, Footer } from 'components';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useDatabase } from 'hooks';
+import { Card, Navbar, Footer, Loader } from 'components';
+import {
+  fetchAllDepartments,
+  fetchCompanies,
+  fetchPendingRequest,
+} from 'middleware';
+import { addLimitedCompanies, addLimitedUpdateRequests } from 'actions';
+import { Link } from 'react-router-dom';
+import { addDepartments } from 'actions/department';
+import PendingRequestCard from '../updateRequest/pendingRequestCard';
+import { Routes } from 'utils';
+import RecentJobs from '../job/components/limitedJobs';
+
 const TpoDashboard = () => {
   return (
     <>
@@ -8,138 +22,23 @@ const TpoDashboard = () => {
       <div className="container">
         <div className="row">
           <div className="col-12 col-md-8 d-md-flex">
-            <Card className="flex-md-fill">
-              <div className="card-header bg-white">
-                <h5 className="text-center">Recent Jobs</h5>
-              </div>
-              <div className="card-body mx-3">
-                <JobTitleCard />
-                <JobTitleCard />
-                <JobTitleCard />
-              </div>
-              <div className="card-footer bg-white">
-                <h6 className="text-muted text-center">See More</h6>
-              </div>
-            </Card>
+            <RecentJobs />
           </div>
           <div className="col-12 col-md d-md-flex">
-            <Card className="flex-md-fill">
-              <div className="card-header bg-white d-flex justify-content-between align-items-center">
-                <h5>Companies</h5>
-                <button className="btn btn-outline-dark">Add Company</button>
-              </div>
-              <div className="card-body">
-                <Card className="gradient2">
-                  <img
-                    src="https://preview.colorlib.com/theme/jobsco/assets/img/icon/1.svg"
-                    alt="Nagarro"
-                    className="card-img img-thumbnail"
-                    style={{ maxHeight: '100px', backgroundColor: '#f2fefe' }}
-                  />
-                  <div className="card-body">
-                    <h4 className="card-title">Nagarro Software Pvt Limited</h4>
-                    HR nagarro
-                  </div>
-                </Card>
-                <Card className="gradient3">
-                  <img
-                    src="https://preview.colorlib.com/theme/jobsco/assets/img/icon/1.svg"
-                    alt="Nagarro"
-                    className="card-img img-thumbnail"
-                    style={{ maxHeight: '100px', backgroundColor: '#f2fefe' }}
-                  />
-                  <div className="card-body">
-                    <h4 className="card-title">TCS</h4>
-                    TCS Recruter name
-                  </div>
-                </Card>
-              </div>
-              <div className="card-footer bg-white">
-                <h6 className="text-muted text-center">See More</h6>
-              </div>
-            </Card>
+            <LimitedCompanies />
           </div>
         </div>
         <div className="row">
           <div className="col-12 col-md-4 d-md-flex">
-            <Card className="flex-md-fill">
-              <div className="card-header bg-white d-flex justify-content-between align-items-center">
-                <h5>Departments</h5>
-                <button className="btn btn-outline-dark">Add Dept</button>
-              </div>
-              <div className="card-body">
-                <input
-                  type="search"
-                  className="form-control"
-                  placeholder="Search..."
-                />
-                <div
-                  className="px-3 mt-3"
-                  style={{ height: '500px', overflowY: 'scroll' }}
-                >
-                  <Card className="gradient1">
-                    <div className="card-body">
-                      <h4 className="card-title">
-                        Computer Science and Engineering
-                      </h4>
-                      Hodname
-                    </div>
-                  </Card>
-                  <Card className="gradient2">
-                    <div className="card-body">
-                      <h4 className="card-title">
-                        Computer Science and Engineering
-                      </h4>
-                      Hodname
-                    </div>
-                  </Card>
-                  <Card className="gradient2">
-                    <div className="card-body">
-                      <h4 className="card-title">
-                        Computer Science and Engineering
-                      </h4>
-                      Hodname
-                    </div>
-                  </Card>
-                  <Card className="gradient2">
-                    <div className="card-body">
-                      <h4 className="card-title">
-                        Computer Science and Engineering
-                      </h4>
-                      Hodname
-                    </div>
-                  </Card>
-                  <Card className="gradient2">
-                    <div className="card-body">
-                      <h4 className="card-title">
-                        Computer Science and Engineering
-                      </h4>
-                      Hodname
-                    </div>
-                  </Card>
-                </div>
-              </div>
-            </Card>
+            <Departments />
           </div>
           <div className="col-12 col-md d-md-flex">
-            <Card className="flex-md-fill">
-              <div className="card-header bg-white">
-                <h5 className="text-center">Pending Update Requests</h5>
-              </div>
-              <div className="card-body mx-3">
-                <JobTitleCard />
-                <JobTitleCard />
-                <JobTitleCard />
-              </div>
-              <div className="card-footer bg-white">
-                <h6 className="text-muted text-center">See More</h6>
-              </div>
-            </Card>
+            <LimitedPendingRequest />
           </div>
         </div>
         <div className="row">
           <div className="col-12">
-            <Card>
+            <Card shadow>
               <div className="card-header bg-white text-center">
                 <h5>Recently Placed Students</h5>
               </div>
@@ -153,46 +52,180 @@ const TpoDashboard = () => {
   );
 };
 
-const JobTitleCard = () => {
+const CompanyCard = ({ gradient, company, id }) => {
   return (
-    <div className="card shadow bg-white my-4">
+    <Link
+      to={`${Routes.companyDetails.path}/${id}`}
+      className="text-decoration-none"
+      style={{ color: 'black' }}
+    >
+      <Card className={gradient}>
+        <div className="card-body">
+          <h4 className="card-title">{company?.name}</h4>
+          HR nagarro
+        </div>
+      </Card>
+    </Link>
+  );
+};
+
+const LimitedCompanies = () => {
+  const { companies, hasAlreadyFetchedCompanies } = useSelector(
+    (state) => state.company,
+  );
+  const dispatch = useDispatch();
+  const { loading, callDatabase } = useDatabase(
+    fetchCompanies,
+    !hasAlreadyFetchedCompanies && Object.keys(companies).length < 3,
+  );
+  useEffect(() => {
+    if (!hasAlreadyFetchedCompanies && Object.keys(companies).length < 3) {
+      callDatabase((data) => {
+        dispatch(addLimitedCompanies(data));
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return (
+    <Card className="flex-md-fill" shadow>
+      <div className="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5>Companies</h5>
+        <Link className="btn btn-outline-dark" to={Routes.addCompany.path}>
+          Add Company
+        </Link>
+      </div>
       <div className="card-body">
-        <div className="row d-flex justify-content-between">
-          <div className="col-12 col-md">
-            <div className="d-flex align-items-center">
-              <div className="p-2 p-sm-3 mr-3 mr-sm-5">
-                <img
-                  src="https://preview.colorlib.com/theme/jobsco/assets/img/icon/1.svg"
-                  alt=""
-                />
-              </div>
-              <div>
-                <h3 className="text-capitalize">Software Engineer</h3>
-                <div className="row">
-                  <div className="col-auto my-1">
-                    <i className="text-muted d-flex align-items-center">
-                      <span className="material-icons">place</span>
-                      Califonia, USA
-                    </i>
-                  </div>
-                  <div className="col-auto my-1">
-                    <i className="text-muted d-flex align-items-center">
-                      <span className="material-icons">schedule</span>
-                      Full-Time
-                    </i>
-                  </div>
-                </div>
-              </div>
+        {loading ? (
+          <div className="d-flex justify-content-center align-items-center">
+            <Loader />
+          </div>
+        ) : (
+          Object.keys(companies).map((company) => {
+            return (
+              <CompanyCard
+                key={company}
+                id={company}
+                company={companies[company]}
+                gradient="gradient2"
+              />
+            );
+          })
+        )}
+      </div>
+      <div className="card-footer bg-white">
+        <h6 className="text-muted text-center">See More</h6>
+      </div>
+    </Card>
+  );
+};
+
+const DepartmentCard = ({ department, gradient, id }) => {
+  return (
+    <Link to="/" className="text-decoration-none" style={{ color: 'black' }}>
+      <Card className={gradient}>
+        <div className="card-body">
+          <h4 className="card-title">{department?.name}</h4>
+          {department?.hodEmail}
+        </div>
+      </Card>
+    </Link>
+  );
+};
+
+const Departments = () => {
+  const { departments, hasAlreadyFetchedDepartments } = useSelector(
+    (state) => state.department,
+  );
+  const dispatch = useDispatch();
+  const { loading, callDatabase } = useDatabase(
+    fetchAllDepartments,
+    !hasAlreadyFetchedDepartments,
+  );
+  useEffect(() => {
+    if (!hasAlreadyFetchedDepartments) {
+      callDatabase((data) => {
+        dispatch(addDepartments(data));
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return (
+    <Card className="flex-md-fill" shadow>
+      <div className="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5>Departments</h5>
+        <button className="btn btn-outline-dark">Add Dept</button>
+      </div>
+      <div className="card-body">
+        <input type="search" className="form-control" placeholder="Search..." />
+        <div
+          className="px-3 mt-3"
+          style={{ height: '500px', overflowY: 'scroll' }}
+        >
+          {loading ? (
+            <div className="d-flex justify-content-center align-items-center">
+              <Loader />
             </div>
-          </div>
-          <div className="col-12 col-md-auto d-flex align-items-center my-3">
-            <button className="btn btn-block btn-outline-dark" type="submit">
-              View
-            </button>
-          </div>
+          ) : (
+            Object.keys(departments).map((department) => {
+              return (
+                <DepartmentCard
+                  key={department}
+                  id={department}
+                  department={departments[department]}
+                  gradient="gradient2"
+                />
+              );
+            })
+          )}
         </div>
       </div>
-    </div>
+    </Card>
+  );
+};
+
+const LimitedPendingRequest = () => {
+  const { requests, hasAlreadyFetchedRequests } = useSelector(
+    (state) => state.updateRequest,
+  );
+  const dispatch = useDispatch();
+  const { loading, callDatabase } = useDatabase(
+    fetchPendingRequest,
+    !hasAlreadyFetchedRequests && Object.keys(requests).length < 3,
+  );
+  useEffect(() => {
+    if (!hasAlreadyFetchedRequests && Object.keys(requests).length < 3) {
+      callDatabase((data) => {
+        dispatch(addLimitedUpdateRequests(data));
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return (
+    <Card className="flex-md-fill" shadow>
+      <div className="card-header bg-white">
+        <h5 className="text-center">Pending Update Requests</h5>
+      </div>
+      <div className="card-body mx-3">
+        {loading ? (
+          <div className="d-flex justify-content-center align-items-center">
+            <Loader />
+          </div>
+        ) : (
+          Object.keys(requests).map((request) => {
+            return (
+              <PendingRequestCard
+                key={request}
+                id={request}
+                {...requests[request]}
+              />
+            );
+          })
+        )}
+      </div>
+      <div className="card-footer bg-white">
+        <h6 className="text-muted text-center">See More</h6>
+      </div>
+    </Card>
   );
 };
 
@@ -221,7 +254,7 @@ const Statistics = () => {
 
   return (
     <div className="col">
-      <Card>
+      <Card shadow>
         <div className="card-body">
           <h4 className="text-center card-title">Statistics</h4>
           <div className="text-white p-2">

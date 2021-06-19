@@ -1,50 +1,69 @@
 import React from 'react';
 import { useParams } from 'react-router';
-import { companies } from 'assets/companies';
 import Card from 'components/card';
+import { useSelector } from 'react-redux';
+import { fetchCompanyById } from 'middleware';
+import { useDatabase } from 'hooks';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { addCompany } from 'actions';
+import CompanyCard from './companyCard';
+import { Loader, Navbar } from 'components';
 
 const CompanyDetails = () => {
   const { id } = useParams();
-  const companyDetails = companies.filter((company) => company.id === id)[0];
-  if (!companyDetails) {
-    return <div>Invalid company id</div>;
-  }
+  const { companies } = useSelector((state) => state.company);
+  const dispatch = useDispatch();
 
-  const { text, registeredOn } = { ...companyDetails };
+  const { loading, callDatabase } = useDatabase(
+    fetchCompanyById,
+    !companies[id],
+  );
+
+  useEffect(() => {
+    if (!companies[id]) {
+      callDatabase(
+        (data) => {
+          dispatch(addCompany(data));
+        },
+        (error) => console.log(error),
+        id,
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <div>
-      <Card className="container p-4">
-        <div className="row">
-          <div className="col-sm-12 col-md-4">
-            <div className="p-2 p-sm-3 mr-3 mr-sm-5">
-              <img
-                alt="Logo of the company"
-                src="https://www.pixsy.com/wp-content/uploads/2021/04/ben-sweet-2LowviVHZ-E-unsplash-1.jpeg"
-                style={{ height: '180px' }}
-                className="rounded"
-              />
+    <>
+      <Navbar />
+      <div className="container p-4">
+        <Card shadow>
+          {loading ? (
+            <div className="d-flex justify-content-center align-items-center">
+              <Loader />
             </div>
-          </div>
-          <Card className="col-sm-12 col-md-8">
-            <div>
-              <h3>{companyDetails.text}</h3>
-              <h4>{companyDetails.registeredOn}</h4>
+          ) : (
+            <div className="card-body mx-3">
+              <div className="row">
+                <div className="col-12">
+                  <CompanyCard company={companies[id]} id={id} />
+                </div>
+                <div className="col-12">
+                  <Card>
+                    <h4>Repersentaives</h4>
+                  </Card>
+                </div>
+                <div className="col-12">
+                  <Card>
+                    <h4>Job Posted By the company</h4>
+                  </Card>
+                </div>
+              </div>
             </div>
-          </Card>
-        </div>
-        <Card className="row">
-          <div className="col-12">
-            <h4>Repersentaives</h4>
-          </div>
+          )}
         </Card>
-        <Card className="row">
-          <div className="col-12">
-            <h4>Job Posted By the company</h4>
-          </div>
-        </Card>
-      </Card>
-    </div>
+      </div>
+    </>
   );
 };
 

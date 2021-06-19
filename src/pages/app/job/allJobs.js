@@ -1,30 +1,22 @@
 import React, { useEffect } from 'react';
 import { Card, Navbar, Loader, Toast } from 'components';
 import { useDatabase } from 'hooks';
-import { JobService, CompanyService } from 'placeme-services/lib';
 import { useSelector, useDispatch } from 'react-redux';
 import { addJobs, addCompanies } from 'actions';
-import JobTitleCard from './components/jobDetailCard';
-
-const fetchCompaniesAndJobs = async () => {
-  const jobService = new JobService();
-  const companyService = new CompanyService();
-  const jobResult = await jobService.getAll();
-  const companyResult = await companyService.getAll();
-  return {
-    successful: jobResult.successful && companyResult.successful,
-    result: { jobs: jobResult.result, companies: companyResult.result },
-    error: jobResult.error ?? companyResult.error,
-  };
-};
+import JobCard from './components/jobCard';
+import { fetchCompaniesAndJobs } from 'middleware';
 
 const AllJobs = () => {
-  const { loading, errors, callDatabase } = useDatabase(fetchCompaniesAndJobs);
   const { jobs, hasAlreadyFetchedJobs } = useSelector((state) => state.job);
   const { companies, hasAlreadyFetchedCompanies } = useSelector(
     (state) => state.company,
   );
   const dispatch = useDispatch();
+  const { loading, errors, callDatabase } = useDatabase(
+    fetchCompaniesAndJobs,
+    !hasAlreadyFetchedJobs || !hasAlreadyFetchedCompanies,
+  );
+
   useEffect(() => {
     if (!hasAlreadyFetchedJobs || !hasAlreadyFetchedCompanies) {
       callDatabase((data) => {
@@ -43,7 +35,7 @@ const AllJobs = () => {
       <div className="container-fluid">
         <div className="row">
           <div className="col-12 col-sm-4 my-sm-5">
-            <Card>
+            <Card shadow>
               <div className="card-body">
                 <h5 className="text-center pt-3 pb-1">Job Filters</h5>
                 <hr />
@@ -54,7 +46,7 @@ const AllJobs = () => {
             </Card>
           </div>
           <div className="col-12 col-sm">
-            <Card>
+            <Card shadow>
               <div className="card-header bg-white">
                 <h4 className="text-center pt-3">Jobs</h4>
               </div>
@@ -66,10 +58,10 @@ const AllJobs = () => {
                 ) : (
                   Object.keys(jobs).map((job) => {
                     return (
-                      <JobTitleCard
+                      <JobCard
                         id={job}
                         job={jobs[job]}
-                        photoUrl={companies[jobs[job].company].logo}
+                        company={companies[jobs[job].company]}
                         key={job}
                       />
                     );

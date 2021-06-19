@@ -10,7 +10,7 @@ const ProfileDetailCard = ({ selectedNavigationOption }) => {
   const { firstName, lastName } = { ...name };
   return (
     <div className="col-md order-md-2">
-      <Card>
+      <Card shadow>
         <div className="card-body text-center">
           <div>
             <img

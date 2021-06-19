@@ -4,4 +4,5 @@ export * from './job';
 export * from './companies';
 export * from './academicDetails';
 export * from './personalDetails';
+export * from './pendingRequests';
 export * from './common';
