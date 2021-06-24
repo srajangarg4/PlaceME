@@ -1,5 +1,6 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Switch, useHistory } from 'react-router-dom';
+import { UserService } from 'placeme-services/lib';
 import { Routes } from 'utils';
 import ComponentResolver from './componentResolver';
 import { Login, Signup } from './auth';
@@ -7,20 +8,16 @@ import { StudentDashboard, StudentProfile } from './app/student';
 import { TPODashboard } from './app/tpo';
 import Home from './app/home';
 import { formSections } from './app/profile/utils';
-import { AllJobs, JobDescription, JobForm } from './app/job';
-import { UserService } from 'placeme-services/lib';
+import { AllJobs, JobDescription, JobForm, EditJob } from './app/job';
 import { onStartup } from 'middleware';
-import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import {
   AllCompletedRequests,
   AllUpdateRequests,
   UpdateRequestDetails,
 } from './app/updateRequest';
 import { CompanyDetails, CompanyForm } from './app/company';
-import { JobApplicantDeatils, JobApplicants } from './app/job/jobApplicants';
-import Companies from './app/company/companies';
-import SearchPage from './app/searchPage';
+import { Companies } from './app/company';
+import { AddDepartment } from './app/department';
 
 const ApplicationNavigator = () => {
   const history = useHistory();
@@ -29,7 +26,7 @@ const ApplicationNavigator = () => {
       if (user) {
         await onStartup(user.email);
       } else {
-        history.push('/');
+        history.push(Routes.default.path);
       }
     });
   }, [history]);
@@ -101,7 +98,7 @@ const ApplicationNavigator = () => {
       />
       <Route
         exact
-        path={Routes.jobDetails.path}
+        path={Routes.jobDetail.path + ':id'}
         component={ComponentResolver({
           studentComponent: JobDescription,
           tpoComponent: JobDescription,
@@ -114,6 +111,11 @@ const ApplicationNavigator = () => {
       />
       <Route
         exact
+        path={Routes.updateJob.path + ':id'}
+        component={ComponentResolver({ tpoComponent: EditJob })}
+      />
+      <Route
+        exact
         path={Routes.allUpdateRequests.path}
         component={ComponentResolver({
           studentComponent: AllUpdateRequests,
@@ -122,7 +124,7 @@ const ApplicationNavigator = () => {
       />
       <Route
         exact
-        path={Routes.updateRequestDetails.path}
+        path={Routes.updateRequestDetail.path + ':id'}
         component={ComponentResolver({
           studentComponent: UpdateRequestDetails,
           tpoComponent: UpdateRequestDetails,
@@ -131,46 +133,17 @@ const ApplicationNavigator = () => {
       <Route
         exact
         path={Routes.addCompany.path}
-        component={ComponentResolver({
-          tpoComponent: CompanyForm,
-        })}
+        component={ComponentResolver({ tpoComponent: CompanyForm })}
       />
       <Route
         exact
-        path={Routes.search.path}
-        component={ComponentResolver({
-          tpoComponent: SearchPage,
-        })}
-      />
-      <Route
-        exact
-        path={Routes.companyDetails.path + '/:id'}
-        component={ComponentResolver({
-          tpoComponent: CompanyDetails,
-        })}
-      />
-      <Route
-        exact
-        path={Routes.jobApplicants.path}
-        component={ComponentResolver({
-          tpoComponent: JobApplicants,
-          studentComponent: JobApplicants,
-        })}
-      />
-      <Route
-        exact
-        path={`${Routes.jobApplicantDetails.path}/:id`}
-        component={ComponentResolver({
-          tpoComponent: JobApplicantDeatils,
-          studentComponent: JobApplicantDeatils,
-        })}
+        path={Routes.companyDetails.path + ':id'}
+        component={ComponentResolver({ tpoComponent: CompanyDetails })}
       />
       <Route
         exact
         path={Routes.companies.path}
-        component={ComponentResolver({
-          tpoComponent: Companies,
-        })}
+        component={ComponentResolver({ tpoComponent: Companies })}
       />
       <Route
         exact
@@ -178,6 +151,11 @@ const ApplicationNavigator = () => {
         component={ComponentResolver({
           studentComponent: AllCompletedRequests,
         })}
+      />
+      <Route
+        exact
+        path={Routes.addDepartment.path}
+        component={ComponentResolver({ tpoComponent: AddDepartment })}
       />
       <Route component={ComponentResolver({})} />
     </Switch>

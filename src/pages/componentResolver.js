@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { Roles } from 'utils';
+import { Role } from 'utils';
 import PageNotFound from './pageNotFound';
 
 const ComponentResolver = ({
@@ -10,9 +10,9 @@ const ComponentResolver = ({
   const user = useSelector((state) => state.user);
   const role = user?.role;
   switch (role) {
-    case Roles.TPO:
+    case Role.TPO:
       return tpoComponent ?? PageNotFound;
-    case Roles.STUDENT:
+    case Role.STUDENT:
       return studentComponent ?? PageNotFound;
     default:
       return defaultComponent ?? PageNotFound;

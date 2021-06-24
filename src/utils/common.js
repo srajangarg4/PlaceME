@@ -1,4 +1,4 @@
-export const resolveDate = (date) => new Date(date?.toDate());
+import { isObject } from 'placeme-services/lib/utils';
 
 export const getFormattedDate = (format, dateInput) => {
   let formattedDate = format;
@@ -63,8 +63,6 @@ export const unflatten = (obj = {}, seperator = '_') => {
   }
   return result;
 };
-
-const isObject = (obj) => typeof obj === 'object';
 
 const areEqualFields = (first, second, key, ignoreKeys = []) => {
   const areBothEmpty = !first[key] && !second[key];
@@ -167,26 +165,4 @@ export const reduceToLevel = (obj = {}, level = 0) => {
     }
   })(obj, '');
   return reducedObj;
-};
-
-/**
- * Add data to target object that is different
- * @param {Object} source source of new data
- * @param {Object} target object to which new data should be mapped
- * @returns
- */
-export const map = (source, target) => {
-  if (!isObject(source) || !isObject(target)) {
-    return;
-  }
-
-  Object.keys(source).forEach((key) => {
-    const sourceValue = source[key];
-    const targetValue = target[key];
-    if (!targetValue || !isObject(sourceValue) || !isObject(targetValue)) {
-      target[key] = source[key];
-    } else {
-      map(source[key], target[key]);
-    }
-  });
 };

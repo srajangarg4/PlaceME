@@ -32,7 +32,7 @@ const SelectOption = ({
         {...extraProps}
       >
         <option value="">Choose a option</option>
-        {options.map((option) => (
+        {options?.map((option) => (
           <option value={option.value} key={option.value}>
             {option.text}
           </option>

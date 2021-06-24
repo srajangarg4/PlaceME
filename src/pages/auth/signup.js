@@ -6,7 +6,7 @@ import {
   required,
   validatePassword,
   confirmPasswordValidator,
-  Roles,
+  Role,
   validateEmail,
 } from 'utils';
 import { UserService } from 'placeme-services/lib';
@@ -43,7 +43,7 @@ const formatUser = ({
       middleName: middleName ?? null,
       lastName,
     },
-    role: Roles.STUDENT,
+    role: Role.STUDENT,
     otherDetails: {},
   };
   return user;

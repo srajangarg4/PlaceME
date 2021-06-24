@@ -17,7 +17,7 @@ const PendingRequests = ({ type, title, requestedBy, requestedOn, id }) => (
           Requested on: {resolveDate(requestedOn).toLocaleDateString()}
         </p>
       </div>
-      <Link to={Routes.updateRequestDetails.path + `/${id}`}>View Details</Link>
+      <Link to={`${Routes.updateRequestDetail.path}${id}`}>View Details</Link>
     </div>
   </Card>
 );

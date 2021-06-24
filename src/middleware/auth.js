@@ -3,7 +3,7 @@ import {
   PersonalDetailService,
   UserService,
 } from 'placeme-services/lib';
-import { Roles } from 'utils';
+import { Role } from 'utils';
 import { dispatch } from 'store';
 import { login, addPersonalDetail, addAcademicDetail } from 'actions';
 
@@ -13,7 +13,7 @@ export const onStartup = async (email) => {
     dispatch(login(result));
     const { role } = result;
     switch (role) {
-      case Roles.STUDENT:
+      case Role.STUDENT:
         const personalDetailService = new PersonalDetailService();
         const { successful: pdSuccess, result: pdResult } =
           await personalDetailService.get(email);

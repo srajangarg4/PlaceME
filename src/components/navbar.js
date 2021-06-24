@@ -1,15 +1,14 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Roles, Routes } from 'utils';
+import { Role, Routes } from 'utils';
 import Icon from './icon';
 import { logout } from 'actions/user';
 import { UserService } from 'placeme-services/lib';
 import { dispatch } from 'store';
-import roles from 'utils/roles';
 import { useSelector } from 'react-redux';
 
 const navOptions = {
-  [Roles.STUDENT]: [
+  [Role.STUDENT]: [
     {
       icon: 'account_circle',
       label: 'Profile',
@@ -43,7 +42,7 @@ const navOptions = {
       },
     },
   ],
-  [Roles.TPO]: [
+  [Role.TPO]: [
     {
       icon: 'work',
       label: 'Jobs',
@@ -116,7 +115,7 @@ const Navbar = ({
 };
 
 Navbar.defaultProps = {
-  forRole: roles.STUDENT,
+  forRole: Role.STUDENT,
 };
 
 const NavItem = ({ className, label, icon, toPath, exact, onClick }) => (

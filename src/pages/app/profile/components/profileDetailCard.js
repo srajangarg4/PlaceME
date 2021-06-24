@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 const ProfileDetailCard = ({ selectedNavigationOption }) => {
   const user = useSelector((state) => state.user);
   const { name, role } = { ...user };
-  const { firstName, lastName } = { ...name };
+  const { firstName, lastName, photoUrl } = { ...name };
   return (
     <div className="col-md order-md-2">
       <Card shadow>
@@ -15,7 +15,10 @@ const ProfileDetailCard = ({ selectedNavigationOption }) => {
           <div>
             <img
               className="img-lg rounded-circle mb-4"
-              src="https://img.icons8.com/bubbles/100/000000/administrator-male.png"
+              src={
+                photoUrl ??
+                'https://img.icons8.com/bubbles/100/000000/administrator-male.png'
+              }
               alt="profile"
             />
             <h4 className="text-capitalize">{firstName + ' ' + lastName}</h4>

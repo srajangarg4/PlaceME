@@ -1,118 +1,54 @@
+//Not Used Yet
 const JobAppliactionRoutes = {
-  jobApplicationDetails: {
-    path: '/job/application/detail',
-  },
-  jobApplications: {
-    path: '/job/application/all',
-  },
+  jobApplicationDetails: { path: '/job/application/detail' },
+  jobApplications: { path: '/job/application/all' },
 };
 
 const CompanyRoutes = {
-  companyDetails: {
-    path: '/company/details',
-  },
-  companies: {
-    path: '/companies',
-  },
-  addCompany: {
-    path: '/company/add',
-  },
-  editCompany: {
-    path: '/company/edit/',
-  },
-  search: {
-    path: '/search',
-  },
+  companyDetails: { path: '/company/details/' },
+  companies: { path: '/companies' },
+  addCompany: { path: '/company/add' },
+  editCompany: { path: '/company/edit/' },
+  search: { path: '/search' },
 };
 
+//Not Using Yet StudentRoutes
 const StudentRoutes = {
-  studentDetails: {
-    path: '/student/details',
-  },
-  students: {
-    path: '/students',
-  },
+  studentDetails: { path: '/student/details' },
+  students: { path: '/students' },
 };
 
 const JobRoutes = {
-  jobBase: {
-    path: '/job',
-  },
-  newJob: {
-    path: '/job/new',
-  },
-  updateJob: {
-    path: '/job/edit',
-  },
-  addNewJob: {
-    path: '/job/new',
-  },
-  allJobs: {
-    path: '/jobs',
-  },
-  jobDetailsBase: {
-    path: '/job/detail/',
-  },
-  jobDetails: {
-    path: '/job/detail/:id',
-  },
-  jobApplicants: {
-    path: '/job/applicants',
-  },
-  jobApplicantDetails: {
-    path: '/job/applicants/details',
-  },
+  updateJob: { path: '/job/edit/' },
+  addNewJob: { path: '/job/new' },
+  allJobs: { path: '/jobs' },
+  jobDetail: { path: '/job/detail/' },
 };
 
 const UpdateRequestRoutes = {
-  newUpdateRequest: {
-    path: '/update/requests/new',
-  },
-  editUpdateRequest: {
-    path: '/update/requests/edit',
-  },
-  updateRequestDetailsBase: {
-    path: '/update/requests/detail/',
-  },
-  updateRequestDetails: {
-    path: '/update/requests/detail/:id',
-  },
-  allUpdateRequests: {
-    path: '/update/requests',
-  },
+  updateRequestDetail: { path: '/update/requests/detail/' },
+  allUpdateRequests: { path: '/update/requests' },
 };
 
 const CompletedRequestRoutes = {
-  allCompletedUpdateRequests: {
-    path: '/update/completed/requests',
-  },
-  completedUpdateRequestsDetail: {
-    path: '/update/completed/request/detail',
-  },
+  allCompletedUpdateRequests: { path: '/update/completed/requests' },
+  completedUpdateRequestsDetail: { path: '/update/completed/request/detail/' },
+};
+
+const DepartmentRoutes = {
+  addDepartment: { path: '/department/add' },
 };
 
 const AuthRoutes = {
-  login: {
-    path: '/login',
-  },
-  signup: {
-    path: '/signup',
-  },
+  login: { path: '/login' },
+  signup: { path: '/signup' },
 };
 
 const ProfileRoutes = {
-  profile: {
-    path: '/profile',
-  },
-  personalDetail: {
-    path: '/profile/personaldetail',
-  },
-  academicDetail: {
-    path: '/profile/academicDetail',
-  },
-  documents: {
-    path: '/profile/documents',
-  },
+  profile: { path: '/profile' },
+  personalDetail: { path: '/profile/personaldetail' },
+  academicDetail: { path: '/profile/academicdetail' },
+  documents: { path: '/profile/documents' },
 };
 
 const Route = {
@@ -124,15 +60,10 @@ const Route = {
   ...AuthRoutes,
   ...ProfileRoutes,
   ...CompletedRequestRoutes,
-  dashboard: {
-    path: '/',
-  },
-  middleware: {
-    path: 'Middleware',
-  },
-  default: {
-    path: '/',
-  },
+  ...DepartmentRoutes,
+  dashboard: { path: '/' },
+  middleware: { path: 'Middleware' },
+  default: { path: '/' },
 };
 
 export default Route;

@@ -1,10 +1,10 @@
 export const bloodGroups = [
-  { text: 'A+', value: 'A+' },
-  { text: 'A-', value: 'A-' },
-  { text: 'B+', value: 'B+' },
-  { text: 'B-', value: 'B-' },
-  { text: 'O+', value: 'O+' },
-  { text: 'O-', value: 'O-' },
-  { text: 'AB+', value: 'AB+' },
-  { text: 'AB-', value: 'AB-' },
+  { text: 'A+', value: 'A_POSITIVE' },
+  { text: 'A-', value: 'A_NEGATIVE' },
+  { text: 'B+', value: 'B_POSITIVE' },
+  { text: 'B-', value: 'B_NEGATIVE' },
+  { text: 'O+', value: 'O_POSITIVE' },
+  { text: 'O-', value: 'O_NEGATIVE' },
+  { text: 'AB+', value: 'AB_POSITIVE' },
+  { text: 'AB-', value: 'AB_NEGATIVE' },
 ];

@@ -15,7 +15,7 @@ const PendingRequestCard = ({ type, title, studentEmail, requestedOn, id }) => (
       </div>
       <Link
         className="text-decoration-none"
-        to={`${Routes.updateRequestDetailsBase.path}${id}`}
+        to={`${Routes.updateRequestDetail.path}${id}`}
       >
         <Button text="View Details" buttonClassName="btn btn-outline-primary" />
       </Link>

@@ -21,18 +21,18 @@ const TpoDashboard = () => {
       <Statistics />
       <div className="container">
         <div className="row">
-          <div className="col-12 col-md-8 d-md-flex">
+          <div className="col-12 col-lg-8 d-lg-flex">
             <RecentJobs />
           </div>
-          <div className="col-12 col-md d-md-flex">
+          <div className="col-12 col-lg d-lg-flex">
             <LimitedCompanies />
           </div>
         </div>
         <div className="row">
-          <div className="col-12 col-md-4 d-md-flex">
+          <div className="col-12 col-lg-4 d-lg-flex">
             <Departments />
           </div>
-          <div className="col-12 col-md d-md-flex">
+          <div className="col-12 col-lg d-lg-flex">
             <LimitedPendingRequest />
           </div>
         </div>
@@ -55,7 +55,7 @@ const TpoDashboard = () => {
 const CompanyCard = ({ gradient, company, id }) => {
   return (
     <Link
-      to={`${Routes.companyDetails.path}/${id}`}
+      to={`${Routes.companyDetails.path}${id}`}
       className="text-decoration-none"
       style={{ color: 'black' }}
     >
@@ -153,7 +153,9 @@ const Departments = () => {
     <Card className="flex-md-fill" shadow>
       <div className="card-header bg-white d-flex justify-content-between align-items-center">
         <h5>Departments</h5>
-        <button className="btn btn-outline-dark">Add Dept</button>
+        <Link to={Routes.addDepartment.path} className="btn btn-outline-dark">
+          Add Dept
+        </Link>
       </div>
       <div className="card-body">
         <input type="search" className="form-control" placeholder="Search..." />

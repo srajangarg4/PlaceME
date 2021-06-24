@@ -1,4 +1,7 @@
 import { DeptarmentService } from 'placeme-services/lib';
-const departmentService = new DeptarmentService();
+const service = new DeptarmentService();
 
-export const fetchAllDepartments = () => departmentService.getAll();
+export const fetchAllDepartments = () => service.getAll();
+
+export const addDepartment = (department) =>
+  service.set(department, department?.abbrivation);

@@ -8,6 +8,7 @@ import document from './documents';
 import updateRequest from './updateRequests';
 import completedRequest from './completedRequest';
 import department from './departments';
+import jobApplication from './jobApplication';
 
 const rootReducer = combineReducers({
   user,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   updateRequest,
   completedRequest,
   department,
+  jobApplication,
 });
 
 export default rootReducer;

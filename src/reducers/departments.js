@@ -1,4 +1,4 @@
-const { ADD_DEPARTMENTS } = require('actions/department');
+const { ADD_DEPARTMENTS, ADD_DEPARTMENT } = require('actions/department');
 
 const initialState = {
   departments: {},
@@ -16,6 +16,13 @@ const DepartmentReducer = (state = initialState, action) => {
         };
       });
       return { ...state, hasAlreadyFetchedDepartments: true };
+    case ADD_DEPARTMENT: {
+      const { id, data } = payload;
+      return {
+        ...state,
+        departments: { ...state.departments, [id]: data },
+      };
+    }
     default:
       return state;
   }

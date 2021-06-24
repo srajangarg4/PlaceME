@@ -4,17 +4,15 @@ import {
   ADD_LIMITED_COMPANIES,
 } from 'actions/companies';
 
-const comapnyReducer = (
-  state = {
-    companies: {},
-    hasAlreadyFetchedCompanies: false,
-  },
-  action,
-) => {
+const initialState = {
+  companies: {},
+  hasAlreadyFetchedCompanies: false,
+};
+
+const comapnyReducer = (state = initialState, action) => {
   const { payload, type } = action;
   switch (type) {
     case ADD_COMPANY: {
-      console.log('object');
       const { id, data } = payload;
       return {
         ...state,

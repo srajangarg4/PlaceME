@@ -17,12 +17,14 @@ const Input = ({
 }) => {
   return (
     <div className={`form-group ${containerClassName}`}>
-      <label
-        htmlFor={name}
-        className={`${labelClassName} ${required ? 'required' : ''}`}
-      >
-        {label}
-      </label>
+      {label && (
+        <label
+          htmlFor={name}
+          className={`${labelClassName} ${required ? 'required' : ''}`}
+        >
+          {label}
+        </label>
+      )}
       <input
         className={`${error && 'is-invalid'} ${inputFieldClassName}`}
         onChange={(e) => onChange(e.target.value)}

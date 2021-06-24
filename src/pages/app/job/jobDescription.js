@@ -1,5 +1,4 @@
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { addCompany, addJob } from 'actions';
@@ -7,6 +6,7 @@ import { Navbar, Card, Loader } from 'components';
 import { useDatabase } from 'hooks';
 import JobCard from './components/jobCard';
 import { fetchJobAndCompanyDetails } from 'middleware';
+import ManageJobApplication from './components/manageJobApplication';
 
 const jobSummaryList = [
   { name: 'Published On', value: 'Date' },
@@ -66,6 +66,7 @@ const JobDescription = () => {
                 />
               </div>
               <JobDetails description={jobs[id]?.description} />
+              <ManageJobApplication job={jobs[id]} jobId={id} />
             </div>
             <div className="col-12 col-md">
               <JobSummary jobSummaryList={jobSummaryList} />

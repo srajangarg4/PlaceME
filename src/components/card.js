@@ -17,7 +17,7 @@ const Card = ({
   ${className ?? ''}
   ${horizontalCenter ? 'justify-content-center' : ''}
   ${verticalCentered ? 'align-items-center' : ''}
-  ${border && 'border border-dark'}
+  ${border ? 'border border-dark' : ''}
   `;
   return (
     <div

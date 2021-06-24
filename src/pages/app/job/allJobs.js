@@ -5,8 +5,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addJobs, addCompanies } from 'actions';
 import JobCard from './components/jobCard';
 import { fetchCompaniesAndJobs } from 'middleware';
+import { Role, Routes } from 'utils';
+import { Link } from 'react-router-dom';
 
 const AllJobs = () => {
+  const user = useSelector((state) => state.user);
   const { jobs, hasAlreadyFetchedJobs } = useSelector((state) => state.job);
   const { companies, hasAlreadyFetchedCompanies } = useSelector(
     (state) => state.company,
@@ -29,7 +32,7 @@ const AllJobs = () => {
   }, []);
 
   return (
-    <div>
+    <>
       <Toast show={!!errors} />
       <Navbar />
       <div className="container-fluid">
@@ -48,7 +51,19 @@ const AllJobs = () => {
           <div className="col-12 col-sm">
             <Card shadow>
               <div className="card-header bg-white">
-                <h4 className="text-center pt-3">Jobs</h4>
+                {user?.role !== Role.STUDENT ? (
+                  <div className="d-flex justify-content-between align-items-center pt-3">
+                    <h4 className="text-center">Jobs</h4>
+                    <Link
+                      className="btn btn-primary"
+                      to={Routes.addNewJob.path}
+                    >
+                      Add Job
+                    </Link>
+                  </div>
+                ) : (
+                  <h4 className="text-center pt-3">Jobs</h4>
+                )}
               </div>
               <div className="card-body mx-3">
                 {loading ? (
@@ -72,7 +87,7 @@ const AllJobs = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

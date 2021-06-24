@@ -1,15 +1,12 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useHistory } from 'react-router';
-import { Button, Loader, Navbar, Toast, Card } from 'components';
+import { useParams } from 'react-router';
+import { Loader, Navbar, Toast, Card } from 'components';
 import { useDatabase } from 'hooks';
-import { flattenObject, reduceToLevel, resolveDate } from 'utils';
+import { flattenObject, reduceToLevel, resolveDate, Role } from 'utils';
 import { addUpdateRequest } from 'actions';
-import {
-  approveRequest,
-  rejectRequest,
-  fetchPendingRequestDetail,
-} from 'middleware';
+import { fetchPendingRequestDetail } from 'middleware';
+import { ApprovalOptions } from './components';
 
 const CurrentData = () => {
   return (
@@ -24,7 +21,8 @@ const CurrentData = () => {
   );
 };
 
-const NewData = ({ data }) => {
+const NewData = ({ data = {} }) => {
+  console.log('Data in new', data);
   return (
     <Card>
       <div className="px-5 py-4">
@@ -38,9 +36,7 @@ const NewData = ({ data }) => {
         {/* <p>Semester 5 Marksheet: </p>
         <p>Semester 5 Percentage: 75</p> */}
         <hr />
-        <p className="text-muted">
-          In the recent exam i have passed by maths backlog.
-        </p>
+        <p className="text-muted">{data?.comment}</p>
       </div>
     </Card>
   );
@@ -57,7 +53,6 @@ const MetaData = ({ requestedBy, requestedOn, type }) => {
         <p>Requested on: {requestedOn}</p>
         <p>Requested by: {requestedBy}</p>
         <p>Category: {type ?? 'Academic Details'}</p>
-        <a href="/sdd">View Student Data</a>
       </div>
     </Card>
   );
@@ -71,27 +66,6 @@ const Header = ({ heading }) => {
   );
 };
 
-const ApprovalOptions = ({ onApprove, onReject }) => {
-  return (
-    <Card className="p-3">
-      <Button
-        fullWidth
-        text="Verify Data"
-        buttonClassName="btn btn-outline-primary"
-        iconName="done"
-        onClick={onApprove}
-      />
-      <Button
-        fullWidth
-        text="Reject Update"
-        buttonClassName="btn  btn-outline-danger"
-        iconName="close"
-        onClick={onReject}
-      />
-    </Card>
-  );
-};
-
 const PendingRequestDetail = ({
   title,
   updatesRequired,
@@ -99,17 +73,15 @@ const PendingRequestDetail = ({
   requestedOn,
   type,
   id,
-  approveRequest,
-  rejectRequest,
 }) => {
-  const history = useHistory();
+  const user = useSelector((state) => state.user);
   return (
     <div className="container">
       <Header heading={title} />
       <div className="row">
         <div className="col-md-8 col-12">
           <NewData data={flattenObject(reduceToLevel(updatesRequired, 2))} />
-          <CurrentData />
+          <CurrentData data={flattenObject(updatesRequired)} />
         </div>
         <div className="col-md-4 col-12">
           <MetaData
@@ -117,10 +89,7 @@ const PendingRequestDetail = ({
             requestedOn={resolveDate(requestedOn).toLocaleDateString()}
             type={type}
           />
-          <ApprovalOptions
-            onApprove={approveRequest}
-            onReject={rejectRequest}
-          />
+          {user?.role !== Role.STUDENT && <ApprovalOptions id={id} />}
         </div>
       </div>
     </div>
@@ -129,23 +98,27 @@ const PendingRequestDetail = ({
 
 const UpdateRequestDetails = () => {
   const { id } = useParams();
-  const { loading, callDatabase, errors } = useDatabase(() =>
-    fetchPendingRequestDetail(id),
-  );
   const { requests } = useSelector((state) => state.updateRequest);
+  const { loading, callDatabase, errors } = useDatabase(
+    fetchPendingRequestDetail,
+    !requests[id],
+  );
   const dispatch = useDispatch();
-
   useEffect(() => {
+    console.log('Id', id);
     if (!requests[id]) {
       callDatabase(
         (data) => {
+          console.log('data reviced', data);
           dispatch(addUpdateRequest(data));
         },
         (error) => {
           console.log(error);
         },
+        id,
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div>
@@ -156,15 +129,7 @@ const UpdateRequestDetails = () => {
           <Loader />
         </div>
       ) : (
-        <PendingRequestDetail
-          type={requests[id]?.type}
-          updatesRequired={requests[id]?.updatesRequired}
-          id={id}
-          requestedBy={requests[id]?.studentEmail}
-          requestedOn={requests[id]?.requestedOn}
-          title={requests[id]?.title}
-          approveRequest={approveRequest}
-        />
+        <PendingRequestDetail {...requests[id]} id={id} />
       )}
     </div>
   );

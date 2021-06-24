@@ -41,11 +41,11 @@ const useDatabase = (databaseFetchCall, loading = false) => {
       const result = await databaseFetchCall(data);
       setLoading(false);
       if (result?.successful) {
-        setData(result.result);
-        resolve?.(result.result);
+        setData(result?.result);
+        resolve?.(result?.result);
       } else {
-        setError(result.error);
-        reject?.(result.error);
+        setError(result?.error);
+        reject?.(result?.error);
       }
     },
     [databaseFetchCall, setData, setError, setLoading],

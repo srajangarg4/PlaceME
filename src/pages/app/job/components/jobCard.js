@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Roles, Routes } from 'utils';
+import { Role, Routes } from 'utils';
 import { Button, Card } from 'components';
 import { useSelector } from 'react-redux';
 import { useDatabase } from 'hooks';
@@ -19,7 +19,7 @@ const JobCard = ({ job, company, id, onClick }) => {
             <div className="d-flex align-items-center">
               {logo && (
                 <div className="p-2 p-sm-3 mr-3 mr-sm-5">
-                  <img height={48} width={46} src={logo.uri} alt="" />
+                  <img height={48} width={46} src={logo?.url} alt="" />
                 </div>
               )}
               <div>
@@ -44,7 +44,7 @@ const JobCard = ({ job, company, id, onClick }) => {
           </div>
           <div className="col-12 col-md-auto d-flex align-items-center my-3">
             {onClick ? (
-              user?.role === Roles.STUDENT ? (
+              user?.role === Role.STUDENT ? (
                 <Button
                   text="Apply"
                   loading={loading}
@@ -52,7 +52,7 @@ const JobCard = ({ job, company, id, onClick }) => {
                   onClick={() => {
                     callDatabase(
                       (data) => {
-                        console.log('Resultafter apply', data);
+                        console.log('Result after apply', data);
                       },
                       (error) => {
                         console.log('Error happended', error);
@@ -62,12 +62,17 @@ const JobCard = ({ job, company, id, onClick }) => {
                   }}
                 />
               ) : (
-                <></>
+                <Link
+                  className="btn btn-block btn-outline-dark"
+                  to={Routes.updateJob.path + id}
+                >
+                  Edit
+                </Link>
               )
             ) : (
               <Link
                 className="btn btn-block btn-outline-dark"
-                to={`${Routes.jobDetailsBase.path}${id}`}
+                to={Routes.jobDetail.path + id}
               >
                 View
               </Link>

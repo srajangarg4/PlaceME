@@ -20,7 +20,7 @@ const Companies = () => {
     !hasAlreadyFetchedCompanies,
   );
   useEffect(() => {
-    if (!hasAlreadyFetchedCompanies && Object.keys(companies).length < 3) {
+    if (!hasAlreadyFetchedCompanies) {
       callDatabase((data) => {
         dispatch(addCompanies(data));
       });

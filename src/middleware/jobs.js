@@ -3,7 +3,7 @@ import { CompanyService, JobService } from 'placeme-services/lib';
 const jobService = new JobService();
 const companyService = new CompanyService();
 
-export const fetchJobs = async (numOfRecords = 3) => {
+export const fetchJobs = (numOfRecords = 3) => {
   return jobService.getNext(numOfRecords, 'postDate');
 };
 
@@ -44,3 +44,12 @@ export const fetchJobAndCompanyDetails = async (id, companies, jobs) => {
     return { successful: true, result: { job: jobResult.result } };
   }
 };
+
+export const addJob = (job) => jobService.add(job);
+
+export const fetchJobsByCompany = (companyId) =>
+  jobService.getAllByCompanyId(companyId);
+
+export const setJob = ({ job, id }) => jobService.set(job, id);
+
+export const fetchJob = (id) => jobService.get(id);

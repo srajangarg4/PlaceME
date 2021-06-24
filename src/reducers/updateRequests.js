@@ -2,6 +2,7 @@ import {
   ADD_LIMITED_UPDATE_REQUESTS,
   ADD_UPDATE_REQUEST,
   ADD_UPDATE_REQUESTS,
+  REMOVE_UPDATE_REQUEST,
 } from 'actions/pendingRequests';
 
 const initialState = {
@@ -35,6 +36,11 @@ const updateRequestReducer = (state = initialState, action) => {
           requests: { ...state.requests, [id]: data },
         };
       });
+      return { ...state };
+    }
+    case REMOVE_UPDATE_REQUEST: {
+      const id = payload;
+      delete state.requests?.[id];
       return { ...state };
     }
     default:

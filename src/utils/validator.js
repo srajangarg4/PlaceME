@@ -46,23 +46,19 @@ export const validatePassword = (password) => {
   return 'Enter a valid password';
 };
 
-export const required = (message) => (data) => {
-  if (data === undefined || data === null || !data) {
-    return message;
-  }
-  return '';
-};
+export const required =
+  (message = 'This is required') =>
+  (data) => {
+    if (data === undefined || data === null || !data) {
+      return message;
+    }
+    return '';
+  };
 
 export const confirmPasswordValidator = (value, other) =>
   value !== other?.password?.value ? 'Password Does not match' : undefined;
 
 export const validateURL = (str) => {
-  // var pattern = new RegExp(
-  //   // eslint-disable-next-line no-useless-escape
-  //   /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
-  // );
-  // // fragment locator
-  // return !!pattern?.test(str) ? undefined : 'Invalid URL';
   var pattern = new RegExp(
     '^(https?:\\/\\/)?' + // protocol
       '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
@@ -74,3 +70,9 @@ export const validateURL = (str) => {
   ); // fragment locator
   return !!pattern?.test(str) ? undefined : 'Invalid URL';
 };
+
+export const ensureArrayLength =
+  (length, message) =>
+  (arr = []) => {
+    return arr.length < length ? message : undefined;
+  };

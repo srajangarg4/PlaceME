@@ -1,9 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { companyTypes } from 'assets';
-import { Button, Card, Input, SelectOption, File } from 'components';
+import { Button, Card, Input, SelectOption, File, TextArea } from 'components';
 import { useDatabase, useFormReducer } from 'hooks';
-import { required, unflatten, validateURL } from 'utils';
+import { required, Routes, unflatten, validateURL } from 'utils';
 import { addNewCompany } from 'middleware';
+import { useDispatch } from 'react-redux';
+import { addCompany } from 'actions';
+import { useHistory } from 'react-router-dom';
 
 const validators = {
   name: [required('Please enter a name.')],
@@ -17,19 +20,24 @@ const validators = {
 };
 
 const CompanyForm = ({ title, defaultValues }) => {
-  const { connectField, addField, handleSubmit, submitting } = useFormReducer(
+  const { connectField, addField, handleSubmit } = useFormReducer(
     validators,
     defaultValues,
   );
   const { loading, callDatabase } = useDatabase(addNewCompany);
+  const dispatch = useDispatch();
+  const { push } = useHistory();
 
   const handleFormSumit = handleSubmit((data) => {
-    console.log(unflatten(data));
-    // callDatabase(
-    //   (result) => console.log(result),
-    //   (error) => console.log(error),
-    //   unflatten(data),
-    // );
+    callDatabase(
+      (result) => {
+        console.log(result);
+        dispatch(addCompany(result));
+        push(`${Routes.companyDetails.path}${result?.id}`);
+      },
+      (error) => console.log(error),
+      unflatten(data),
+    );
   });
 
   const addRepersentatives = useCallback(
@@ -84,6 +92,14 @@ const CompanyForm = ({ title, defaultValues }) => {
           })(Input)}
         </div>
       </div>
+      <div className="row">
+        <div className="col-12">
+          {connectField('otherDetails', {
+            label: 'Other Details',
+            rows: 5,
+          })(TextArea)}
+        </div>
+      </div>
       <p className="text-muted">Repersentatives</p>
       {[...Array(numOfReps)].map((_, index) => (
         <div className="row" key={index.toString()}>
@@ -124,7 +140,7 @@ const CompanyForm = ({ title, defaultValues }) => {
         <Button
           text="Submit"
           fullWidth
-          loading={submitting}
+          loading={loading}
           onClick={handleFormSumit}
         />
       </div>
