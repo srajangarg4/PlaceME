@@ -76,3 +76,27 @@ export const ensureArrayLength =
   (arr = []) => {
     return arr.length < length ? message : undefined;
   };
+
+export const validateNumber = (value) => {
+  return isFinite(value) ? undefined : messages.invalid.number;
+};
+
+export const ensureInRange = (min, max) => (value) => {
+  return value <= max && value >= min ? undefined : messages.not.inRange;
+}
+
+export const validatePincode = (pincode) => {
+
+}
+
+export const validateBloodGroup = () => {
+
+}
+
+export const validateAadhar = () => {
+
+}
+
+export const validateYear = () => {
+  
+}

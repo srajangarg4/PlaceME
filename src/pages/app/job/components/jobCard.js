@@ -16,13 +16,13 @@ const JobCard = ({ job, company, id, onClick }) => {
       <div className="card-body">
         <div className="row d-flex justify-content-between">
           <div className="col-12 col-md">
-            <div className="d-flex align-items-center">
+            <div className="row align-items-center">
               {logo && (
-                <div className="p-2 p-sm-3 mr-3 mr-sm-5">
-                  <img height={48} width={46} src={logo?.url} alt="" />
+                <div className="col-12 col-md-2 p-2 p-sm-3 mr-3 mr-sm-5">
+                  <img height={48} width={46} src={logo?.url} className="mx-auto d-block" alt="" />
                 </div>
               )}
-              <div>
+              <div className="col-12 col-md">
                 <h3 className="text-capitalize">{title}</h3>
                 {name && <h6 className="text-capitalize">{name}</h6>}
                 <div className="row">

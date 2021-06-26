@@ -1,19 +1,4 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-
-const initializeState = (options = [], value = []) => {
-  const customSet = new Set(value);
-  const obj = {};
-  options.forEach(({ value } = {}, index) => {
-    if (customSet.has(value)) {
-      obj[index] = true;
-    } else {
-      obj[index] = false;
-    }
-  });
-  console.log('Initaise', obj, options, value);
-  return obj;
-};
 
 const MultipleSelect = ({
   error,
@@ -31,18 +16,6 @@ const MultipleSelect = ({
   labelFieldClassName,
   required,
 }) => {
-  const [state, setState] = useState(() => initializeState(options, value));
-  console.log(value);
-  useEffect(() => {
-    const arr = [];
-    Object.keys(state).forEach((key) => {
-      if (state[key]) {
-        arr.push(options[key].value);
-      }
-    });
-    onChange(arr);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state]);
 
   return (
     <div className={`form-group ${containerClassName}`}>
@@ -54,6 +27,7 @@ const MultipleSelect = ({
       </label>
       <br />
       {options?.map((item, index) => {
+        const checked = value?.includes(item?.value)
         return (
           <div className={divClassName} key={index.toString()}>
             <input
@@ -62,10 +36,12 @@ const MultipleSelect = ({
               disabled={disabled ? true : false}
               id={name + index.toString()}
               onChange={() => {
-                setState({ ...state, [index]: !state[index] });
+                checked
+                  ? onChange(value?.filter(itm => itm !== item?.value))
+                  : onChange([...value, item?.value])
               }}
               value={item.value}
-              checked={state[index]}
+              checked={checked}
             />
             <label
               className={labelFieldClassName}
@@ -92,6 +68,7 @@ MultipleSelect.defaultProps = {
   containerClassName: '',
   required: false,
   options: [],
+  value:[]
 };
 
 export default MultipleSelect;

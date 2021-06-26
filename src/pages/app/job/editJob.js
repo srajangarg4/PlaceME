@@ -20,6 +20,9 @@ import {
   ensureArrayLength,
   Routes,
   flattenObject,
+  validateNumber,
+  resolveDate,
+  getFormattedDate,
 } from 'utils';
 import {
   fetchAllCompanies,
@@ -51,10 +54,10 @@ const validators = {
   title: [required('Title is required to continue.')],
   description: [required('Description is required.')],
   forDepartments: [ensureArrayLength(1, 'Select atleast one options')],
-  maxBacklogs: [required('Enter Max backlogs allowed.')],
+  maxBacklogs: [required('Enter Max backlogs allowed.'), validateNumber],
   company: [required('Please choose a company.')],
-  salary_max: [required('Min salary is required')],
-  salary_min: [required('Max salary is required')],
+  salary_max: [required('Min salary is required'), validateNumber],
+  salary_min: [required('Max salary is required'), validateNumber],
   rounds_0_name: [required('Enter name of the round.')],
   rounds_0_description: [required('Enter round description.')],
   location: [required('Location is required')],
@@ -65,7 +68,6 @@ const validators = {
 };
 
 const EditJob = () => {
-  const [defaultValues, setdefaultValues] = useState({});
 
   const [numOfRounds, setNumOfRounds] = useState(1);
   const { id } = useParams();
@@ -96,7 +98,7 @@ const EditJob = () => {
     useDatabase(fetchAllDepartments, !hasAlreadyFetchedDepartments);
 
   const { connectField, addField, handleSubmit, submitting, change } =
-    useFormReducer(validators, defaultValues);
+    useFormReducer(validators);
 
   const companyOptions = reduceOptions(companies);
   const departmentOptions = reduceOptions(departments);
@@ -132,28 +134,34 @@ const EditJob = () => {
       getJob(
         (result) => {
           dispatch(addJobAction(result));
-          setdefaultValues(result?.data);
-          setNumOfRounds(result?.data?.rounds?.length);
         },
         (error) => {
           console.error(error);
         },
         id,
       );
-    } else {
-      setdefaultValues(flattenObject(jobs[id]));
-      setNumOfRounds(jobs[id]?.rounds?.length);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    console.log('Default values useEffect wale', defaultValues);
-    Object.keys(flattenObject(defaultValues)).forEach((key) =>
-      change(key, defaultValues[key]),
-    );
+    const jobDetail = {...jobs[id]};
+    const forBatchs = jobDetail?.forBatchs ?? [];
+    const forDepartments = jobDetail?.forDepartments ?? [];
+    const lastDateToApply = getFormattedDate("yyyy-mm-dd", resolveDate(jobDetail?.lastDateToApply));
+    const postDate = jobDetail?.postDate;
+    const rounds = jobDetail?.rounds;
+    setNumOfRounds(rounds?.length ??0)
+    delete jobDetail?.forBatchs;
+    delete jobDetail?.forDepartments;
+    delete jobDetail?.lastDateToApply;
+    delete jobDetail?.postDate;
+    
+    let flatValues = flattenObject(jobDetail);
+    flatValues = { ...flatValues, forBatchs, forDepartments, lastDateToApply, postDate }
+    Object.keys(flatValues).forEach(key=> change(key, flatValues[key]))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultValues]);
+  }, [jobs]);
 
   return (
     <div>
@@ -170,17 +178,19 @@ const EditJob = () => {
           ) : (
             <div className="card-body">
               <form
-                onSubmit={handleSubmit((data) => {
-                  console.log('Data', unflatten(data));
+                  onSubmit={handleSubmit((data) => {
+                    const finalValues = unflatten(data);
+                  console.log('Data', finalValues);
                   setJobToDb(
                     (result) => {
+                      console.log("Result reviced", result)
                       dispatch(addJobAction(result));
                       push(Routes.jobDetail.path + result?.id);
                     },
                     (error) => {
                       console.log(error);
                     },
-                    unflatten(data),
+                    {job: finalValues, id},
                   );
                 })}
               >
@@ -306,7 +316,7 @@ const EditJob = () => {
                     <Button
                       className="btn btn-block btn-primary"
                       type="submit"
-                      text="Add Job"
+                      text="Save"
                       loading={submitting || isJobAdded}
                     />
                   </div>

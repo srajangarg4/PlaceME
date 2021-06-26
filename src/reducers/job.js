@@ -12,14 +12,14 @@ const jobReducer = (state = initialState, action) => {
       const { id, data } = payload;
       return {
         ...state,
-        jobs: { ...state.jobs, [id]: data },
+        jobs: { ...state.jobs, [id]: {...data, id} },
       };
     }
     case ADD_JOBS: {
       payload?.forEach(({ data, id }) => {
         state = {
           ...state,
-          jobs: { ...state.jobs, [id]: data },
+          jobs: { ...state.jobs, [id]: {...data, id} },
         };
       });
       return { ...state, hasAlreadyFetchedJobs: true };

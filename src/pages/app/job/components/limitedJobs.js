@@ -60,7 +60,9 @@ const RecentJobs = () => {
         )}
       </div>
       <div className="card-footer bg-white">
-        <h6 className="text-muted text-center">See More</h6>
+        <Link to={Routes.allJobs.path} className="text-decoration-none">
+          <h6 className="text-muted text-center">See More</h6>
+        </Link>
       </div>
     </Card>
   );

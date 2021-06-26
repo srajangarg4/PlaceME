@@ -8,15 +8,18 @@ import {
   confirmPasswordValidator,
   Role,
   validateEmail,
+  validateFirstName,
+  validateLastName,
+  validatePhoneNumber,
 } from 'utils';
 import { UserService } from 'placeme-services/lib';
 import { login } from 'actions';
 
 const validators = {
-  firstName: [required('First Name is required')],
-  lastName: [required('Last Name is required')],
+  firstName: [required('First Name is required'), validateFirstName],
+  lastName: [required('Last Name is required'), validateLastName],
   email: [required('Email is required'), validateEmail],
-  phoneNumber: [required('Phone Number is required')],
+  phoneNumber: [required('Phone Number is required'), validatePhoneNumber],
   password: [required('Password is required'), validatePassword],
   confPassword: [
     required('Confirm Password is required'),

@@ -31,20 +31,9 @@ const Companies = () => {
     <div>
       <Toast show={!!errors} />
       <Navbar />
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-12 col-md-4 my-md-5">
-            <Card shadow>
-              <div className="card-body">
-                <h5 className="text-center pt-3 pb-1">Company Filters</h5>
-                <hr />
-                <ul className="list-unstyled">
-                  <li></li>
-                </ul>
-              </div>
-            </Card>
-          </div>
-          <div className="col-12 col-md">
+      <div className="container">
+        <div className="row d-flex justify-content-center">
+          <div className="col-12 col-md-10">
             <Card shadow>
               <div className="card-header bg-white">
                 <div className="d-flex justify-content-between align-items-center pt-3">

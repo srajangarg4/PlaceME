@@ -32,7 +32,7 @@ const ContactCard = ({ contact }) => {
                   />
                 </a>
               </div>
-              <div className="col">
+              <div className="col  pb-3">
                 <a
                   href={`mailto:${contact?.email}`}
                   className="text-decoration-none"
@@ -89,7 +89,6 @@ const RelatedJobs = ({ id }) => {
     if (!hasAlreadyFetchedJobs) {
       callDatabase(
         (result) => {
-          console.log(result);
           dispatch(addLimitedJobs(result));
           setRelatedJobState(createRelatedJobState(jobs, id));
         },
@@ -148,21 +147,21 @@ const CompanyDetails = () => {
     <>
       <Navbar />
       <div className="container p-4">
-        <Card shadow>
-          {loading ? (
-            <div className="d-flex justify-content-center align-items-center">
-              <Loader />
-            </div>
-          ) : (
-            <div className="card-body mx-3">
+        {loading ? (
+          <div className="d-flex justify-content-center align-items-center">
+            <Loader />
+          </div>
+        ) : (
+          <>
+            <div className="shadow">
               <CompanyCard company={companies[id]} id={id} />
-              <Representatives
-                representatives={companies[id]?.representatives}
-              />
-              <RelatedJobs id={id} />
             </div>
-          )}
-        </Card>
+            <Representatives
+              representatives={companies[id]?.representatives}
+            />
+            <RelatedJobs id={id} />
+          </>
+        )}
       </div>
     </>
   );

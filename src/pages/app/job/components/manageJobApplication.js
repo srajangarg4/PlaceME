@@ -12,6 +12,7 @@ import {
   required,
   unflatten,
   validateEmail,
+  validateNumber,
 } from 'utils';
 
 const searchStudentValidators = {
@@ -21,6 +22,7 @@ const searchStudentValidators = {
 const jobApplicationValidators = {
   status_roundsQualified: [
     required('Please specify number of rounds qualified.'),
+    validateNumber
   ],
 };
 

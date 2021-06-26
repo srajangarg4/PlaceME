@@ -12,7 +12,7 @@ const Card = ({
 }) => {
   const [shadowState, setShadow] = useState(shadow);
   const containerStyle = `card ${
-    shadowState && 'shadow-lg'
+    shadowState && 'shadow'
   } bg-white my-4 rounded d-flex
   ${className ?? ''}
   ${horizontalCenter ? 'justify-content-center' : ''}

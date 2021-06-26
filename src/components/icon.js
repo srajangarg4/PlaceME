@@ -1,11 +1,13 @@
 import React from 'react';
 
-const Icon = ({ name, className }) => {
+const Icon = ({ name, className, size }) => {
   return (
-    <span className={`material-icons mx-1 small ${className ?? ''}`}>
+    <span style={{fontSize: size}} className={`material-icons mx-1 small ${className ?? ''}`}>
       {name}
     </span>
   );
 };
+
+
 
 export default Icon;

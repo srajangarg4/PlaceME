@@ -1,14 +1,14 @@
 import { useDatabase, useFormReducer } from 'hooks';
 import React from 'react';
 import { Navbar, Card, Input, Button } from 'components';
-import { required } from 'utils';
+import { required, validateEmail } from 'utils';
 import { addDepartment } from 'middleware';
 import { addDepartment as addDepartmentAction } from 'actions';
 
 const validators = {
   name: [required('Name is required to continue.')],
   abbrivation: [required('Abbrivation is required to continue')],
-  hodEmail: [required('Hod Email is required')],
+  hodEmail: [required('Hod Email is required'), validateEmail],
 };
 
 const AddDepartment = () => {

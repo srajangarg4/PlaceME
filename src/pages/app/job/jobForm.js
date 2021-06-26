@@ -13,7 +13,7 @@ import {
 } from 'components';
 import { jobTypes } from 'assets';
 import { useDatabase, useFormReducer } from 'hooks';
-import { required, unflatten, ensureArrayLength, Routes } from 'utils';
+import { required, unflatten, ensureArrayLength, Routes, validateNumber } from 'utils';
 import { addJob, fetchAllCompanies, fetchAllDepartments } from 'middleware';
 import { addCompanies, addJob as addJobAction, addDepartments } from 'actions';
 
@@ -40,11 +40,11 @@ const validators = {
   title: [required('Title is required to continue.')],
   description: [required('Description is required.')],
   forDepartments: [ensureArrayLength(1, 'Select atleast one options')],
-  maxBacklogs: [required('Enter Max backlogs allowed.')],
-  maxAcademicGap: [required('Enter academic gap allowed.')],
+  maxBacklogs: [required('Enter Max backlogs allowed.'), validateNumber],
+  maxAcademicGap: [required('Enter academic gap allowed.'), validateNumber],
   company: [required('Please choose a company.')],
-  salary_max: [required('Min salary is required')],
-  salary_min: [required('Max salary is required')],
+  salary_max: [required('Min salary is required'), validateNumber],
+  salary_min: [required('Max salary is required'), validateNumber],
   rounds_0_name: [required('Enter name of the round.')],
   rounds_0_description: [required('Enter round description.')],
   location: [required('Location is required')],

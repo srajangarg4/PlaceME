@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { Card, Navbar, Loader, Toast } from 'components';
-import { useDatabase } from 'hooks';
+import { Card, Navbar, Loader, Toast, Badge } from 'components';
+import { useDatabase, useFilter } from 'hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import { addJobs, addCompanies } from 'actions';
 import JobCard from './components/jobCard';
@@ -8,8 +8,22 @@ import { fetchCompaniesAndJobs } from 'middleware';
 import { Role, Routes } from 'utils';
 import { Link } from 'react-router-dom';
 
+const convertToArray = (data = {}) => Object.keys(data).map(key => data[key])
+
+
+const filters = [
+  {
+    text: 'By Salary',
+    comparator: (a,b) => b?.salary?.max - a?.salary?.max 
+  },
+  {
+    text: 'two',
+  },
+];
+
 const AllJobs = () => {
   const user = useSelector((state) => state.user);
+  const { renderFilters, setInitailData, sortedData } = useFilter(null, filters, Badge);
   const { jobs, hasAlreadyFetchedJobs } = useSelector((state) => state.job);
   const { companies, hasAlreadyFetchedCompanies } = useSelector(
     (state) => state.company,
@@ -19,6 +33,11 @@ const AllJobs = () => {
     fetchCompaniesAndJobs,
     !hasAlreadyFetchedJobs || !hasAlreadyFetchedCompanies,
   );
+
+  useEffect(() => {
+    const arr = convertToArray(jobs);
+    setInitailData(arr)
+  }, [jobs, setInitailData])
 
   useEffect(() => {
     if (!hasAlreadyFetchedJobs || !hasAlreadyFetchedCompanies) {
@@ -35,20 +54,9 @@ const AllJobs = () => {
     <>
       <Toast show={!!errors} />
       <Navbar />
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-12 col-sm-4 my-sm-5">
-            <Card shadow>
-              <div className="card-body">
-                <h5 className="text-center pt-3 pb-1">Job Filters</h5>
-                <hr />
-                <ul className="list-unstyled">
-                  <li></li>
-                </ul>
-              </div>
-            </Card>
-          </div>
-          <div className="col-12 col-sm">
+      <div className="container">
+        <div className="row d-flex justify-content-center">
+          <div className="col-12 col-md-10">
             <Card shadow>
               <div className="card-header bg-white">
                 {user?.role !== Role.STUDENT ? (
@@ -65,19 +73,22 @@ const AllJobs = () => {
                   <h4 className="text-center pt-3">Jobs</h4>
                 )}
               </div>
+              <div className="d-flex flex-row flex-nowrap overflow-auto">
+                {renderFilters()}
+              </div>
               <div className="card-body mx-3">
                 {loading ? (
                   <div className="d-flex justify-content-center align-items-center">
                     <Loader />
                   </div>
                 ) : (
-                  Object.keys(jobs).map((job) => {
+                  sortedData?.map((job, index) => {
                     return (
                       <JobCard
-                        id={job}
-                        job={jobs[job]}
-                        company={companies[jobs[job].company]}
-                        key={job}
+                        id={job?.id}
+                        job={job}
+                        company={companies[job.company]}
+                        key={index?.toString()}
                       />
                     );
                   })

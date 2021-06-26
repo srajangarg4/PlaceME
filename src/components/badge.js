@@ -1,13 +1,14 @@
 import React from 'react';
 import Icon from './icon';
 
-const Badge = ({ text, className, show, onClick }) => {
+const Badge = ({ text, className, selected, onClick }) => {
   return (
     <span
       className={`badge badge-pill badge-primary py-1 px-4 ${className}`}
       onClick={onClick}
+      
     >
-      {show && <Icon name="done" />}
+      {selected && <Icon name="done" size={13} />}
       {text}
     </span>
   );
@@ -15,7 +16,7 @@ const Badge = ({ text, className, show, onClick }) => {
 
 Badge.defaultProps = {
   className: '',
-  show: false,
+  selected: false,
 };
 
 export default Badge;

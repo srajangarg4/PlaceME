@@ -2,13 +2,16 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Input } from 'components';
 import { useFormReducer } from 'hooks';
-import { required } from 'utils';
+import {
+  required,
+  validateEmail, validateFirstName, validateLastName, validatePhoneNumber
+} from 'utils';
 
 const validators = {
-  firstName: [required('First Name is required')],
-  lastName: [required('Last Name is required')],
-  email: [required('Email is required')],
-  phoneNumber: [required('Phone Number is required')],
+  firstName: [required('First Name is required'), validateFirstName],
+  lastName: [required('Last Name is required'), validateLastName],
+  email: [required('Email is required'), validateEmail],
+  phoneNumber: [required('Phone Number is required'), validatePhoneNumber],
 };
 
 const GeneralDetailSection = ({ isFormEditable }) => {

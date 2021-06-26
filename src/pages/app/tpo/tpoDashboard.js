@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useDatabase } from 'hooks';
+import { useDatabase, } from 'hooks';
 import { Card, Navbar, Footer, Loader } from 'components';
 import {
   fetchAllDepartments,
@@ -253,12 +253,14 @@ const Statistics = () => {
   //     description: '12',
   //   },
   // ];
+  
 
   return (
     <div className="col">
       <Card shadow>
         <div className="card-body">
           <h4 className="text-center card-title">Statistics</h4>
+         
           <div className="text-white p-2">
             <div className="d-flex flex-wrap"></div>
           </div>
