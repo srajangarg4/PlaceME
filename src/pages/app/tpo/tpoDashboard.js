@@ -52,7 +52,6 @@ const CompanyCard = ({ gradient, company, id }) => {
       <Card className={gradient}>
         <div className="card-body">
           <h4 className="card-title">{company?.name}</h4>
-          HR nagarro
         </div>
       </Card>
     </Link>
