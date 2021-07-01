@@ -9,14 +9,14 @@ export const validateName = (firstName) => {
 
 export const validateFirstName = (firstName) => {
   if (!firstName) {
-    return messages.signup.firstNameError;
+    return messages.firstNameError;
   }
   return '';
 };
 
 export const validateLastName = (lastName) => {
   if (!lastName) {
-    return messages.signup.lastNameError;
+    return messages.lastNameError;
   }
   return '';
 };
@@ -83,20 +83,20 @@ export const validateNumber = (value) => {
 
 export const ensureInRange = (min, max) => (value) => {
   return value <= max && value >= min ? undefined : messages.not.inRange;
-}
+};
 
-export const validatePincode = (pincode) => {
+export const validatePincode = (pincode = '') => {
+  return pincode?.length !== 6 ? 'Invalid pincode' : undefined;
+};
 
-}
+export const validateBloodGroup = (bloodGroup) => {
+  return bloodGroup ? undefined : 'Invalid Blood group';
+};
 
-export const validateBloodGroup = () => {
+export const validateAadhar = (aadhar = '') => {
+  return aadhar?.length !== 12 ? 'Invalid aadhar number' : undefined;
+};
 
-}
-
-export const validateAadhar = () => {
-
-}
-
-export const validateYear = () => {
-  
-}
+export const validateYear = (year) => {
+  return year ? undefined : 'Invalid Year';
+};

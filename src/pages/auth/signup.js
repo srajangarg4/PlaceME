@@ -14,6 +14,7 @@ import {
 } from 'utils';
 import { UserService } from 'placeme-services/lib';
 import { login } from 'actions';
+import { showError, showSuccess } from 'components/toast';
 
 const validators = {
   firstName: [required('First Name is required'), validateFirstName],
@@ -68,11 +69,7 @@ const Signup = () => {
         >
           <div className="row">
             <div className="col-12 col-sm-5 align-items-center">
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/placeme-d4e2a.appspot.com/o/SignUp%2Fsignup.png?alt=media&token=472b6a78-a715-44ed-9178-c642bdf965a3"
-                alt="hihkhkh"
-                className="img-fluid p-3"
-              />
+              <img src="./signup.png" alt="hihkhkh" className="img-fluid p-3" />
               <h2 className="text-center">Sign Up</h2>
             </div>
             <div className="col-12 col-sm">
@@ -84,12 +81,10 @@ const Signup = () => {
                     const { password } = formData;
                     callDatabase(
                       (data) => {
-                        console.log('After signup', data);
+                        showSuccess('You have successfully Sign Up in');
                         dispatch(login(data));
                       },
-                      (error) => {
-                        console.error('Something went wrong', error);
-                      },
+                      showError,
                       { user, password },
                     );
                   })}

@@ -8,3 +8,6 @@ export const fetchJobApplication = (id) => service.get(id);
 
 export const updateJobApplication = ({ jobApplication, id }) =>
   service.update(jobApplication, id);
+
+export const fetchJobApplications = () =>
+  service.getAllApplicationsOfCurrentUser();

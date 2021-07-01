@@ -7,47 +7,46 @@ import { addCompany, addLimitedJobs } from 'actions';
 import CompanyCard from './companyCard';
 import { Loader, Navbar, Card, Button } from 'components';
 import JobCard from '../job/components/jobCard';
+import { showError } from 'components/toast';
 
 const ContactCard = ({ contact }) => {
   return (
-    <div className="row row-cols-1 row-cols-md-2">
-      <div className="col">
-        <Card>
-          <div className="card-body">
-            <div className="row">
-              <div className="col-12 pb-3">
-                <span className="text-capitalize">
-                  <span className="material-icons">badge</span> {contact?.name}
-                </span>
-              </div>
-              <div className="col pb-3">
-                <a
-                  href={`tel:${contact?.mobile}`}
-                  className="text-decoration-none"
-                >
-                  <Button
-                    buttonClassName="btn-outline-secondary"
-                    iconName="call"
-                    text="Call"
-                  />
-                </a>
-              </div>
-              <div className="col  pb-3">
-                <a
-                  href={`mailto:${contact?.email}`}
-                  className="text-decoration-none"
-                >
-                  <Button
-                    buttonClassName="btn-outline-info"
-                    iconName="email"
-                    text="Mail"
-                  />
-                </a>
-              </div>
+    <div className="col">
+      <Card>
+        <div className="card-body">
+          <div className="row">
+            <div className="col-12 pb-3">
+              <span className="text-capitalize">
+                <span className="material-icons">badge</span> {contact?.name}
+              </span>
+            </div>
+            <div className="col pb-3">
+              <a
+                href={`tel:${contact?.mobile}`}
+                className="text-decoration-none"
+              >
+                <Button
+                  buttonClassName="btn-outline-secondary"
+                  iconName="call"
+                  text="Call"
+                />
+              </a>
+            </div>
+            <div className="col  pb-3">
+              <a
+                href={`mailto:${contact?.email}`}
+                className="text-decoration-none"
+              >
+                <Button
+                  buttonClassName="btn-outline-info"
+                  iconName="email"
+                  text="Mail"
+                />
+              </a>
             </div>
           </div>
-        </Card>
-      </div>
+        </div>
+      </Card>
     </div>
   );
 };
@@ -57,22 +56,14 @@ const Representatives = ({ representatives }) => {
     <Card shadow className="my-5">
       <h4 className="card-header">Representatives</h4>
       <div className="card-body mx-3">
-        {representatives?.map((contact, index) => (
-          <ContactCard contact={contact} key={index} />
-        ))}
+        <div className="row row-cols-1 row-cols-md-2">
+          {representatives?.map((contact, index) => (
+            <ContactCard contact={contact} key={index} />
+          ))}
+        </div>
       </div>
     </Card>
   );
-};
-
-const createRelatedJobState = (jobs, companyId) => {
-  const relatedJobState = {};
-  Object.keys(jobs).forEach((job) => {
-    if (jobs[job]?.company === companyId) {
-      relatedJobState[job] = jobs[job];
-    }
-  });
-  return relatedJobState;
 };
 
 const RelatedJobs = ({ id }) => {
@@ -81,25 +72,32 @@ const RelatedJobs = ({ id }) => {
     fetchJobsByCompany,
     !hasAlreadyFetchedJobs,
   );
-  const [relatedJobState, setRelatedJobState] = useState(
-    createRelatedJobState(jobs, id),
-  );
+  const [relatedJobState, setRelatedJobState] = useState({});
+
   const dispatch = useDispatch();
   useEffect(() => {
     if (!hasAlreadyFetchedJobs) {
       callDatabase(
         (result) => {
           dispatch(addLimitedJobs(result));
-          setRelatedJobState(createRelatedJobState(jobs, id));
         },
-        (error) => {
-          console.log(error);
-        },
+        showError,
         id,
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const temp = {};
+    Object.keys(jobs).forEach((job) => {
+      if (jobs[job]?.company === id) {
+        temp[job] = jobs[job];
+      }
+    });
+    setRelatedJobState(temp);
+  }, [jobs, id]);
+
   return (
     <Card shadow className="my-5">
       <h4 className="card-header">Jobs Posted of this Company</h4>
@@ -110,9 +108,7 @@ const RelatedJobs = ({ id }) => {
         {loading && (
           <>
             <br />
-            <div className="d-flex justify-content-center align-items-center">
-              <Loader />
-            </div>
+            <Loader />
           </>
         )}
       </div>
@@ -136,7 +132,7 @@ const CompanyDetails = () => {
         (data) => {
           dispatch(addCompany(data));
         },
-        (error) => console.log(error),
+        showError,
         id,
       );
     }
@@ -148,19 +144,19 @@ const CompanyDetails = () => {
       <Navbar />
       <div className="container p-4">
         {loading ? (
-          <div className="d-flex justify-content-center align-items-center">
-            <Loader />
-          </div>
+          <Loader />
         ) : (
-          <>
-            <div className="shadow">
-              <CompanyCard company={companies[id]} id={id} />
+          <div className="row d-flex justify-content-center">
+            <div className="col-12 col-md-10">
+              <div className="shadow">
+                <CompanyCard company={companies[id]} id={id} />
+              </div>
+              <Representatives
+                representatives={companies[id]?.representatives}
+              />
+              <RelatedJobs id={id} />
             </div>
-            <Representatives
-              representatives={companies[id]?.representatives}
-            />
-            <RelatedJobs id={id} />
-          </>
+          </div>
         )}
       </div>
     </>

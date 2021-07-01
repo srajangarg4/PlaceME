@@ -14,6 +14,7 @@ import {
   validateEmail,
   validateNumber,
 } from 'utils';
+import { showError, showSuccess } from 'components/toast';
 
 const searchStudentValidators = {
   email: [required('Student Email is required'), validateEmail],
@@ -22,7 +23,7 @@ const searchStudentValidators = {
 const jobApplicationValidators = {
   status_roundsQualified: [
     required('Please specify number of rounds qualified.'),
-    validateNumber
+    validateNumber,
   ],
 };
 
@@ -67,10 +68,11 @@ const UpdateJobApplication = ({
           callDatabase(
             (result) => {
               dispatch(addJobApplication(result));
+              showSuccess('Job Application Updated Successfully');
               searchChange('email', '');
               setState();
             },
-            (error) => console.log(error),
+            showError,
             { jobApplication: unflatten(data), id: customJobApplicationId },
           );
         })}
@@ -129,7 +131,7 @@ const ManageJobApplication = ({ job, jobId }) => {
                   dispatch(addJobApplication(result));
                   setState(result?.data);
                 },
-                (error) => console.log(error),
+                showError,
                 customJobApplicationId,
               );
             }

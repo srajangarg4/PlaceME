@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useDatabase, } from 'hooks';
+import { useDatabase } from 'hooks';
 import { Card, Navbar, Footer, Loader } from 'components';
 import {
   fetchAllDepartments,
@@ -13,12 +13,12 @@ import { addDepartments } from 'actions/department';
 import PendingRequestCard from '../updateRequest/pendingRequestCard';
 import { Routes } from 'utils';
 import RecentJobs from '../job/components/limitedJobs';
+import { showError } from 'components/toast';
 
 const TpoDashboard = () => {
   return (
     <>
       <Navbar />
-      <Statistics />
       <div className="container">
         <div className="row">
           <div className="col-12 col-lg-8 d-lg-flex">
@@ -34,16 +34,6 @@ const TpoDashboard = () => {
           </div>
           <div className="col-12 col-lg d-lg-flex">
             <LimitedPendingRequest />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-12">
-            <Card shadow>
-              <div className="card-header bg-white text-center">
-                <h5>Recently Placed Students</h5>
-              </div>
-              <div className="card-body"></div>
-            </Card>
           </div>
         </div>
       </div>
@@ -82,7 +72,7 @@ const LimitedCompanies = () => {
     if (!hasAlreadyFetchedCompanies && Object.keys(companies).length < 3) {
       callDatabase((data) => {
         dispatch(addLimitedCompanies(data));
-      });
+      }, showError);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -96,9 +86,7 @@ const LimitedCompanies = () => {
       </div>
       <div className="card-body">
         {loading ? (
-          <div className="d-flex justify-content-center align-items-center">
-            <Loader />
-          </div>
+          <Loader />
         ) : (
           Object.keys(companies).map((company) => {
             return (
@@ -113,7 +101,9 @@ const LimitedCompanies = () => {
         )}
       </div>
       <div className="card-footer bg-white">
-        <h6 className="text-muted text-center">See More</h6>
+        <Link to={Routes.companies.path} className="text-decoration-none">
+          <h6 className="text-muted text-center">See More</h6>
+        </Link>
       </div>
     </Card>
   );
@@ -121,7 +111,11 @@ const LimitedCompanies = () => {
 
 const DepartmentCard = ({ department, gradient, id }) => {
   return (
-    <Link to="/" className="text-decoration-none" style={{ color: 'black' }}>
+    <Link
+      to={Routes.departmentDetails.path + id}
+      className="text-decoration-none"
+      style={{ color: 'black' }}
+    >
       <Card className={gradient}>
         <div className="card-body">
           <h4 className="card-title">{department?.name}</h4>
@@ -145,7 +139,7 @@ const Departments = () => {
     if (!hasAlreadyFetchedDepartments) {
       callDatabase((data) => {
         dispatch(addDepartments(data));
-      });
+      }, showError);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -164,9 +158,7 @@ const Departments = () => {
           style={{ height: '500px', overflowY: 'scroll' }}
         >
           {loading ? (
-            <div className="d-flex justify-content-center align-items-center">
-              <Loader />
-            </div>
+            <Loader />
           ) : (
             Object.keys(departments).map((department) => {
               return (
@@ -198,7 +190,7 @@ const LimitedPendingRequest = () => {
     if (!hasAlreadyFetchedRequests && Object.keys(requests).length < 3) {
       callDatabase((data) => {
         dispatch(addLimitedUpdateRequests(data));
-      });
+      }, showError);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -209,9 +201,7 @@ const LimitedPendingRequest = () => {
       </div>
       <div className="card-body mx-3">
         {loading ? (
-          <div className="d-flex justify-content-center align-items-center">
-            <Loader />
-          </div>
+          <Loader />
         ) : (
           Object.keys(requests).map((request) => {
             return (
@@ -225,50 +215,15 @@ const LimitedPendingRequest = () => {
         )}
       </div>
       <div className="card-footer bg-white">
-        <h6 className="text-muted text-center">See More</h6>
+        <Link
+          to={Routes.allUpdateRequests.path}
+          className="text-decoration-none"
+        >
+          <h6 className="text-muted text-center">See More</h6>
+        </Link>
       </div>
     </Card>
   );
 };
 
-// const StatCard = ({ gradientName, title, description }) => (
-//   <div className="col d-flex align-self-stretch">
-//     <Card className={`${gradientName}`}>
-//       <div className="card-body">
-//         <h6>{title}</h6>
-//         <h3>{description}</h3>
-//       </div>
-//     </Card>
-//   </div>
-// );
-
-const Statistics = () => {
-  // const statFields = [
-  //   { gradientName: 'gradient1', title: 'In Hand Offers', description: '8' },
-  //   { gradientName: 'gradient2', title: 'Applied In', description: '22' },
-  //   { gradientName: 'gradient3', title: 'Waiting for', description: '2' },
-  //   {
-  //     gradientName: 'red-orange',
-  //     title: 'Pending Update',
-  //     description: '12',
-  //   },
-  // ];
-  
-
-  return (
-    <div className="col">
-      <Card shadow>
-        <div className="card-body">
-          <h4 className="text-center card-title">Statistics</h4>
-         
-          <div className="text-white p-2">
-            <div className="d-flex flex-wrap"></div>
-          </div>
-        </div>
-      </Card>
-    </div>
-  );
-};
-
-// https://apexcharts.com/react-chart-demos/bar-charts/basic/
 export default TpoDashboard;

@@ -28,7 +28,7 @@ const navOptions = {
     },
     {
       icon: 'how_to_reg',
-      label: 'Completed Update Requests',
+      label: 'Completed Requests',
       toPath: Routes.allCompletedUpdateRequests.path,
     },
     {

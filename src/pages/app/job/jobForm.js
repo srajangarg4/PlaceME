@@ -13,9 +13,16 @@ import {
 } from 'components';
 import { jobTypes } from 'assets';
 import { useDatabase, useFormReducer } from 'hooks';
-import { required, unflatten, ensureArrayLength, Routes, validateNumber } from 'utils';
+import {
+  required,
+  unflatten,
+  ensureArrayLength,
+  Routes,
+  validateNumber,
+} from 'utils';
 import { addJob, fetchAllCompanies, fetchAllDepartments } from 'middleware';
 import { addCompanies, addJob as addJobAction, addDepartments } from 'actions';
+import { showError, showSuccess } from 'components/toast';
 
 const reduceOptions = (options = {}) => {
   const result = [];
@@ -98,12 +105,12 @@ const JobForm = () => {
     if (!hasAlreadyFetchedCompanies) {
       getCompanies((data) => {
         dispatch(addCompanies(data));
-      });
+      }, showError);
     }
     if (!hasAlreadyFetchedDepartments) {
       getDepartments((data) => {
         dispatch(addDepartments(data));
-      });
+      }, showError);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -123,11 +130,10 @@ const JobForm = () => {
                 addJobToDB(
                   (result) => {
                     dispatch(addJobAction(result));
+                    showSuccess('Job Created Successfully');
                     push(Routes.jobDetail.path + result?.id);
                   },
-                  (error) => {
-                    console.log(error);
-                  },
+                  showError,
                   unflatten(data),
                 );
               })}

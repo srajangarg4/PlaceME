@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { Loader, Navbar, Toast, Card } from 'components';
+import { Loader, Navbar, Card } from 'components';
 import { useDatabase } from 'hooks';
 import { flattenObject, reduceToLevel, resolveDate, Role } from 'utils';
 import { addUpdateRequest } from 'actions';
 import { fetchPendingRequestDetail } from 'middleware';
 import { ApprovalOptions } from './components';
+import { showError } from 'components/toast';
 
 const CurrentData = () => {
   return (
@@ -99,7 +100,7 @@ const PendingRequestDetail = ({
 const UpdateRequestDetails = () => {
   const { id } = useParams();
   const { requests } = useSelector((state) => state.updateRequest);
-  const { loading, callDatabase, errors } = useDatabase(
+  const { loading, callDatabase } = useDatabase(
     fetchPendingRequestDetail,
     !requests[id],
   );
@@ -109,12 +110,9 @@ const UpdateRequestDetails = () => {
     if (!requests[id]) {
       callDatabase(
         (data) => {
-          console.log('data reviced', data);
           dispatch(addUpdateRequest(data));
         },
-        (error) => {
-          console.log(error);
-        },
+        showError,
         id,
       );
     }
@@ -122,12 +120,9 @@ const UpdateRequestDetails = () => {
   }, []);
   return (
     <div>
-      <Toast show={!!errors} />
       <Navbar />
       {loading ? (
-        <div className="d-flex justify-content-center align-items-center">
-          <Loader />
-        </div>
+        <Loader />
       ) : (
         <PendingRequestDetail {...requests[id]} id={id} />
       )}

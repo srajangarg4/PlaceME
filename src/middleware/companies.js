@@ -10,3 +10,5 @@ export const fetchCompanies = (noOfRecords = 3) =>
 export const fetchCompanyById = (id) => service.get(id);
 
 export const addNewCompany = (company) => service.add(company);
+
+export const updateCompany = ({ company, id }) => service.update(company, id);

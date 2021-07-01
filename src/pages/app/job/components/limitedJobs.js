@@ -1,5 +1,6 @@
 import { addLimitedJobs } from 'actions';
 import { Card, Loader } from 'components';
+import { showError } from 'components/toast';
 import { useDatabase } from 'hooks';
 import { fetchJobs } from 'middleware';
 import React from 'react';
@@ -22,7 +23,7 @@ const RecentJobs = () => {
     if (!hasAlreadyFetchedJobs && Object.keys(jobs).length < 3) {
       callDatabase((data) => {
         dispatch(addLimitedJobs(data));
-      });
+      }, showError);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -43,9 +44,7 @@ const RecentJobs = () => {
       )}
       <div className="card-body mx-3">
         {loading ? (
-          <div className="d-flex justify-content-center align-items-center">
-            <Loader />
-          </div>
+          <Loader />
         ) : (
           Object.keys(jobs).map((job) => {
             return (

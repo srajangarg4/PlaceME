@@ -5,6 +5,7 @@ import PageNotFound from './pageNotFound';
 const ComponentResolver = ({
   studentComponent,
   tpoComponent,
+  hodComponent,
   defaultComponent,
 }) => {
   const user = useSelector((state) => state.user);
@@ -14,6 +15,8 @@ const ComponentResolver = ({
       return tpoComponent ?? PageNotFound;
     case Role.STUDENT:
       return studentComponent ?? PageNotFound;
+    case Role.HOD:
+      return hodComponent ?? PageNotFound;
     default:
       return defaultComponent ?? PageNotFound;
   }

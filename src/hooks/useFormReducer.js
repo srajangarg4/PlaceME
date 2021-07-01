@@ -245,6 +245,7 @@ export const useFormReducer = (
       dirty();
       if (callback && !state.hasError && !state.submitting) {
         startSubmitting();
+
         const data = Object.keys(state.formValues).reduce(
           (acc, key) => ({ ...acc, [key]: state.formValues[key].value }),
           {},

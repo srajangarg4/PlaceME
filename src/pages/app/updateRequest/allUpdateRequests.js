@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react';
-import { Card, Loader, Navbar, Toast } from 'components';
+import { Card, Loader, Navbar } from 'components';
 import { useDispatch, useSelector } from 'react-redux';
 import { addUpdateRequests } from 'actions/pendingRequests';
 import { fetchAllPendingRequests } from 'middleware/updateRequests';
 import { useDatabase } from 'hooks';
 import PendingRequestCard from './pendingRequestCard';
+import { showError } from 'components/toast';
 
 const AllUpdateRequests = () => {
   const { requests, hasAlreadyFetchedRequests } = useSelector(
     (state) => state.updateRequest,
   );
   const user = useSelector((state) => state.user);
-  const { loading, callDatabase, errors } = useDatabase(() =>
+  const { loading, callDatabase } = useDatabase(() =>
     fetchAllPendingRequests(user?.role),
   );
   const dispatch = useDispatch();
@@ -20,14 +21,13 @@ const AllUpdateRequests = () => {
     if (!hasAlreadyFetchedRequests) {
       callDatabase((data) => {
         dispatch(addUpdateRequests(data));
-      });
+      }, showError);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div>
-      <Toast show={!!errors} />
       <Navbar />
       <div className="container">
         <div className="row d-flex justify-content-center">
@@ -38,9 +38,7 @@ const AllUpdateRequests = () => {
               </div>
               <div className="card-body mx-3">
                 {loading ? (
-                  <div className="d-flex justify-content-center align-items-center">
-                    <Loader />
-                  </div>
+                  <Loader />
                 ) : (
                   Object.keys(requests).map((request) => {
                     return (

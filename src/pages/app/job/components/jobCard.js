@@ -5,6 +5,7 @@ import { Button, Card } from 'components';
 import { useSelector } from 'react-redux';
 import { useDatabase } from 'hooks';
 import { applyForJob } from 'middleware/jobApplication';
+import { showError, showSuccess } from 'components/toast';
 
 const JobCard = ({ job, company, id, onClick }) => {
   const user = useSelector((state) => state.user);
@@ -19,7 +20,13 @@ const JobCard = ({ job, company, id, onClick }) => {
             <div className="row align-items-center">
               {logo && (
                 <div className="col-12 col-md-2 p-2 p-sm-3 mr-3 mr-sm-5">
-                  <img height={48} width={46} src={logo?.url} className="mx-auto d-block" alt="" />
+                  <img
+                    height={48}
+                    width={46}
+                    src={logo?.url}
+                    className="mx-auto d-block"
+                    alt=""
+                  />
                 </div>
               )}
               <div className="col-12 col-md">
@@ -51,12 +58,9 @@ const JobCard = ({ job, company, id, onClick }) => {
                   buttonClassName="btn btn-block btn-outline-dark"
                   onClick={() => {
                     callDatabase(
-                      (data) => {
-                        console.log('Result after apply', data);
-                      },
-                      (error) => {
-                        console.log('Error happended', error);
-                      },
+                      () =>
+                        showSuccess('You have suceesfully applied for the job'),
+                      showError,
                       id,
                     );
                   }}

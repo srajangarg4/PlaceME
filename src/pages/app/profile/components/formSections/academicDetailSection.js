@@ -3,16 +3,26 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Input } from 'components';
 import { useFormReducer } from 'hooks';
-import { flattenObject, getDifference, required, unflatten, validateNumber, validateYear } from 'utils';
+import {
+  flattenObject,
+  getDifference,
+  required,
+  unflatten,
+  validateNumber,
+  validateYear,
+} from 'utils';
 import { PendingRequestService } from 'placeme-services/lib';
 
 const validators = {
-  academicGap: [required("Specify academic gap.")],
+  academicGap: [required('Specify academic gap.')],
 
-  graduation_rollNumber: [required("Enter your graduation number.")],
-  graduation_department: [required("Specify your graduation department.")],
+  graduation_rollNumber: [required('Enter your graduation number.')],
+  graduation_department: [required('Specify your graduation department.')],
   graduation_course: [],
-  graduation_batch_startingYear: [required("Enter graduation starting year."),validateYear],
+  graduation_batch_startingYear: [
+    required('Enter graduation starting year.'),
+    validateYear,
+  ],
   graduation_batch_passingYear: [],
 
   secondary_board: [required('Board is required')],
@@ -20,7 +30,10 @@ const validators = {
   secondary_schoolName: [required('Percentage is required')],
 
   seniorSecondary_board: [required('Board is required')],
-  seniorSecondary_percentage: [required('School Name is required'), validateNumber],
+  seniorSecondary_percentage: [
+    required('School Name is required'),
+    validateNumber,
+  ],
   seniorSecondary_schoolName: [required('Percentage is required')],
 };
 
@@ -135,7 +148,6 @@ const AcademicDetailSection = ({ isFormEditable, setIsFormEditable }) => {
               disabled: !isFormEditable,
             })(Input)}
           </div>
-
           <div className="col-12">
             {connectField('secondary_schoolName', {
               label: ' School Name',

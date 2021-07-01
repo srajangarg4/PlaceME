@@ -11,7 +11,7 @@ const CompanyCard = ({ company, id, hasLink }) => {
           <div className="col-12 col-md">
             <div className="row align-items-center">
               <div className="col-12 col-md-2 p-2 p-sm-3 mr-3 mr-sm-5">
-                <img 
+                <img
                   height={48}
                   width={46}
                   src={company?.logo?.url}
@@ -22,7 +22,7 @@ const CompanyCard = ({ company, id, hasLink }) => {
               <div className="col-12 col-md">
                 <h3 className="text-capitalize">{company?.name}</h3>
                 <p className="text-capitalize">
-                  -- Registered On :
+                  -- Registered On :{' '}
                   {resolveDate(company?.registeredOn).toLocaleDateString()}
                 </p>
                 <div className="row">

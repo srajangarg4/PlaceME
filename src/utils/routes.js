@@ -37,6 +37,7 @@ const CompletedRequestRoutes = {
 
 const DepartmentRoutes = {
   addDepartment: { path: '/department/add' },
+  departmentDetails: { path: '/department/' },
 };
 
 const AuthRoutes = {

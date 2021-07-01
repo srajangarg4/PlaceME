@@ -4,21 +4,15 @@ import { useParams } from 'react-router';
 import { addCompany, addJob } from 'actions';
 import { Navbar, Card, Loader } from 'components';
 import { useDatabase } from 'hooks';
-import JobCard from './components/jobCard';
+import { JobCard, ManageJobApplication } from './components';
 import { fetchJobAndCompanyDetails } from 'middleware';
-import ManageJobApplication from './components/manageJobApplication';
-
-const jobSummaryList = [
-  { name: 'Published On', value: 'Date' },
-  { name: 'Salary', value: 'Date' },
-  { name: 'Location', value: 'Date' },
-  { name: 'Job Nature', value: 'Full time' },
-  { name: 'Last Date', value: 'Date' },
-];
+import { resolveSalary, resolveDate, Role } from 'utils';
+import { showError } from 'components/toast';
 
 const JobDescription = () => {
   const { id } = useParams();
   const { jobs } = useSelector((state) => state.job);
+  const user = useSelector((state) => state.user);
   const { companies } = useSelector((state) => state.company);
   const dispatch = useDispatch();
 
@@ -29,20 +23,15 @@ const JobDescription = () => {
 
   useEffect(() => {
     if (!jobs[id] || !companies[jobs[id]?.company]) {
-      callDatabase(
-        (jobDetail) => {
-          const { job, company } = jobDetail;
-          if (company) {
-            dispatch(addCompany(company));
-          }
-          if (job) {
-            dispatch(addJob(job));
-          }
-        },
-        (error) => {
-          console.error(error);
-        },
-      );
+      callDatabase((jobDetail) => {
+        const { job, company } = jobDetail;
+        if (company) {
+          dispatch(addCompany(company));
+        }
+        if (job) {
+          dispatch(addJob(job));
+        }
+      }, showError);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -51,9 +40,7 @@ const JobDescription = () => {
       <Navbar title="PlaceMe" />
       <div className="container">
         {loading ? (
-          <div className="d-flex justify-content-center align-items-center">
-            <Loader />
-          </div>
+          <Loader />
         ) : (
           <div className="row">
             <div className="col-12 col-md-8">
@@ -66,11 +53,12 @@ const JobDescription = () => {
                 />
               </div>
               <JobDetails description={jobs[id]?.description} />
-              <ManageJobApplication job={jobs[id]} jobId={id} />
+              {user?.role === Role.TPO && (
+                <ManageJobApplication job={jobs[id]} jobId={id} />
+              )}
             </div>
             <div className="col-12 col-md">
-              <JobSummary jobSummaryList={jobSummaryList} />
-              <JobAnalytics />
+              <JobSummary {...jobs[id]} />
             </div>
           </div>
         )}
@@ -83,22 +71,39 @@ const JobDetails = ({ description }) => {
   return (
     <div className="card shadow bg-white">
       <div className="card-body">
-        <h4 className="card-title py-3 px-1">Job Description</h4>
+        <h4 className="card-title pt-3 px-1">Job Description</h4>
+        <hr className="pt-1 pb-2" />
         <p>{description}</p>
       </div>
     </div>
   );
 };
 
-const JobSummary = ({ jobSummaryList }) => (
+const JobSummary = ({
+  postDate,
+  salary,
+  jobType,
+  lastDateToApply,
+  maxBacklogs,
+  maxAcademicGap,
+}) => (
   <Card className="my-5" shadow>
     <div className="card-body">
       <h5 className="text-center pt-3 pb-1">Job Summary</h5>
       <hr />
       <ul style={{ listStyleType: 'circle' }}>
-        {jobSummaryList?.map((item) => (
-          <ListItem {...item} key={item.name} />
-        ))}
+        <ListItem name="Salary" value={resolveSalary(salary)} />
+        <ListItem name="Job Type" value={jobType} />
+        <ListItem name="Max Backlogs" value={maxBacklogs} />
+        <ListItem name="Max Academic gap" value={maxAcademicGap} />
+        <ListItem
+          name="Apply till"
+          value={resolveDate(lastDateToApply).toDateString()}
+        />
+        <ListItem
+          name="Posted on"
+          value={resolveDate(postDate).toDateString()}
+        />
       </ul>
     </div>
   </Card>
@@ -112,17 +117,5 @@ const ListItem = ({ name, value }) => {
     </li>
   );
 };
-
-const JobAnalytics = () => (
-  <Card className="my-5" shadow>
-    <div className="card-body">
-      <h5 className="text-center pt-3 pb-1">Job Analytics</h5>
-      <hr />
-      <ul style={{ listStyleType: 'circle' }}>
-        <ListItem name="Application Recived" value="10" />
-      </ul>
-    </div>
-  </Card>
-);
 
 export default JobDescription;

@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { resolveDate, Routes } from 'utils';
-import { Card, Loader, Navbar, Toast } from 'components';
+import { Card, Loader, Navbar } from 'components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDatabase } from 'hooks';
 import { addCompletedRequests } from 'actions/completedRequest';
 import { fetchAllCompletedRequests } from 'middleware/completedRequest';
+import { showError } from 'components/toast';
 
 const PendingRequests = ({ type, title, requestedBy, requestedOn, id }) => (
   <Card className="row rounded p-4 mt-4">
@@ -26,28 +27,22 @@ const AllCompletedRequests = () => {
   const { requests, hasAlreadyFetchedRequests } = useSelector(
     (state) => state.completedRequest,
   );
-  const { loading, callDatabase, errors } = useDatabase(
-    fetchAllCompletedRequests,
-  );
+  const { loading, callDatabase } = useDatabase(fetchAllCompletedRequests);
   const dispatch = useDispatch();
 
   console.log(requests);
 
   useEffect(() => {
     if (!hasAlreadyFetchedRequests) {
-      callDatabase(
-        (data) => {
-          dispatch(addCompletedRequests(data));
-        },
-        (error) => console.log(error),
-      );
+      callDatabase((data) => {
+        dispatch(addCompletedRequests(data));
+      }, showError);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div>
-      <Toast show={!!errors} />
       <Navbar />
       <div className="container">
         <div className="row d-flex justify-content-center">
@@ -58,9 +53,7 @@ const AllCompletedRequests = () => {
               </div>
               <div className="card-body mx-3">
                 {loading ? (
-                  <div className="d-flex justify-content-center align-items-center">
-                    <Loader />
-                  </div>
+                  <Loader />
                 ) : (
                   Object.keys(requests).map((request) => {
                     return (

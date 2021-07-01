@@ -1,5 +1,6 @@
 import { removeUpdateRequest } from 'actions';
 import { Button, Card } from 'components';
+import { showError, showSuccess } from 'components/toast';
 import { useDatabase } from 'hooks';
 import { acceptRequest, rejectRequest } from 'middleware';
 import React from 'react';
@@ -21,11 +22,10 @@ const AcceptRequest = ({ id }) => {
         callDatabase(
           (result) => {
             dispatch(removeUpdateRequest(id));
+            showSuccess('Request Accepted Successfully');
             goBack();
           },
-          (error) => {
-            console.log(error);
-          },
+          showError,
           id,
         )
       }
@@ -48,11 +48,10 @@ const RejectRequest = ({ id }) => {
         callDatabase(
           (result) => {
             dispatch(removeUpdateRequest(id));
+            showSuccess('Request Rejected Successfully');
             goBack();
           },
-          (error) => {
-            console.log(error);
-          },
+          showError,
           id,
         )
       }

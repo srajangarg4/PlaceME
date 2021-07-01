@@ -166,3 +166,8 @@ export const reduceToLevel = (obj = {}, level = 0) => {
   })(obj, '');
   return reducedObj;
 };
+
+export const resolveSalary = ({ min = 0, max = 0 } = {}) =>
+  `${resolveAmount(min)}${max ? ` - ${resolveAmount(max)} LPA` : ''}`;
+
+const resolveAmount = (amount = 0) => `${Math.round(amount / 100000)}`;

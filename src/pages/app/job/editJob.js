@@ -22,7 +22,6 @@ import {
   flattenObject,
   validateNumber,
   resolveDate,
-  getFormattedDate,
 } from 'utils';
 import {
   fetchAllCompanies,
@@ -31,6 +30,7 @@ import {
   setJob,
 } from 'middleware';
 import { addCompanies, addJob as addJobAction, addDepartments } from 'actions';
+import { showError, showSuccess } from 'components/toast';
 
 const reduceOptions = (options = {}) => {
   const result = [];
@@ -68,7 +68,6 @@ const validators = {
 };
 
 const EditJob = () => {
-
   const [numOfRounds, setNumOfRounds] = useState(1);
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -118,26 +117,19 @@ const EditJob = () => {
     if (!hasAlreadyFetchedCompanies) {
       getCompanies((data) => {
         dispatch(addCompanies(data));
-      });
+      }, showError);
     }
     if (!hasAlreadyFetchedDepartments) {
-      getDepartments(
-        (data) => {
-          dispatch(addDepartments(data));
-        },
-        (error) => {
-          console.log(error);
-        },
-      );
+      getDepartments((data) => {
+        dispatch(addDepartments(data));
+      }, showError);
     }
     if (!jobs[id]) {
       getJob(
         (result) => {
           dispatch(addJobAction(result));
         },
-        (error) => {
-          console.error(error);
-        },
+        showError,
         id,
       );
     }
@@ -145,21 +137,27 @@ const EditJob = () => {
   }, []);
 
   useEffect(() => {
-    const jobDetail = {...jobs[id]};
+    const jobDetail = { ...jobs[id] };
     const forBatchs = jobDetail?.forBatchs ?? [];
     const forDepartments = jobDetail?.forDepartments ?? [];
-    const lastDateToApply = getFormattedDate("yyyy-mm-dd", resolveDate(jobDetail?.lastDateToApply));
+    const lastDateToApply = resolveDate(jobDetail?.lastDateToApply);
     const postDate = jobDetail?.postDate;
     const rounds = jobDetail?.rounds;
-    setNumOfRounds(rounds?.length ??0)
+    setNumOfRounds(rounds?.length ?? 0);
     delete jobDetail?.forBatchs;
     delete jobDetail?.forDepartments;
     delete jobDetail?.lastDateToApply;
     delete jobDetail?.postDate;
-    
+
     let flatValues = flattenObject(jobDetail);
-    flatValues = { ...flatValues, forBatchs, forDepartments, lastDateToApply, postDate }
-    Object.keys(flatValues).forEach(key=> change(key, flatValues[key]))
+    flatValues = {
+      ...flatValues,
+      forBatchs,
+      forDepartments,
+      lastDateToApply,
+      postDate,
+    };
+    Object.keys(flatValues).forEach((key) => change(key, flatValues[key]));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobs]);
 
@@ -172,25 +170,20 @@ const EditJob = () => {
             <h4 className="text-center">Edit Job</h4>
           </div>
           {isCompaniesLoading || isDepartmentsLoading || isJobLoading ? (
-            <div className="d-flex justify-content-center align-items-center">
-              <Loader />
-            </div>
+            <Loader />
           ) : (
             <div className="card-body">
               <form
-                  onSubmit={handleSubmit((data) => {
-                    const finalValues = unflatten(data);
-                  console.log('Data', finalValues);
+                onSubmit={handleSubmit((data) => {
+                  const finalValues = unflatten(data);
                   setJobToDb(
                     (result) => {
-                      console.log("Result reviced", result)
                       dispatch(addJobAction(result));
+                      showSuccess('Job Updated Successfully');
                       push(Routes.jobDetail.path + result?.id);
                     },
-                    (error) => {
-                      console.log(error);
-                    },
-                    {job: finalValues, id},
+                    showError,
+                    { job: finalValues, id },
                   );
                 })}
               >
@@ -316,7 +309,7 @@ const EditJob = () => {
                     <Button
                       className="btn btn-block btn-primary"
                       type="submit"
-                      text="Save"
+                      text="Update"
                       loading={submitting || isJobAdded}
                     />
                   </div>

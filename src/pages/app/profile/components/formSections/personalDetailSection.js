@@ -22,26 +22,25 @@ const validators = {
     required("Father's mobile number is required."),
     validatePhoneNumber,
   ],
-  fatherDetails_occupation: [required("Enter father occupation.")],
+  fatherDetails_occupation: [required('Enter father occupation.')],
 
   motherDetails_name: [required("Mother's name is required."), validateName],
   motherDetails_mobile: [
     required("Mother's mobile number is required."),
     validatePhoneNumber,
   ],
-  motherDetails_occupation: [required("Enter mother occupation.")],
+  motherDetails_occupation: [required('Enter mother occupation.')],
 
   dob: [required('Date of birth is required.')],
   address_area: [required('Area is required.')],
   address_state: [required('State is required.')],
-  address_district: [required('District is required.')],
+  address_district: [],
   address_city: [required('City is required.')],
   address_pincode: [required('Pin code is required.'), validatePincode],
 
   bloodGroup: [required('Blood group is required.'), validateBloodGroup],
 
   aadhar_number: [required('Aadhar is required.'), validateAadhar],
-  aadhar_url: [],
 
   emergencyContact: [
     required('Emergency Contact is required.'),

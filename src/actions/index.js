@@ -7,3 +7,4 @@ export * from './personalDetails';
 export * from './pendingRequests';
 export * from './common';
 export * from './department';
+export * from './toast';

@@ -16,7 +16,10 @@ const Request = () => (
       >
         <h4 className="text-center">Pending</h4>
         <div>
-          <span class="badge badge-pill" style={{ backgroundColor: '#c96256' }}>
+          <span
+            className="badge badge-pill"
+            style={{ backgroundColor: '#c96256' }}
+          >
             Approved by
           </span>
         </div>
@@ -27,7 +30,10 @@ const Request = () => (
           width="100"
         />
         <div>
-          <span class="badge badge-pill" style={{ backgroundColor: '#c96256' }}>
+          <span
+            className="badge badge-pill"
+            style={{ backgroundColor: '#c96256' }}
+          >
             On 12-April-2020
           </span>
         </div>

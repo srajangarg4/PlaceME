@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { companyTypes } from 'assets';
 import {
   Button,
@@ -12,18 +12,16 @@ import {
 import { useDatabase, useFormReducer } from 'hooks';
 import {
   required,
-  Routes,
-  unflatten,
   validateEmail,
   validateFirstName,
   validatePhoneNumber,
   validateURL,
+  flattenObject,
 } from 'utils';
-import { addNewCompany } from 'middleware';
-import { useDispatch } from 'react-redux';
+import { fetchCompanyById, updateCompany } from 'middleware';
+import { useDispatch, useSelector } from 'react-redux';
 import { addCompany } from 'actions';
-import { useHistory } from 'react-router-dom';
-import { showError, showSuccess } from 'components/toast';
+import { useParams } from 'react-router-dom';
 
 const validators = {
   name: [required('Please enter a name.')],
@@ -39,24 +37,53 @@ const validators = {
   otherDetails: [],
 };
 
-const CompanyForm = ({ title, defaultValues }) => {
-  const { connectField, addField, handleSubmit } = useFormReducer(
-    validators,
-    defaultValues,
-  );
-  const { loading, callDatabase } = useDatabase(addNewCompany);
+const EditCompany = () => {
+  const [numOfReps, setNumOfReps] = useState(1);
   const dispatch = useDispatch();
-  const { push } = useHistory();
+  const { id } = useParams();
+
+  const { companies, hasAlreadyFetchedCompanies } = useSelector(
+    (state) => state.company,
+  );
+
+  const { connectField, addField, handleSubmit, change } =
+    useFormReducer(validators);
+
+  const { callDatabase: fetchCompany } = useDatabase(fetchCompanyById);
+
+  const { loading: updatingCompany, callDatabase: updateCompanyDetails } =
+    useDatabase(updateCompany);
+
+  useEffect(() => {
+    if (!hasAlreadyFetchedCompanies) {
+      fetchCompany(
+        (result) => {
+          addCompany(result);
+          console.log('State', result);
+        },
+        (error) => console.log(error),
+        id,
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const defaultValues = flattenObject(companies[id]);
+    Object.keys(defaultValues).forEach((key) =>
+      change(key, defaultValues[key]),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [companies, id]);
 
   const handleFormSumit = handleSubmit((data) => {
-    callDatabase(
+    updateCompanyDetails(
       (result) => {
-        dispatch(addCompany(result));
-        showSuccess('Company created successfully');
-        push(`${Routes.companyDetails.path}${result?.id}`);
+        console.log(result);
+        dispatch(addCompany(result)); //TODO
+        // push(`${Routes.companyDetails.path}${result?.id}`);
       },
-      showError,
-      unflatten(data),
+      (error) => console.log(error),
     );
   });
 
@@ -78,8 +105,6 @@ const CompanyForm = ({ title, defaultValues }) => {
     [addField],
   );
 
-  const [numOfReps, setNumOfReps] = useState(1);
-
   return (
     <>
       <Navbar />
@@ -88,7 +113,7 @@ const CompanyForm = ({ title, defaultValues }) => {
           <div className="col-12 col-md-10">
             <Card shadow>
               <div className="card-header p-4">
-                <h4 className="text-center">Add New Company</h4>
+                <h4 className="text-center">Edit Company</h4>
               </div>
               <div className="card-body">
                 <div className="row">
@@ -165,7 +190,7 @@ const CompanyForm = ({ title, defaultValues }) => {
                   <Button
                     text="Submit"
                     fullWidth
-                    loading={loading}
+                    loading={updatingCompany}
                     onClick={handleFormSumit}
                   />
                 </div>
@@ -178,8 +203,8 @@ const CompanyForm = ({ title, defaultValues }) => {
   );
 };
 
-CompanyForm.defaultProps = {
+EditCompany.defaultProps = {
   title: 'Add new company',
 };
 
-export default CompanyForm;
+export default EditCompany;

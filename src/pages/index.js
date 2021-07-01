@@ -3,7 +3,7 @@ import { Route, Switch, useHistory } from 'react-router-dom';
 import { UserService } from 'placeme-services/lib';
 import { Routes } from 'utils';
 import ComponentResolver from './componentResolver';
-import { Login, Signup } from './auth';
+import { Signup } from './auth';
 import { StudentDashboard, StudentProfile } from './app/student';
 import { TPODashboard } from './app/tpo';
 import Home from './app/home';
@@ -15,9 +15,13 @@ import {
   AllUpdateRequests,
   UpdateRequestDetails,
 } from './app/updateRequest';
-import { CompanyDetails, CompanyForm } from './app/company';
-import { Companies } from './app/company';
-import { AddDepartment } from './app/department';
+import {
+  CompanyDetails,
+  CompanyForm,
+  EditCompany,
+  Companies,
+} from './app/company';
+import { AddDepartment, DepartmentDetail } from './app/department';
 
 const ApplicationNavigator = () => {
   const history = useHistory();
@@ -33,11 +37,6 @@ const ApplicationNavigator = () => {
 
   return (
     <Switch>
-      <Route
-        path={Routes.login.path}
-        exact
-        component={ComponentResolver({ defaultComponent: Login })}
-      />
       <Route
         exact
         path={Routes.signup.path}
@@ -120,6 +119,7 @@ const ApplicationNavigator = () => {
         component={ComponentResolver({
           studentComponent: AllUpdateRequests,
           tpoComponent: AllUpdateRequests,
+          hodComponent: AllUpdateRequests,
         })}
       />
       <Route
@@ -128,6 +128,7 @@ const ApplicationNavigator = () => {
         component={ComponentResolver({
           studentComponent: UpdateRequestDetails,
           tpoComponent: UpdateRequestDetails,
+          hodComponent: UpdateRequestDetails,
         })}
       />
       <Route
@@ -156,6 +157,16 @@ const ApplicationNavigator = () => {
         exact
         path={Routes.addDepartment.path}
         component={ComponentResolver({ tpoComponent: AddDepartment })}
+      />
+      <Route
+        exact
+        path={Routes.departmentDetails.path + ':id'}
+        component={ComponentResolver({ tpoComponent: DepartmentDetail })}
+      />
+      <Route
+        exact
+        path={Routes.editCompany.path + ':id'}
+        component={ComponentResolver({ tpoComponent: EditCompany })}
       />
       <Route component={ComponentResolver({})} />
     </Switch>

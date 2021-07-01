@@ -8,3 +8,4 @@ export { default as Toast } from './toast';
 export { default as Badge } from './badge';
 export { default as Modal } from './modal';
 export { default as Card } from './card';
+export { default as Header } from './header';

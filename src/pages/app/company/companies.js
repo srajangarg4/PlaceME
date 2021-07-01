@@ -1,6 +1,7 @@
 import { addCompanies } from 'actions';
-import { Loader, Navbar, Toast } from 'components';
+import { Loader, Navbar } from 'components';
 import Card from 'components/card';
+import { showError } from 'components/toast';
 import { useDatabase } from 'hooks';
 import { fetchAllCompanies } from 'middleware';
 import React from 'react';
@@ -15,7 +16,7 @@ const Companies = () => {
     (state) => state.company,
   );
   const dispatch = useDispatch();
-  const { loading, callDatabase, errors } = useDatabase(
+  const { loading, callDatabase } = useDatabase(
     fetchAllCompanies,
     !hasAlreadyFetchedCompanies,
   );
@@ -23,13 +24,12 @@ const Companies = () => {
     if (!hasAlreadyFetchedCompanies) {
       callDatabase((data) => {
         dispatch(addCompanies(data));
-      });
+      }, showError);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div>
-      <Toast show={!!errors} />
       <Navbar />
       <div className="container">
         <div className="row d-flex justify-content-center">
@@ -45,9 +45,7 @@ const Companies = () => {
               </div>
               <div className="card-body mx-3">
                 {loading ? (
-                  <div className="d-flex justify-content-center align-items-center">
-                    <Loader />
-                  </div>
+                  <Loader />
                 ) : (
                   Object.keys(companies).map((company) => {
                     return (
