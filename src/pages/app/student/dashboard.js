@@ -1,6 +1,5 @@
 import React from 'react';
 import { Header, Navbar } from 'components';
-import Statistics from './statistics';
 import RecentJobs from '../job/components/limitedJobs';
 
 const Dashboard = () => {
@@ -18,11 +17,8 @@ const Dashboard = () => {
         </div>
       </Header>
       <div className="container-fluid">
-        <div className="row">
-          <div className="col-12 col-md-4 order-md-2">
-            <Statistics />
-          </div>
-          <div className="col-12 col-md-8 order-md-1">
+        <div className="row d-flex justify-content-center">
+          <div className="col-12 col-md-9">
             <RecentJobs />
           </div>
         </div>
